@@ -11,10 +11,9 @@
 // ═══════════════════════════════════════════════
 // PASTE YOUR KEYS HERE (same as index.html)
 // ═══════════════════════════════════════════════
-const SUPABASE_URL  = 'https://cdxxltgowjlfbhcqjqkr.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkeHhsdGdvd2psZmJoY3FqcWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MDU3OTQsImV4cCI6MjA5MjA4MTc5NH0.WCyz_pEqI0a_NHCYyIY_eF6YCj-4PKmQQUTc4i5vWF4';
+const SUPABASE_URL  = 'https://YOUR_PROJECT_ID.supabase.co';
+const SUPABASE_ANON = 'YOUR_ANON_PUBLIC_KEY';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-
 </script>
 <style>
 :root {
@@ -204,9 +203,15 @@ textarea.form-control{resize:vertical;min-height:80px}
   </div>
   <div class="nav-right">
     <span style="font-size:0.85rem;color:var(--muted)" id="nav-greeting"></span>
-    <a href="index.html" class="btn btn-ghost btn-sm">← Back to site</a>
+    <a href="index.html" class="btn btn-ghost btn-sm nav-back-btn">← Back</a>
     <button class="btn btn-ghost btn-sm" onclick="handleSignOut()">Sign Out</button>
   </div>
+  <style>
+    @media(max-width:600px){
+      #nav-greeting{ display:none !important; }
+      .nav-back-btn{ display:none !important; }
+    }
+  </style>
 </nav>
 
 <div class="dashboard-layout">
