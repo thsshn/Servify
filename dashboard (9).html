@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dashboard — Servify</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='20' fill='white'>S</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='110' fill='white'>S</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── Supabase public config ──
+// Anon key is safe client-side — protect data via RLS policies in Supabase dashboard.
+const SUPABASE_URL  = 'https://cdxxltgowjlfbhcqjqkr.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkeHhsdGdvd2psZmJoY3FqcWtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1MDU3OTQsImV4cCI6MjA5MjA4MTc5NH0.WCyz_pEqI0a_NHCYyIY_eF6YCj-4PKmQQUTc4i5vWF4';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  }
+});
+</script>
+<style>
+:root {
+  --ink: #0d0d0d;
+  --paper: #f5f2eb;
+  --cream: #ede9df;
+  --accent: #e8521a;
+  --accent2: #2d5be3;
+  --muted: #7a7570;
+  --card: #ffffff;
+  --border: #e2ddd5;
+  --success: #1a9e5c;
+  --warning: #d97706;
+  --danger: #d93025;
+  --sidebar-w: 260px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:68px;background:rgba(245,242,235,0.97);border-bottom:1.5px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.04em;text-decoration:none}
+.nav-right{display:flex;align-items:center;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.875rem;cursor:pointer;border:none;transition:all 0.18s;text-decoration:none}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--border)}.btn-ghost:hover{background:var(--cream)}
+.btn-accent{background:var(--accent);color:white}.btn-accent:hover{background:#cc4412;transform:translateY(-1px)}
+.btn-primary{background:var(--ink);color:white}.btn-primary:hover{background:#222}
+.btn-success{background:var(--success);color:white}
+.btn-danger{background:var(--danger);color:white}
+.btn-sm{padding:6px 12px;font-size:0.78rem}
+
+/* ── LAYOUT ── */
+.dashboard-layout{display:flex;margin-top:68px;min-height:calc(100vh - 68px)}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:white;border-right:1.5px solid var(--border);position:fixed;top:68px;left:0;height:calc(100vh - 68px);overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-user{padding:24px 20px;border-bottom:1.5px solid var(--border)}
+.user-avatar{width:52px;height:52px;border-radius:50%;background:var(--accent);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.user-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:2px}
+.user-email{font-size:0.78rem;color:var(--muted);margin-bottom:8px;word-break:break-all}
+.user-role-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.72rem;font-weight:600}
+.role-provider{background:#fff4ee;color:var(--accent)}
+.role-seeker{background:#eef2ff;color:var(--accent2)}
+
+.sidebar-nav{padding:12px 0;flex:1}
+.sidebar-section{padding:8px 20px 4px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted)}
+.sidebar-link{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:0.875rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;border-radius:0}
+.sidebar-link:hover{background:var(--paper);color:var(--ink)}
+.sidebar-link.active{background:var(--paper);color:var(--accent);font-weight:600}
+.sidebar-link.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);border-radius:0 2px 2px 0}
+.sidebar-link{position:relative}
+.sidebar-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--danger);color:white;font-size:0.65rem;font-weight:700;padding:2px 6px;border-radius:100px}
+
+.sidebar-footer{padding:16px 20px;border-top:1.5px solid var(--border)}
+
+/* ── MAIN CONTENT ── */
+.main-content{margin-left:var(--sidebar-w);flex:1;padding:32px}
+
+/* ── PAGES ── */
+.page{display:none}.page.active{display:block}
+.page-header{margin-bottom:28px}
+.page-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.04em;margin-bottom:4px}
+.page-sub{color:var(--muted);font-size:0.9rem}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+.stat-card-icon{font-size:1.8rem;margin-bottom:10px}
+.stat-card-val{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:4px}
+.stat-card-label{font-size:0.78rem;color:var(--muted);font-weight:500}
+
+/* ── CARDS ── */
+.card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+/* ── TRIAL BANNER ── */
+.trial-card{background:linear-gradient(135deg,#fff4ee,#ffe8dd);border:1.5px solid #fcd5c4;border-radius:16px;padding:24px;margin-bottom:20px;display:flex;align-items:center;gap:20px}
+.trial-card.expired{background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fecaca}
+.trial-card.warning{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a}
+.trial-icon{font-size:2.5rem;flex-shrink:0}
+.trial-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:4px}
+.trial-sub{font-size:0.85rem;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.trial-bar-wrap{background:rgba(0,0,0,0.08);border-radius:100px;height:6px;margin-bottom:12px;overflow:hidden}
+.trial-bar{height:100%;border-radius:100px;background:var(--accent);transition:width 0.5s}
+
+/* ── LISTINGS ── */
+.listing-item{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--border)}
+.listing-item:last-child{border-bottom:none}
+.listing-emoji{width:48px;height:48px;border-radius:12px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.listing-info{flex:1;min-width:0}
+.listing-title{font-weight:600;font-size:0.9rem;margin-bottom:2px}
+.listing-meta{font-size:0.78rem;color:var(--muted)}
+.listing-status{flex-shrink:0}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.72rem;font-weight:700}
+.badge-green{background:#e8f7ef;color:var(--success)}
+.badge-orange{background:#fff4ee;color:var(--accent)}
+.badge-blue{background:#eef2ff;color:var(--accent2)}
+.badge-red{background:#fef2f2;color:var(--danger)}
+.badge-grey{background:var(--cream);color:var(--muted)}
+
+/* ── FORM ── */
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:0.82rem;font-weight:600;margin-bottom:7px}
+.form-control{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;color:var(--ink);background:white}
+.form-control:focus{border-color:var(--accent)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+textarea.form-control{resize:vertical;min-height:80px}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:48px 20px}
+.empty-icon{font-size:2.5rem;margin-bottom:12px}
+.empty-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:6px}
+.empty-sub{color:var(--muted);font-size:0.85rem;margin-bottom:20px}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:20px;padding:32px;width:100%;max-width:520px;transform:translateY(16px);transition:transform 0.2s;max-height:90vh;overflow-y:auto;position:relative}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:4px}
+.modal-sub{color:var(--muted);font-size:0.85rem;margin-bottom:24px}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:var(--cream);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;right:28px;z-index:999;background:var(--ink);color:white;padding:12px 22px;border-radius:10px;font-size:0.85rem;font-weight:500;transform:translateY(60px);opacity:0;transition:all 0.3s;display:flex;align-items:center;gap:8px;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── PROFILE ── */
+.profile-avatar-big{width:80px;height:80px;border-radius:50%;background:var(--accent);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.profile-stat{background:var(--paper);border-radius:12px;padding:16px;text-align:center}
+.profile-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent)}
+.profile-stat-label{font-size:0.75rem;color:var(--muted);margin-top:2px}
+
+/* ── ACTIVITY ── */
+.activity-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;background:var(--accent)}
+.activity-text{font-size:0.85rem;line-height:1.5}
+.activity-time{font-size:0.75rem;color:var(--muted);margin-top:2px}
+
+/* ── SAVED SERVICES ── */
+.saved-card{background:white;border:1.5px solid var(--border);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start}
+.saved-emoji{width:44px;height:44px;border-radius:10px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform 0.3s;z-index:90}
+  .sidebar.open{transform:translateX(0)}
+  .main-content{margin-left:0;padding:20px 16px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .mobile-menu-btn{display:flex!important}
+  nav{padding:0 16px}
+}
+@media(max-width:560px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .trial-card{flex-direction:column;gap:12px}
+  .main-content{padding:16px 14px}
+}
+.mobile-menu-btn{display:none;width:38px;height:38px;border-radius:8px;border:1.5px solid var(--border);background:white;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem}
+
+/* ── SIDEBAR BACKDROP (mobile) ── */
+#sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:89;backdrop-filter:blur(2px);transition:opacity 0.3s}
+@media(max-width:900px){#sidebar-backdrop.open{display:block}}
+
+/* loading */
+.loading-screen{position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:300;flex-direction:column;gap:16px}
+.loading-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--accent)}
+.loading-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- Loading screen -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-logo">Servify</div>
+  <div class="loading-spinner"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    <a class="nav-logo" href="index.html">Servify</a>
+  </div>
+  <div class="nav-right">
+    <span style="font-size:0.85rem;color:var(--muted)" id="nav-greeting"></span>
+    <a href="index.html" class="btn btn-ghost btn-sm nav-back-btn">← Back</a>
+    <button class="btn btn-ghost btn-sm" onclick="handleSignOut()">Sign Out</button>
+  </div>
+  <style>
+    @media(max-width:600px){
+      #nav-greeting{ display:none !important; }
+      .nav-back-btn{ display:none !important; }
+    }
+  </style>
+</nav>
+
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sb-avatar">?</div>
+      <div class="user-name" id="sb-name">Loading...</div>
+      <div class="user-email" id="sb-email"></div>
+      <span class="user-role-badge" id="sb-role-badge">...</span>
+    </div>
+
+    <div class="sidebar-nav">
+      <!-- Common -->
+      <div class="sidebar-section">Overview</div>
+      <button class="sidebar-link active" onclick="goTo('overview',this)">
+        <span class="sidebar-icon">🏠</span> Dashboard
+      </button>
+      <button class="sidebar-link" onclick="goTo('profile',this)">
+        <span class="sidebar-icon">👤</span> My Profile
+      </button>
+
+      <!-- Provider only -->
+      <div class="sidebar-section provider-only" style="display:none">For Providers</div>
+      <button class="sidebar-link provider-only" style="display:none" onclick="goTo('my-listings',this)">
+        <span class="sidebar-icon">📋</span> My Listings
+        <span class="sb-badge" id="pending-listings-badge" style="display:none">!</span>
+      </button>
+      <button class="sidebar-link provider-only" style="display:none" onclick="goTo('add-listing',this)">
+        <span class="sidebar-icon">➕</span> Add New Listing
+      </button>
+      <button class="sidebar-link provider-only" style="display:none" onclick="goTo('subscription',this)">
+        <span class="sidebar-icon">💳</span> Subscription
+      </button>
+      <button class="sidebar-link provider-only" style="display:none" onclick="goTo('analytics',this)">
+        <span class="sidebar-icon">📈</span> Analytics
+      </button>
+
+      <!-- Seeker only -->
+      <div class="sidebar-section seeker-only" style="display:none">For Seekers</div>
+      <button class="sidebar-link seeker-only" style="display:none" onclick="goTo('saved',this)">
+        <span class="sidebar-icon">❤️</span> Saved Services
+      </button>
+      <button class="sidebar-link seeker-only" style="display:none" onclick="goTo('enquiries',this)">
+        <span class="sidebar-icon">📩</span> My Enquiries
+      </button>
+
+      <!-- Admin only -->
+      <div class="sidebar-section admin-only" style="display:none">Admin</div>
+      <button class="sidebar-link admin-only" style="display:none" onclick="goTo('admin',this)">
+        <span class="sidebar-icon">🛡️</span> Admin Panel
+        <span class="sb-badge" id="admin-pending-badge" style="display:none">0</span>
+      </button>
+
+      <!-- Common bottom -->
+      <div class="sidebar-section">Account</div>
+      <button class="sidebar-link" onclick="goTo('notifications',this)">
+        <span class="sidebar-icon">🔔</span> Notifications
+        <span class="sb-badge" id="notifications-badge" style="display:none">0</span>
+      </button>
+      <button class="sidebar-link" onclick="goTo('settings',this)">
+        <span class="sidebar-icon">⚙️</span> Settings
+      </button>
+      <button class="sidebar-link" onclick="goTo('help',this)">
+        <span class="sidebar-icon">❓</span> Help & Support
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;font-size:0.82rem" onclick="handleSignOut()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content" id="main-content">
+
+    <!-- ══════════ OVERVIEW ══════════ -->
+    <div class="page active" id="page-overview">
+      <div class="page-header">
+        <div class="page-title" id="overview-greeting">Welcome back!</div>
+        <div class="page-sub">Here's what's happening with your Servify account.</div>
+      </div>
+
+      <!-- Provider stats -->
+      <div id="provider-stats" style="display:none">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-icon">📋</div>
+            <div class="stat-card-val" id="stat-listings">0</div>
+            <div class="stat-card-label">Active Listings</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">👁️</div>
+            <div class="stat-card-val">—</div>
+            <div class="stat-card-label">Profile Views</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">📩</div>
+            <div class="stat-card-val">0</div>
+            <div class="stat-card-label">Enquiries</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">⭐</div>
+            <div class="stat-card-val">—</div>
+            <div class="stat-card-label">Avg Rating</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seeker stats -->
+      <div id="seeker-stats" style="display:none">
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat-card">
+            <div class="stat-card-icon">🔍</div>
+            <div class="stat-card-val" id="stat-searches">0</div>
+            <div class="stat-card-label">Searches Made</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">❤️</div>
+            <div class="stat-card-val" id="stat-saved">0</div>
+            <div class="stat-card-label">Saved Services</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">📩</div>
+            <div class="stat-card-val">0</div>
+            <div class="stat-card-label">Enquiries Sent</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trial banner (provider only) -->
+      <div id="trial-banner-wrap" style="display:none"></div>
+
+      <!-- Provider onboarding checklist (shown until all steps complete) -->
+      <div id="onboarding-checklist" style="display:none;margin-bottom:20px">
+        <div class="card" style="border:1.5px solid #fcd5c4;background:linear-gradient(135deg,#fff9f7,#fff4ee)">
+          <div class="card-header" style="margin-bottom:16px">
+            <div>
+              <div class="card-title" style="font-size:1rem">🚀 Get your profile ready</div>
+              <div style="font-size:0.8rem;color:var(--muted);margin-top:2px">Complete these steps to start receiving enquiries</div>
+            </div>
+            <button onclick="document.getElementById('onboarding-checklist').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px" title="Dismiss">✕</button>
+          </div>
+          <div id="onboarding-steps" style="display:flex;flex-direction:column;gap:10px"></div>
+          <div style="margin-top:14px">
+            <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--muted);margin-bottom:6px">
+              <span>Progress</span><span id="onboarding-pct">0%</span>
+            </div>
+            <div style="background:rgba(0,0,0,0.08);border-radius:100px;height:6px;overflow:hidden">
+              <div id="onboarding-bar" style="height:100%;border-radius:100px;background:var(--accent);transition:width 0.5s;width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <!-- Recent listings / activity -->
+        <div class="card" id="overview-card-left">
+          <div class="card-header">
+            <div class="card-title" id="overview-left-title">Recent Listings</div>
+          </div>
+          <div id="overview-left-content">
+            <div class="empty-state" style="padding:24px">
+              <div class="empty-icon">📋</div>
+              <div class="empty-title">No listings yet</div>
+              <div class="empty-sub">Add your first service listing to get started.</div>
+              <button class="btn btn-accent btn-sm" onclick="goTo('add-listing',document.querySelector('[onclick*=add-listing]'))">Add Listing →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Quick Actions</div>
+          </div>
+          <div id="quick-actions" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Account Activity</div>
+        </div>
+        <div id="activity-list">
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div>
+              <div class="activity-text">Account created successfully</div>
+              <div class="activity-time" id="account-created-time">Just now</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ PROFILE ══════════ -->
+    <div class="page" id="page-profile">
+      <div class="page-header">
+        <div class="page-title">My Profile</div>
+        <div class="page-sub">Manage your personal information</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Personal Info</div>
+            <button class="btn btn-ghost btn-sm" onclick="toggleEditProfile()">✏️ Edit</button>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px">
+            <div class="profile-avatar-big" id="profile-avatar-big">?</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem" id="profile-fullname">—</div>
+            <div style="color:var(--muted);font-size:0.85rem;margin-top:4px" id="profile-email-display">—</div>
+            <span class="user-role-badge mt-2" id="profile-role-badge" style="margin-top:8px">—</span>
+          </div>
+          <!-- View mode -->
+          <div id="profile-view">
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:0.875rem">
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">Full Name</span>
+                <span style="font-weight:500" id="pv-name">—</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">Email</span>
+                <span style="font-weight:500" id="pv-email">—</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">Phone</span>
+                <span style="font-weight:500" id="pv-phone">Not set</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">Location</span>
+                <span style="font-weight:500" id="pv-location">Not set</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0">
+                <span style="color:var(--muted)">Member since</span>
+                <span style="font-weight:500" id="pv-joined">—</span>
+              </div>
+            </div>
+          </div>
+          <!-- Edit mode -->
+          <div id="profile-edit" style="display:none">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input class="form-control" id="edit-first" placeholder="Ahmad"/>
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input class="form-control" id="edit-last" placeholder="bin Razak"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input class="form-control" id="edit-phone" placeholder="01X-XXXXXXX"/>
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <select class="form-control" id="edit-location">
+                <option value="">Select location...</option>
+                <option>Kuala Lumpur</option><option>Petaling Jaya</option><option>Subang Jaya</option>
+                <option>Shah Alam</option><option>Selangor</option><option>Penang</option>
+                <option>Johor Bahru</option><option>Ipoh</option><option>Melaka</option>
+                <option>Kota Kinabalu</option><option>Kuching</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-accent" style="flex:1;justify-content:center" onclick="saveProfile()">Save Changes</button>
+              <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="toggleEditProfile()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Provider business info -->
+          <div class="card provider-only" id="biz-card" style="display:none">
+            <div class="card-header">
+              <div class="card-title">Business Info</div>
+              <button class="btn btn-ghost btn-sm" onclick="toggleEditBiz()">✏️ Edit</button>
+            </div>
+            <div id="biz-view">
+              <div style="display:flex;flex-direction:column;gap:12px;font-size:0.875rem">
+                <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                  <span style="color:var(--muted)">Business Name</span>
+                  <span style="font-weight:500" id="pv-biz">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                  <span style="color:var(--muted)">Category</span>
+                  <span style="font-weight:500" id="pv-cat">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:10px 0">
+                  <span style="color:var(--muted)">Account Status</span>
+                  <span id="pv-status">—</span>
+                </div>
+              </div>
+            </div>
+            <div id="biz-edit" style="display:none;margin-top:16px">
+              <div class="form-group">
+                <label>Business / Provider Name</label>
+                <input class="form-control" id="edit-biz" placeholder="Ahmad's Catering"/>
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <select class="form-control" id="edit-cat">
+                  <option value="">Select...</option>
+                  <option>Catering</option><option>Cleaning</option><option>Photography</option>
+                  <option>Events</option><option>Moving</option><option>Repair</option>
+                  <option>Tutoring</option><option>Beauty</option><option>IT</option>
+                  <option>Fitness</option><option>Music</option><option>Pets</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Business Description</label>
+                <textarea class="form-control" id="edit-biz-desc" placeholder="Tell customers about your business..."></textarea>
+              </div>
+              <div style="display:flex;gap:10px">
+                <button class="btn btn-accent" style="flex:1;justify-content:center" onclick="saveBizInfo()">Save</button>
+                <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="toggleEditBiz()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile stats -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom:16px">Account Stats</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="profile-stat">
+                <div class="profile-stat-val" id="ps-listings">0</div>
+                <div class="profile-stat-label">Listings</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-val" id="ps-enquiries">0</div>
+                <div class="profile-stat-label">Enquiries</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-val" id="ps-reviews">0</div>
+                <div class="profile-stat-label">Reviews</div>
+              </div>
+              <div class="profile-stat">
+                <div class="profile-stat-val" id="ps-rating">—</div>
+                <div class="profile-stat-label">Avg Rating</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ MY LISTINGS (Provider) ══════════ -->
+    <div class="page" id="page-my-listings">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div class="page-title">My Listings</div>
+          <div class="page-sub">Manage your service listings</div>
+        </div>
+        <button class="btn btn-accent" onclick="goTo('add-listing',document.querySelector('[onclick*=add-listing]'))">+ Add New Listing</button>
+      </div>
+      <div class="card">
+        <div id="my-listings-content">
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <div class="empty-title">No listings yet</div>
+            <div class="empty-sub">Add your first service to start reaching customers.</div>
+            <button class="btn btn-accent" onclick="goTo('add-listing',document.querySelector('[onclick*=add-listing]'))">+ Add Your First Listing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ ADD LISTING (Provider) ══════════ -->
+    <div class="page" id="page-add-listing">
+      <div class="page-header">
+        <div class="page-title">Add New Listing</div>
+        <div class="page-sub">Fill in the details of your service</div>
+      </div>
+      <div class="card" style="max-width:640px">
+        <div class="form-group">
+          <label>Service Title *</label>
+          <input class="form-control" id="new-title" placeholder="e.g. Professional Wedding Catering" maxlength="80"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category *</label>
+            <select class="form-control" id="new-cat">
+              <option value="">Select category...</option>
+              <option>Catering</option><option>Events</option><option>Cleaning</option>
+              <option>Photography</option><option>Moving</option><option>Repair</option>
+              <option>Tutoring</option><option>Beauty</option><option>IT</option>
+              <option>Fitness</option><option>Music</option><option>Pets</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Starting Price (RM) *</label>
+            <input class="form-control" type="number" id="new-price" placeholder="e.g. 150" min="1"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" id="new-desc" rows="4" placeholder="Describe your service, experience, and what makes you stand out..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Location *</label>
+            <select class="form-control" id="new-location">
+              <option value="">Select location...</option>
+              <option>Kuala Lumpur</option><option>Petaling Jaya</option><option>Subang Jaya</option>
+              <option>Shah Alam</option><option>Selangor</option><option>Penang</option>
+              <option>Johor Bahru</option><option>Ipoh</option><option>Melaka</option>
+              <option>Kota Kinabalu</option><option>Kuching</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Contact Number *</label>
+            <input class="form-control" id="new-phone" type="tel" placeholder="01X-XXXXXXX"/>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-accent" style="flex:1;justify-content:center;padding:14px" onclick="submitNewListing()">Publish Listing →</button>
+          <button class="btn btn-ghost" onclick="goTo('my-listings',document.querySelector('[onclick*=my-listings]'))">Cancel</button>
+        </div>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:12px;text-align:center">Your listing will be reviewed by our team before going live — usually within 24 hours.</p>
+      </div>
+    </div>
+
+    <!-- ══════════ SUBSCRIPTION (Provider) ══════════ -->
+    <div class="page" id="page-subscription">
+      <div class="page-header">
+        <div class="page-title">Subscription</div>
+        <div class="page-sub">Manage your Servify Pro plan</div>
+      </div>
+      <div id="subscription-content"></div>
+    </div>
+
+    <!-- ══════════ ANALYTICS (Provider) ══════════ -->
+    <div class="page" id="page-analytics">
+      <div class="page-header">
+        <div class="page-title">Analytics</div>
+        <div class="page-sub">Track your listing performance</div>
+      </div>
+      <div class="card">
+        <div class="empty-state">
+          <div class="empty-icon">📈</div>
+          <div class="empty-title">Analytics coming soon</div>
+          <div class="empty-sub">Once you have active listings, you'll see views, clicks, and enquiry data here.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ SAVED SERVICES (Seeker) ══════════ -->
+    <div class="page" id="page-saved">
+      <div class="page-header">
+        <div class="page-title">Saved Services</div>
+        <div class="page-sub">Services you've bookmarked</div>
+      </div>
+      <div class="card">
+        <div class="empty-state">
+          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:14px">
+            <circle cx="36" cy="36" r="36" fill="#ede9df"/>
+            <path d="M36 52s-18-11.5-18-22a12 12 0 0 1 18-10.39A12 12 0 0 1 54 30c0 10.5-18 22-18 22z" fill="#fcd5c4" stroke="#e8521a" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M36 48s-13-8.5-13-18a8 8 0 0 1 13-6.24" stroke="#e8521a" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.35"/>
+          </svg>
+          <div class="empty-title">No saved services yet</div>
+          <div class="empty-sub">Browse services and tap the heart icon to save ones you like.</div>
+          <a href="index.html#listings" class="btn btn-accent">Browse Services →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ ENQUIRIES (Seeker) ══════════ -->
+    <div class="page" id="page-enquiries">
+      <div class="page-header">
+        <div class="page-title">My Enquiries</div>
+        <div class="page-sub">Services you've contacted</div>
+      </div>
+      <div class="card">
+        <div class="empty-state">
+          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:14px">
+            <circle cx="36" cy="36" r="36" fill="#ede9df"/>
+            <rect x="14" y="22" width="44" height="30" rx="6" fill="#fcd5c4" stroke="#e8521a" stroke-width="2.5"/>
+            <path d="M14 28l22 14 22-14" stroke="#e8521a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="52" cy="22" r="7" fill="#e8521a"/>
+            <path d="M52 18v4.5l3 1.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div class="empty-title">No enquiries yet</div>
+          <div class="empty-sub">When you contact a service provider, it'll appear here.</div>
+          <a href="index.html#listings" class="btn btn-accent">Find a Service →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ SETTINGS ══════════ -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <div class="page-title">Settings</div>
+        <div class="page-sub">Manage your account preferences</div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title" style="margin-bottom:20px">🔐 Change Password</div>
+        <div style="max-width:400px">
+          <div class="form-group">
+            <label>New Password</label>
+            <input class="form-control" type="password" id="new-pw" placeholder="Min. 8 characters"/>
+          </div>
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <input class="form-control" type="password" id="new-pw-confirm" placeholder="Repeat password"/>
+          </div>
+          <div style="color:var(--danger);font-size:0.78rem;margin-bottom:12px;display:none" id="pw-change-err"></div>
+          <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title" style="margin-bottom:20px">🔔 Notifications</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:0.875rem;font-weight:500">Email notifications</div>
+              <div style="font-size:0.78rem;color:var(--muted)">Receive emails about your account activity</div>
+            </div>
+            <button class="toggle-btn on" onclick="this.classList.toggle('on')">
+              <span></span>
+            </button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:0.875rem;font-weight:500">Enquiry alerts</div>
+              <div style="font-size:0.78rem;color:var(--muted)">Get notified when someone contacts you</div>
+            </div>
+            <button class="toggle-btn on" onclick="this.classList.toggle('on')">
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:#fecaca">
+        <div class="card-title" style="margin-bottom:8px;color:var(--danger)">⚠️ Danger Zone</div>
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">These actions are permanent and cannot be undone.</p>
+        <button class="btn btn-danger btn-sm" onclick="confirmDeleteAccount()">Delete My Account</button>
+      </div>
+    </div>
+
+    <!-- ══════════ HELP ══════════ -->
+    <div class="page" id="page-help">
+      <div class="page-header">
+        <div class="page-title">Help & Support</div>
+        <div class="page-sub">We're here to help</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:16px">📬 Contact Support</div>
+          <div class="form-group">
+            <label>Subject</label>
+            <select class="form-control" id="help-subject">
+              <option>General Enquiry</option>
+              <option>Listing Issue</option>
+              <option>Payment Issue</option>
+              <option>Account Problem</option>
+              <option>Report a Problem</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea class="form-control" id="help-msg" rows="4" placeholder="Describe your issue..."></textarea>
+          </div>
+          <button class="btn btn-accent" style="width:100%;justify-content:center" onclick="submitHelp()">Send Message →</button>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-title" style="margin-bottom:12px">❓ FAQs</div>
+            <div style="display:flex;flex-direction:column;gap:12px;font-size:0.875rem">
+              <div><strong>How do I get my listing approved?</strong><br><span style="color:var(--muted)">Submit your listing and our team reviews it within 24 hours.</span></div>
+              <div><strong>How does the free trial work?</strong><br><span style="color:var(--muted)">You get 30 days free. After that it's RM 29/month to keep your listing live.</span></div>
+              <div><strong>How do customers contact me?</strong><br><span style="color:var(--muted)">They see your phone number on your listing and can call or WhatsApp directly.</span></div>
+              <div><strong>Can I edit my listing?</strong><br><span style="color:var(--muted)">Yes, go to My Listings and click Edit on any listing.</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:12px">📞 Direct Contact</div>
+            <div style="font-size:0.875rem;display:flex;flex-direction:column;gap:8px">
+              <div>📧 <a href="mailto:hello@servify.my" style="color:var(--accent)">hello@servify.my</a></div>
+              <div style="color:var(--muted);font-size:0.78rem">Response time: within 24 hours<br>Mon–Fri, 9am–6pm MYT</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ NOTIFICATIONS ══════════ -->
+    <div class="page" id="page-notifications">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div class="page-title">Notifications</div>
+          <div class="page-sub">Recent activity on your account</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="loadNotifications(currentUser)">🔄 Refresh</button>
+      </div>
+      <div class="card" id="notifications-content">
+        <div class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:14px">
+            <circle cx="32" cy="32" r="32" fill="#ede9df"/>
+            <path d="M32 14a14 14 0 0 1 14 14v8l4 6H14l4-6v-8a14 14 0 0 1 14-14z" fill="#fcd5c4" stroke="#e8521a" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M28 42a4 4 0 0 0 8 0" stroke="#e8521a" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <circle cx="46" cy="18" r="6" fill="#e8521a"/>
+            <path d="M46 15v3.5l2 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div class="empty-title">No notifications yet</div>
+          <div class="empty-sub">Enquiries received, listing approvals, and account updates will appear here.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ ADMIN PANEL ══════════ -->
+    <div class="page" id="page-admin">
+      <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+        <div>
+          <div class="page-title">🛡️ Admin Panel</div>
+          <div class="page-sub">Manage listings, users, and platform activity</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="loadAdminListings()">🔄 Refresh</button>
+          <button class="btn btn-success btn-sm" onclick="approveAllPending()">✅ Approve All Pending</button>
+        </div>
+      </div>
+
+      <!-- Admin Stats -->
+      <div class="stats-grid" id="admin-stats-grid" style="margin-bottom:24px">
+        <div class="stat-card" style="cursor:pointer" onclick="filterAdminListings('pending',document.querySelectorAll('.admin-tab')[1])">
+          <div class="stat-card-icon">⏳</div>
+          <div class="stat-card-val" id="admin-stat-pending">—</div>
+          <div class="stat-card-label">Pending Listings</div>
+        </div>
+        <div class="stat-card" style="cursor:pointer" onclick="filterAdminListings('active',document.querySelectorAll('.admin-tab')[2])">
+          <div class="stat-card-icon">✅</div>
+          <div class="stat-card-val" id="admin-stat-active">—</div>
+          <div class="stat-card-label">Active Listings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">👥</div>
+          <div class="stat-card-val" id="admin-stat-users">—</div>
+          <div class="stat-card-label">Providers</div>
+        </div>
+        <div class="stat-card" style="cursor:pointer" onclick="filterAdminListings('rejected',document.querySelectorAll('.admin-tab')[3])">
+          <div class="stat-card-icon">❌</div>
+          <div class="stat-card-val" id="admin-stat-rejected">—</div>
+          <div class="stat-card-label">Rejected</div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="admin-tab active" onclick="filterAdminListings('all',this)">All Listings</button>
+        <button class="admin-tab" onclick="filterAdminListings('pending',this)">⏳ Pending</button>
+        <button class="admin-tab" onclick="filterAdminListings('active',this)">✅ Active</button>
+        <button class="admin-tab" onclick="filterAdminListings('rejected',this)">❌ Rejected</button>
+      </div>
+
+      <!-- Search bar -->
+      <div style="margin-bottom:16px">
+        <input class="form-control" id="admin-search" placeholder="🔍 Search by title, provider, category, location..." oninput="searchAdminListings()" style="max-width:440px"/>
+      </div>
+
+      <!-- Listings Table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div id="admin-listings-container">
+          <div class="empty-state" style="padding:40px">
+            <div class="empty-icon">⏳</div>
+            <div class="empty-title">Loading listings...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Admin Listing Detail Modal -->
+<div class="modal-overlay" id="admin-detail-modal" onclick="closeModal('admin-detail-modal')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:520px;width:95%">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div class="modal-title" id="admin-modal-title">Listing Details</div>
+      <button onclick="closeModal('admin-detail-modal')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+    <div id="admin-modal-body"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap" id="admin-modal-actions"></div>
+  </div>
+</div>
+
+<!-- Sidebar backdrop for mobile -->
+<div id="sidebar-backdrop" onclick="toggleSidebar()"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toast-icon"></span><span id="toast-msg"></span></div>
+
+<!-- Confirm delete modal -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" style="color:var(--danger)">Delete Account</div>
+    <p class="modal-sub">This will permanently delete your account and all your data. This cannot be undone.</p>
+    <p style="font-size:0.875rem;margin-bottom:20px">Type <strong>DELETE</strong> to confirm:</p>
+    <input class="form-control" id="delete-confirm-input" placeholder="Type DELETE here"/>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn btn-danger" style="flex:1;justify-content:center" onclick="deleteAccount()">Delete Forever</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.toggle-btn{width:44px;height:24px;background:var(--border);border-radius:100px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;border:none}
+.toggle-btn.on{background:var(--success)}
+.toggle-btn span{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;transition:left 0.2s;display:block}
+.toggle-btn.on span{left:23px}
+
+/* ── ADMIN ── */
+.admin-tab{padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.15s}
+.admin-tab.active{background:var(--ink);color:white;border-color:var(--ink)}
+.admin-table{width:100%;border-collapse:collapse;font-size:0.85rem}
+.admin-table th{background:var(--cream);padding:12px 16px;text-align:left;font-weight:600;font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;border-bottom:1.5px solid var(--border)}
+.admin-table td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:var(--cream)}
+.admin-action-btn{padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer;border:none;transition:all 0.15s}
+.admin-approve{background:#dcfce7;color:#166534}.admin-approve:hover{background:#bbf7d0}
+.admin-reject{background:#fee2e2;color:#991b1b}.admin-reject:hover{background:#fecaca}
+.admin-view{background:var(--cream);color:var(--ink)}.admin-view:hover{background:var(--border)}
+.admin-delete{background:#fee2e2;color:#991b1b}.admin-delete:hover{background:#fecaca}
+@media(max-width:700px){
+  .admin-table th:nth-child(3),.admin-table td:nth-child(3),
+  .admin-table th:nth-child(4),.admin-table td:nth-child(4){display:none}
+}
+</style>
+
+<script>
+// ════════════════════════════════════
+// SECURITY: XSS sanitiser
+// ════════════════════════════════════
+function sanitize(str) {
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
+}
+
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+let currentUser = null;
+let userProfile = null;
+let userListings = [];
+
+// ════════════════════════════════════
+// INIT — strict auth guard
+// ════════════════════════════════════
+// Hide body instantly to prevent flash of unauthenticated content
+document.documentElement.style.visibility = 'hidden';
+
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) {
+      // No session — hard redirect, no flash
+      window.location.replace('index.html');
+      return;
+    }
+    // Session confirmed — show page and init
+    document.documentElement.style.visibility = '';
+    currentUser = session.user;
+    await initDashboard(session.user);
+    document.getElementById('loading-screen').style.display = 'none';
+  } catch(e) {
+    // On any error, redirect for safety
+    window.location.replace('index.html');
+  }
+
+  // Listen for sign-out events (e.g. session expired in another tab)
+  db.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT' || !session) {
+      window.location.replace('index.html');
+    }
+  });
+});
+
+async function initDashboard(user) {
+  const name = (user.user_metadata?.full_name || user.email).split(/[ @]/)[0];
+  const fullName = user.user_metadata?.full_name || name;
+  const role = user.user_metadata?.role || 'seeker';
+  const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  const joinedDate = new Date(user.created_at).toLocaleDateString('en-MY', {day:'numeric',month:'long',year:'numeric'});
+
+  // Nav
+  document.getElementById('nav-greeting').textContent = `Hi, ${name} 👋`;
+
+  // Sidebar
+  document.getElementById('sb-avatar').textContent = initials;
+  document.getElementById('sb-name').textContent = fullName;
+  document.getElementById('sb-email').textContent = user.email;
+
+  // Profile page
+  document.getElementById('profile-avatar-big').textContent = initials;
+  document.getElementById('profile-fullname').textContent = fullName;
+  document.getElementById('profile-email-display').textContent = user.email;
+  document.getElementById('pv-name').textContent = fullName;
+  document.getElementById('pv-email').textContent = user.email;
+  document.getElementById('pv-joined').textContent = joinedDate;
+  document.getElementById('account-created-time').textContent = joinedDate;
+
+  // Greetings
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('overview-greeting').textContent = `${greeting}, ${name}! 👋`;
+
+  // Admin check — if admin, skip provider/seeker UI entirely
+  if (isAdmin(user)) {
+    // Set admin badge
+    const badge = document.getElementById('sb-role-badge');
+    badge.textContent = '🛡️ Admin';
+    badge.className = 'user-role-badge';
+    badge.style.background = '#1e3a8a';
+    badge.style.color = 'white';
+    document.getElementById('profile-role-badge').textContent = '🛡️ Admin';
+    document.getElementById('profile-role-badge').className = 'user-role-badge';
+    document.getElementById('profile-role-badge').style.background = '#1e3a8a';
+    document.getElementById('profile-role-badge').style.color = 'white';
+    // Admin quick actions
+    document.getElementById('quick-actions').innerHTML = `
+      <button class="btn btn-accent" style="justify-content:flex-start" onclick="goTo('admin',document.querySelector('[onclick*=admin]'))">🛡️ Go to Admin Panel</button>
+      <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('profile',document.querySelector('[onclick*=profile]'))">👤 Edit Profile</button>
+    `;
+    await initAdminPanel(user);
+  } else if (role === 'provider') {
+    setupProviderUI(user, fullName, joinedDate);
+  } else {
+    setupSeekerUI(user);
+  }
+
+  // Load profile data from DB
+  await loadProfileData(user.id, role);
+
+  // Load notifications (async, non-blocking)
+  loadNotifications(user);
+}
+
+// ════════════════════════════════════
+// PROVIDER SETUP
+// ════════════════════════════════════
+function setupProviderUI(user, name, joinedDate) {
+  // Show provider sidebar items
+  document.querySelectorAll('.provider-only').forEach(el => el.style.display = '');
+  document.getElementById('provider-stats').style.display = '';
+
+  const badge = document.getElementById('sb-role-badge');
+  badge.textContent = '🏪 Service Provider';
+  badge.className = 'user-role-badge role-provider';
+
+  document.getElementById('profile-role-badge').textContent = '🏪 Service Provider';
+  document.getElementById('profile-role-badge').className = 'user-role-badge role-provider';
+
+  document.getElementById('biz-card').style.display = '';
+
+  // Quick actions
+  document.getElementById('quick-actions').innerHTML = `
+    <button class="btn btn-accent" style="justify-content:flex-start" onclick="goTo('add-listing',document.querySelector('[onclick*=add-listing]'))">➕ Add New Listing</button>
+    <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('my-listings',document.querySelector('[onclick*=my-listings]'))">📋 View My Listings</button>
+    <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('profile',document.querySelector('[onclick*=profile]'))">👤 Edit Profile</button>
+    <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('subscription',document.querySelector('[onclick*=subscription]'))">💳 Subscription</button>
+  `;
+
+  // Trial banner
+  setupTrialBanner();
+
+  // Onboarding checklist (for new/incomplete providers)
+  setupOnboardingChecklist(user);
+
+  // Load listings
+  loadMyListings(user.id);
+
+  // Subscription page
+  setupSubscriptionPage(user);
+}
+
+// ════════════════════════════════════
+// PROVIDER ONBOARDING CHECKLIST
+// ════════════════════════════════════
+async function setupOnboardingChecklist(user) {
+  const steps = [
+    {
+      id: 'step-listing',
+      label: 'Add your first listing',
+      sub: 'Describe your service so customers can find you',
+      action: () => goTo('add-listing', document.querySelector('[onclick*="add-listing"]')),
+      actionLabel: 'Add Listing →',
+    },
+    {
+      id: 'step-profile',
+      label: 'Complete your profile',
+      sub: 'Add your business name, phone number and location',
+      action: () => goTo('profile', document.querySelector('[onclick*="profile"]')),
+      actionLabel: 'Edit Profile →',
+    },
+    {
+      id: 'step-biz',
+      label: 'Add business details',
+      sub: 'Tell customers what category of service you offer',
+      action: () => goTo('profile', document.querySelector('[onclick*="profile"]')),
+      actionLabel: 'Edit Profile →',
+    },
+  ];
+
+  // Check completion state
+  const { data: listings } = await db.from('listings').select('id').eq('user_id', user.id).limit(1);
+  const { data: profile } = await db.from('profiles').select('phone,location').eq('id', user.id).single();
+  const { data: provider } = await db.from('providers').select('business_name,category').eq('id', user.id).single();
+
+  const done = [
+    !!(listings && listings.length > 0),
+    !!(profile && profile.phone && profile.location),
+    !!(provider && provider.business_name && provider.category),
+  ];
+
+  // If all done, don't show checklist
+  if (done.every(Boolean)) return;
+
+  const completedCount = done.filter(Boolean).length;
+  const pct = Math.round((completedCount / steps.length) * 100);
+
+  document.getElementById('onboarding-checklist').style.display = '';
+  document.getElementById('onboarding-pct').textContent = pct + '%';
+  document.getElementById('onboarding-bar').style.width = pct + '%';
+
+  document.getElementById('onboarding-steps').innerHTML = steps.map((s, i) => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:${done[i] ? '#e8f7ef' : 'white'};border:1.5px solid ${done[i] ? '#bbf7d0' : 'var(--border)'}">
+      <div style="width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;
+        background:${done[i] ? 'var(--success)' : 'var(--cream)'};color:${done[i] ? 'white' : 'var(--muted)'}">
+        ${done[i] ? '✓' : (i + 1)}
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.875rem;font-weight:600;${done[i] ? 'text-decoration:line-through;color:var(--muted)' : ''}">${s.label}</div>
+        <div style="font-size:0.75rem;color:var(--muted)">${s.sub}</div>
+      </div>
+      ${!done[i] ? `<button class="btn btn-accent btn-sm" onclick="(${s.action.toString()})()" style="flex-shrink:0;font-size:0.75rem;padding:5px 10px">${s.actionLabel}</button>` : ''}
+    </div>`).join('');
+}
+function setupSeekerUI(user) {
+  document.querySelectorAll('.seeker-only').forEach(el => el.style.display = '');
+
+  const badge = document.getElementById('sb-role-badge');
+  badge.textContent = '🔍 Service Seeker';
+  badge.className = 'user-role-badge role-seeker';
+
+  document.getElementById('profile-role-badge').textContent = '🔍 Service Seeker';
+  document.getElementById('profile-role-badge').className = 'user-role-badge role-seeker';
+
+  document.getElementById('seeker-stats').style.display = '';
+
+  document.getElementById('overview-left-title').textContent = 'Recently Viewed';
+  document.getElementById('overview-left-content').innerHTML = `
+    <div class="empty-state" style="padding:24px">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">Start exploring</div>
+      <div class="empty-sub">Browse services and save the ones you like.</div>
+      <a href="index.html#listings" class="btn btn-accent btn-sm">Browse Services →</a>
+    </div>`;
+
+  document.getElementById('quick-actions').innerHTML = `
+    <a href="index.html#listings" class="btn btn-accent" style="justify-content:flex-start">🔍 Browse Services</a>
+    <a href="index.html#categories" class="btn btn-ghost" style="justify-content:flex-start">📂 Browse Categories</a>
+    <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('profile',document.querySelector('[onclick*=profile]'))">👤 Edit Profile</button>
+    <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('enquiries',document.querySelector('[onclick*=enquiries]'))">📩 My Enquiries</button>
+  `;
+}
+
+// ════════════════════════════════════
+// LOAD PROFILE FROM DB
+// ════════════════════════════════════
+async function loadProfileData(userId, role) {
+  // Try loading from profiles table
+  const { data: profile } = await db.from('profiles').select('*').eq('id', userId).single();
+  if (profile) {
+    userProfile = profile;
+    if (profile.phone) document.getElementById('pv-phone').textContent = profile.phone;
+    if (profile.location) document.getElementById('pv-location').textContent = profile.location;
+    if (profile.phone) document.getElementById('edit-phone').value = profile.phone;
+    if (profile.location) document.getElementById('edit-location').value = profile.location;
+  }
+
+  if (role === 'provider') {
+    const { data: provider } = await db.from('providers').select('*').eq('id', userId).single();
+    if (provider) {
+      document.getElementById('pv-biz').textContent = provider.business_name || '—';
+      document.getElementById('pv-cat').textContent = provider.category || '—';
+      const statusMap = {active:'<span class="badge badge-green">✅ Active</span>',pending:'<span class="badge badge-orange">⏳ Pending Review</span>',suspended:'<span class="badge badge-red">❌ Suspended</span>'};
+      document.getElementById('pv-status').innerHTML = statusMap[provider.status] || provider.status;
+      if (provider.business_name) document.getElementById('edit-biz').value = provider.business_name;
+      if (provider.category) document.getElementById('edit-cat').value = provider.category;
+    }
+  }
+}
+
+// ════════════════════════════════════
+// LOAD MY LISTINGS
+// ════════════════════════════════════
+async function loadMyListings(userId) {
+  const { data: listings, error } = await db.from('listings').select('*').eq('user_id', userId).order('created_at', {ascending: false});
+  if (error || !listings) return;
+  userListings = listings;
+
+  document.getElementById('stat-listings').textContent = listings.filter(l => l.status === 'active').length;
+  document.getElementById('ps-listings').textContent = listings.length;
+
+  const pendingCount = listings.filter(l => l.status === 'pending').length;
+  if (pendingCount > 0) {
+    document.getElementById('pending-listings-badge').style.display = '';
+    document.getElementById('pending-listings-badge').textContent = pendingCount;
+  }
+
+  if (!listings.length) return;
+
+  const catEmoji = {'Catering':'🍽️','Events':'🎉','Cleaning':'🧹','Photography':'📸','Moving':'📦','Repair':'🔧','Tutoring':'📚','Beauty':'💄','IT':'💻','Fitness':'🏋️','Music':'🎵','Pets':'🐾'};
+  const statusBadge = {active:'<span class="badge badge-green">✅ Active</span>',pending:'<span class="badge badge-orange">⏳ Pending</span>',rejected:'<span class="badge badge-red">❌ Rejected</span>'};
+
+  const html = listings.map(l => `
+    <div class="listing-item">
+      <div class="listing-emoji">${catEmoji[l.category]||'⭐'}</div>
+      <div class="listing-info">
+        <div class="listing-title">${sanitize(l.title)}</div>
+        <div class="listing-meta">${sanitize(l.category)} · ${sanitize(l.location)} · RM ${parseFloat(l.price).toLocaleString()}</div>
+      </div>
+      <div class="listing-status">${statusBadge[l.status]||'<span class="badge badge-grey">Unknown</span>'}</div>
+    </div>
+  `).join('');
+
+  // Overview card
+  document.getElementById('overview-left-content').innerHTML = `<div>${listings.slice(0,3).map(l => `
+    <div class="listing-item">
+      <div class="listing-emoji">${catEmoji[l.category]||'⭐'}</div>
+      <div class="listing-info">
+        <div class="listing-title">${sanitize(l.title)}</div>
+        <div class="listing-meta">${sanitize(l.category)} · ${statusBadge[l.status]||''}</div>
+      </div>
+    </div>`).join('')}</div>`;
+
+  // My listings page
+  document.getElementById('my-listings-content').innerHTML = html;
+}
+
+// ════════════════════════════════════
+// TRIAL BANNER — uses auth created_at (tamper-proof, not localStorage)
+// ════════════════════════════════════
+function setupTrialBanner() {
+  const TRIAL_DAYS = 30;
+  // Use Supabase auth account creation date — cannot be manipulated by user
+  const signupDate = currentUser?.created_at;
+  if (!signupDate) return;
+
+  const start = new Date(signupDate);
+  const now = new Date();
+  const daysElapsed = Math.floor((now - start) / (1000*60*60*24));
+  const daysLeft = TRIAL_DAYS - daysElapsed;
+  const pct = Math.max(0, Math.min(100, (daysLeft/TRIAL_DAYS)*100));
+
+  const wrap = document.getElementById('trial-banner-wrap');
+  wrap.style.display = '';
+
+  if (daysLeft <= 0) {
+    wrap.innerHTML = `
+      <div class="trial-card expired">
+        <div class="trial-icon">⚠️</div>
+        <div style="flex:1">
+          <div class="trial-title">Your free trial has ended</div>
+          <div class="trial-sub">Your listings are currently frozen. Subscribe for RM 29/month to reactivate them immediately.</div>
+          <button class="btn btn-danger" onclick="goTo('subscription',document.querySelector('[onclick*=subscription]'))">Subscribe Now — RM 29/month →</button>
+        </div>
+      </div>`;
+  } else if (daysLeft <= 7) {
+    wrap.innerHTML = `
+      <div class="trial-card warning">
+        <div class="trial-icon">⏳</div>
+        <div style="flex:1">
+          <div class="trial-title">${daysLeft} day${daysLeft===1?'':'s'} left on your free trial</div>
+          <div class="trial-sub">After your trial ends, subscribe for RM 29/month to keep your listings live.</div>
+          <div class="trial-bar-wrap"><div class="trial-bar" style="width:${pct}%;background:var(--warning)"></div></div>
+          <button class="btn btn-accent" onclick="goTo('subscription',document.querySelector('[onclick*=subscription]'))">Subscribe Early →</button>
+        </div>
+      </div>`;
+  } else {
+    wrap.innerHTML = `
+      <div class="trial-card">
+        <div class="trial-icon">🎉</div>
+        <div style="flex:1">
+          <div class="trial-title">Free trial active — ${daysLeft} days remaining</div>
+          <div class="trial-sub">After 30 days, continue for just RM 29/month to keep your listings live.</div>
+          <div class="trial-bar-wrap"><div class="trial-bar" style="width:${pct}%"></div></div>
+        </div>
+      </div>`;
+  }
+
+  // Subscription page
+  document.getElementById('subscription-content').innerHTML = `
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:16px">Current Plan</div>
+        ${daysLeft > 0 ? `
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:16px;margin-bottom:16px">
+            <div style="font-weight:700;color:var(--success);margin-bottom:4px">✅ Free Trial Active</div>
+            <div style="font-size:0.85rem;color:var(--muted)">${daysLeft} days remaining out of 30</div>
+          </div>` : `
+          <div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:16px;margin-bottom:16px">
+            <div style="font-weight:700;color:var(--danger);margin-bottom:4px">❌ Trial Expired</div>
+            <div style="font-size:0.85rem;color:var(--muted)">Your listings are currently frozen</div>
+          </div>`}
+        <div style="font-size:0.875rem;color:var(--muted);margin-bottom:20px">After your trial, continue for <strong style="color:var(--ink)">RM 29/month</strong>. Cancel anytime.</div>
+        <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px" onclick="showToast('info','Payment integration coming soon! Contact hello@servify.my to subscribe.')">Subscribe — RM 29/month →</button>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:16px">What's included</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:0.875rem">
+          ${['Unlimited service listings','Priority search placement','Customer enquiries','Verified provider badge','Analytics & booking stats','Dedicated support'].map(f=>`<div style="display:flex;align-items:center;gap:8px"><span style="color:var(--success)">✓</span>${f}</div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════
+// SUBMIT NEW LISTING
+// ════════════════════════════════════
+async function submitNewListing() {
+  const title = document.getElementById('new-title').value.trim();
+  const cat = document.getElementById('new-cat').value;
+  const price = document.getElementById('new-price').value;
+  const location = document.getElementById('new-location').value;
+  const phone = document.getElementById('new-phone').value.trim();
+
+  if (!title || !cat || !price || !location || !phone) {
+    showToast('error', 'Please fill in all required fields'); return;
+  }
+
+  const btn = document.querySelector('#page-add-listing .btn-accent');
+  btn.textContent = 'Publishing…'; btn.disabled = true;
+
+  const { error } = await db.from('listings').insert({
+    title, category: cat,
+    price: parseFloat(price),
+    description: document.getElementById('new-desc').value.trim() || null,
+    provider_name: currentUser.user_metadata?.full_name || '',
+    location, phone,
+    status: 'pending',
+    user_id: currentUser.id
+  });
+
+  btn.textContent = 'Publish Listing →'; btn.disabled = false;
+
+  if (error) { showToast('error', 'Failed to submit. Please try again.'); return; }
+
+  showToast('success', '🚀 Listing submitted! We\'ll review it within 24 hours.');
+  ['new-title','new-cat','new-price','new-desc','new-location','new-phone'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  await loadMyListings(currentUser.id);
+  goTo('my-listings', document.querySelector('[onclick*=my-listings]'));
+}
+
+// ════════════════════════════════════
+// SAVE PROFILE
+// ════════════════════════════════════
+async function saveProfile() {
+  const first = document.getElementById('edit-first').value.trim();
+  const last = document.getElementById('edit-last').value.trim();
+  const phone = document.getElementById('edit-phone').value.trim();
+  const location = document.getElementById('edit-location').value;
+
+  const btn = document.querySelector('#profile-edit .btn-accent');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+
+  // Update auth metadata
+  if (first || last) {
+    await db.auth.updateUser({ data: { full_name: `${first} ${last}`.trim() } });
+  }
+
+  // Upsert profile row
+  await db.from('profiles').upsert({ id: currentUser.id, full_name: `${first} ${last}`.trim(), phone, location });
+
+  btn.textContent = 'Save Changes'; btn.disabled = false;
+
+  // Update UI
+  const fullName = `${first} ${last}`.trim() || document.getElementById('pv-name').textContent;
+  document.getElementById('pv-name').textContent = fullName;
+  if (phone) document.getElementById('pv-phone').textContent = phone;
+  if (location) document.getElementById('pv-location').textContent = location;
+  document.getElementById('profile-fullname').textContent = fullName;
+  document.getElementById('sb-name').textContent = fullName;
+
+  toggleEditProfile();
+  showToast('success', '✅ Profile updated!');
+}
+
+async function saveBizInfo() {
+  const biz = document.getElementById('edit-biz').value.trim();
+  const cat = document.getElementById('edit-cat').value;
+  const desc = document.getElementById('edit-biz-desc').value.trim();
+
+  await db.from('providers').upsert({ id: currentUser.id, business_name: biz, category: cat, description: desc });
+
+  document.getElementById('pv-biz').textContent = biz || '—';
+  document.getElementById('pv-cat').textContent = cat || '—';
+  toggleEditBiz();
+  showToast('success', '✅ Business info updated!');
+}
+
+function toggleEditProfile() {
+  const view = document.getElementById('profile-view');
+  const edit = document.getElementById('profile-edit');
+  const isEditing = edit.style.display !== 'none';
+  view.style.display = isEditing ? 'block' : 'none';
+  edit.style.display = isEditing ? 'none' : 'block';
+  if (!isEditing) {
+    const nameParts = document.getElementById('pv-name').textContent.split(' ');
+    document.getElementById('edit-first').value = nameParts[0] || '';
+    document.getElementById('edit-last').value = nameParts.slice(1).join(' ') || '';
+  }
+}
+
+function toggleEditBiz() {
+  const view = document.getElementById('biz-view');
+  const edit = document.getElementById('biz-edit');
+  const isEditing = edit.style.display !== 'none';
+  view.style.display = isEditing ? 'block' : 'none';
+  edit.style.display = isEditing ? 'none' : 'block';
+}
+
+// ════════════════════════════════════
+// CHANGE PASSWORD
+// ════════════════════════════════════
+async function changePassword() {
+  const pw = document.getElementById('new-pw').value;
+  const pw2 = document.getElementById('new-pw-confirm').value;
+  const err = document.getElementById('pw-change-err');
+
+  if (pw.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.style.display='block'; return; }
+  if (pw !== pw2) { err.textContent = 'Passwords do not match.'; err.style.display='block'; return; }
+  err.style.display = 'none';
+
+  const { error } = await db.auth.updateUser({ password: pw });
+  if (error) { err.textContent = error.message; err.style.display='block'; return; }
+
+  document.getElementById('new-pw').value = '';
+  document.getElementById('new-pw-confirm').value = '';
+  showToast('success', '✅ Password updated successfully!');
+}
+
+// ════════════════════════════════════
+// DELETE ACCOUNT
+// ════════════════════════════════════
+function confirmDeleteAccount() { openModal('delete-modal'); }
+async function deleteAccount() {
+  const input = document.getElementById('delete-confirm-input').value;
+  if (input !== 'DELETE') { showToast('error', 'Please type DELETE to confirm'); return; }
+  showToast('info', 'Account deletion — please contact hello@servify.my');
+  closeModal('delete-modal');
+}
+
+// ════════════════════════════════════
+// HELP SUBMIT
+// ════════════════════════════════════
+async function submitHelp() {
+  const msg = document.getElementById('help-msg').value.trim();
+  if (!msg) { showToast('error', 'Please enter a message'); return; }
+
+  await db.from('contacts').insert({
+    name: currentUser.user_metadata?.full_name || '',
+    email: currentUser.email,
+    subject: document.getElementById('help-subject').value,
+    message: msg
+  });
+
+  document.getElementById('help-msg').value = '';
+  showToast('success', '✅ Message sent! We\'ll reply within 24 hours.');
+}
+
+// ════════════════════════════════════
+// SIGN OUT
+// ════════════════════════════════════
+async function handleSignOut() {
+  await db.auth.signOut();
+  window.location.href = 'index.html';
+}
+
+// ════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════
+function goTo(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').classList.remove('open');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-backdrop').classList.toggle('open');
+}
+
+// ════════════════════════════════════
+// MODAL
+// ════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); });
+
+// ════════════════════════════════════
+// TOAST
+// ════════════════════════════════════
+let toastT;
+function showToast(type, msg) {
+  const t = document.getElementById('toast');
+  const icons = {success:'✅',info:'ℹ️',error:'❌',warning:'⚠️'};
+  document.getElementById('toast-icon').textContent = icons[type]||'ℹ️';
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// ════════════════════════════════════
+// ADMIN — config (add your email here)
+// ════════════════════════════════════
+const ADMIN_EMAILS = ['thasshanrao@gmail.com'];
+
+let allAdminListings = [];
+let filteredAdminListings = [];
+let currentAdminFilter = 'all';
+
+function isAdmin(user) {
+  return ADMIN_EMAILS.includes(user?.email?.toLowerCase());
+}
+
+// ════════════════════════════════════
+// ADMIN INIT
+// ════════════════════════════════════
+async function initAdminPanel(user) {
+  // Show admin sidebar
+  document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+  await loadAdminListings();
+}
+
+async function loadAdminListings() {
+  const { data: listings, error } = await db.from('listings').select('*').order('created_at', { ascending: false });
+  if (error) { showToast('error', 'Failed to load admin data'); return; }
+
+  allAdminListings = listings || [];
+
+  // Stats
+  const pending  = allAdminListings.filter(l => l.status === 'pending').length;
+  const active   = allAdminListings.filter(l => l.status === 'active').length;
+  const rejected = allAdminListings.filter(l => l.status === 'rejected').length;
+  const uniqueUsers = new Set(allAdminListings.map(l => l.user_id)).size;
+
+  document.getElementById('admin-stat-pending').textContent  = pending;
+  document.getElementById('admin-stat-active').textContent   = active;
+  document.getElementById('admin-stat-users').textContent    = uniqueUsers;
+  document.getElementById('admin-stat-rejected').textContent = rejected;
+
+  // Badge in sidebar
+  const badge = document.getElementById('admin-pending-badge');
+  if (pending > 0) {
+    badge.style.display = '';
+    badge.textContent = pending;
+  } else {
+    badge.style.display = 'none';
+  }
+
+  filterAdminListings(currentAdminFilter, null);
+}
+
+function filterAdminListings(filter, el) {
+  currentAdminFilter = filter;
+  if (el) {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  filteredAdminListings = filter === 'all'
+    ? [...allAdminListings]
+    : allAdminListings.filter(l => l.status === filter);
+  renderAdminTable(filteredAdminListings);
+}
+
+function searchAdminListings() {
+  const q = document.getElementById('admin-search').value.toLowerCase();
+  const base = currentAdminFilter === 'all' ? allAdminListings : allAdminListings.filter(l => l.status === currentAdminFilter);
+  const results = base.filter(l =>
+    (l.title||'').toLowerCase().includes(q) ||
+    (l.provider_name||'').toLowerCase().includes(q) ||
+    (l.category||'').toLowerCase().includes(q) ||
+    (l.location||'').toLowerCase().includes(q)
+  );
+  renderAdminTable(results);
+}
+
+function renderAdminTable(listings) {
+  const container = document.getElementById('admin-listings-container');
+  if (!listings.length) {
+    container.innerHTML = `<div class="empty-state" style="padding:40px"><div class="empty-icon">📭</div><div class="empty-title">No listings found</div></div>`;
+    return;
+  }
+
+  const statusBadge = {
+    active:   '<span class="badge badge-green">✅ Active</span>',
+    pending:  '<span class="badge badge-orange">⏳ Pending</span>',
+    rejected: '<span class="badge badge-red">❌ Rejected</span>'
+  };
+
+  const rows = listings.map(l => `
+    <tr>
+      <td>
+        <div style="font-weight:600;font-size:0.875rem">${sanitize(l.title||'—')}</div>
+        <div style="color:var(--muted);font-size:0.75rem">${sanitize(l.provider_name||'Unknown')}</div>
+      </td>
+      <td>${statusBadge[l.status] || '<span class="badge badge-grey">'+sanitize(l.status)+'</span>'}</td>
+      <td>${sanitize(l.category||'—')}</td>
+      <td>${sanitize(l.location||'—')}</td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="admin-action-btn admin-view" onclick="viewAdminListing('${encodeURIComponent(l.id)}')">👁 View</button>
+          ${l.status !== 'active'   ? `<button class="admin-action-btn admin-approve" onclick="updateListingStatus('${encodeURIComponent(l.id)}','active')">✅ Approve</button>` : ''}
+          ${l.status !== 'rejected' ? `<button class="admin-action-btn admin-reject"  onclick="updateListingStatus('${encodeURIComponent(l.id)}','rejected')">❌ Reject</button>` : ''}
+          <button class="admin-action-btn admin-delete" onclick="adminDeleteListing('${encodeURIComponent(l.id)}')">🗑</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  container.innerHTML = `
+    <div style="overflow-x:auto">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Listing / Provider</th>
+            <th>Status</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+async function updateListingStatus(id, status) {
+  const realId = decodeURIComponent(id);
+  const { error } = await db.from('listings').update({ status }).eq('id', realId);
+  if (error) { showToast('error', 'Failed to update listing'); return; }
+  showToast('success', `✅ Listing ${status === 'active' ? 'approved' : 'rejected'}!`);
+  closeModal('admin-detail-modal');
+  await loadAdminListings();
+}
+
+async function adminDeleteListing(id) {
+  const realId = decodeURIComponent(id);
+  if (!confirm('Permanently delete this listing? This cannot be undone.')) return;
+  const { error } = await db.from('listings').delete().eq('id', realId);
+  if (error) { showToast('error', 'Failed to delete listing'); return; }
+  showToast('success', '🗑️ Listing deleted');
+  await loadAdminListings();
+}
+
+function viewAdminListing(id) {
+  const l = allAdminListings.find(x => x.id === decodeURIComponent(id));
+  if (!l) return;
+
+  const statusBadge = {
+    active:   '<span class="badge badge-green">✅ Active</span>',
+    pending:  '<span class="badge badge-orange">⏳ Pending</span>',
+    rejected: '<span class="badge badge-red">❌ Rejected</span>'
+  };
+
+  document.getElementById('admin-modal-title').textContent = l.title || 'Listing Details';
+  document.getElementById('admin-modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:0.875rem">
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--muted)">Status</span><span>${statusBadge[l.status]||sanitize(l.status)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--muted)">Provider</span><span style="font-weight:500">${sanitize(l.provider_name||'—')}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--muted)">Category</span><span>${sanitize(l.category||'—')}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--muted)">Price</span><span style="font-weight:600;color:var(--accent)">RM ${parseFloat(l.price||0).toLocaleString()}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--muted)">Location</span><span>${sanitize(l.location||'—')}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--muted)">Contact</span><span>${sanitize(l.phone||'—')}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--muted)">Submitted</span><span>${new Date(l.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}</span>
+      </div>
+      ${l.description ? `<div style="padding:8px 0"><span style="color:var(--muted);display:block;margin-bottom:4px">Description</span><span>${sanitize(l.description)}</span></div>` : ''}
+    </div>`;
+
+  document.getElementById('admin-modal-actions').innerHTML = `
+    ${l.status !== 'active'   ? `<button class="btn btn-success" onclick="updateListingStatus('${encodeURIComponent(l.id)}','active')">✅ Approve</button>` : ''}
+    ${l.status !== 'rejected' ? `<button class="btn btn-danger"  onclick="updateListingStatus('${encodeURIComponent(l.id)}','rejected')">❌ Reject</button>` : ''}
+    <button class="btn btn-ghost" onclick="closeModal('admin-detail-modal')">Close</button>
+  `;
+
+  openModal('admin-detail-modal');
+}
+
+async function approveAllPending() {
+  const pending = allAdminListings.filter(l => l.status === 'pending');
+  if (!pending.length) { showToast('info', 'No pending listings to approve'); return; }
+  if (!confirm(`Approve all ${pending.length} pending listing(s)?`)) return;
+  const { error } = await db.from('listings').update({ status: 'active' }).eq('status', 'pending');
+  if (error) { showToast('error', 'Failed to approve listings'); return; }
+  showToast('success', `✅ ${pending.length} listing(s) approved!`);
+  await loadAdminListings();
+}
+
+// Setup subscription page placeholder
+function setupSubscriptionPage(user) { /* Called after trial banner setup */ }
+
+// ════════════════════════════════════
+// NOTIFICATIONS
+// ════════════════════════════════════
+async function loadNotifications(user) {
+  if (!user) return;
+  const role = user.user_metadata?.role || 'seeker';
+  const container = document.getElementById('notifications-content');
+  const items = [];
+
+  try {
+    if (role === 'provider' || isAdmin(user)) {
+      // Fetch enquiries sent to this provider's listings in the last 30 days
+      const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      // Get this user's listing IDs first
+      const { data: myListings } = await db.from('listings').select('id,title').eq('user_id', user.id);
+      if (myListings && myListings.length) {
+        const listingIds = myListings.map(l => l.id);
+        const { data: contacts } = await db.from('contacts')
+          .select('*')
+          .in('listing_id', listingIds)
+          .gte('created_at', since)
+          .order('created_at', { ascending: false })
+          .limit(20);
+
+        if (contacts && contacts.length) {
+          const listingMap = {};
+          myListings.forEach(l => { listingMap[l.id] = l.title; });
+          contacts.forEach(c => {
+            const isNew = new Date(c.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            items.push({
+              icon: '📩',
+              text: `New enquiry from <strong>${sanitize(c.name || 'Someone')}</strong>${c.listing_id && listingMap[c.listing_id] ? ` about <em>${sanitize(listingMap[c.listing_id])}</em>` : ''}`,
+              time: _timeAgo(c.created_at),
+              isNew,
+            });
+          });
+        }
+      }
+
+      // Fetch recent listing status changes
+      const { data: listings } = await db.from('listings')
+        .select('title,status,updated_at')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(5);
+
+      if (listings) {
+        listings.forEach(l => {
+          const isNew = new Date(l.updated_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+          const statusMsg = {
+            active:   `✅ Your listing <em>${sanitize(l.title)}</em> was approved and is now live`,
+            rejected: `❌ Your listing <em>${sanitize(l.title)}</em> was rejected`,
+            pending:  `⏳ Your listing <em>${sanitize(l.title)}</em> is under review`,
+          }[l.status];
+          if (statusMsg) items.push({ icon: '📋', text: statusMsg, time: _timeAgo(l.updated_at), isNew });
+        });
+      }
+    }
+
+    // Sort by recency — newer items first
+    items.sort((a, b) => (a.isNew === b.isNew ? 0 : a.isNew ? -1 : 1));
+
+    if (!items.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:14px">
+            <circle cx="32" cy="32" r="32" fill="#ede9df"/>
+            <path d="M32 14a14 14 0 0 1 14 14v8l4 6H14l4-6v-8a14 14 0 0 1 14-14z" fill="#fcd5c4" stroke="#e8521a" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M28 42a4 4 0 0 0 8 0" stroke="#e8521a" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </svg>
+          <div class="empty-title">No notifications yet</div>
+          <div class="empty-sub">Enquiries received, listing approvals, and account updates will appear here.</div>
+        </div>`;
+      return;
+    }
+
+    // Show badge count
+    const newCount = items.filter(i => i.isNew).length;
+    const badge = document.getElementById('notifications-badge');
+    if (newCount > 0) {
+      badge.style.display = '';
+      badge.textContent = newCount;
+    }
+
+    container.innerHTML = items.map(item => `
+      <div class="activity-item" style="${item.isNew ? 'background:var(--paper);border-radius:10px;padding:12px;margin-bottom:4px' : ''}">
+        <div class="activity-dot" style="${item.isNew ? 'background:var(--accent)' : 'background:var(--border)'}"></div>
+        <div style="flex:1">
+          <div class="activity-text">${item.icon} ${item.text}${item.isNew ? ' <span style="font-size:0.68rem;background:var(--accent);color:white;padding:1px 7px;border-radius:100px;font-weight:700;vertical-align:middle;margin-left:4px">NEW</span>' : ''}</div>
+          <div class="activity-time">${item.time}</div>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load notifications</div></div>`;
+  }
+}
+
+function _timeAgo(iso) {
+  if (!iso) return '';
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  if (d < 7) return `${d}d ago`;
+  return new Date(iso).toLocaleDateString('en-MY', { day:'numeric', month:'short' });
+}
+
+/*
+ ═══════════════════════════════════════════════════════════════
+ SUPABASE ROW LEVEL SECURITY (RLS) — SET THESE UP IN DASHBOARD
+ ═══════════════════════════════════════════════════════════════
+ Go to Supabase → Table Editor → [table] → RLS Policies
+
+ TABLE: listings
+   - SELECT: status = 'active' OR auth.uid() = user_id
+   - INSERT: auth.uid() = user_id (must be logged in)
+   - UPDATE: auth.uid() = user_id (own listings only)
+   - DELETE: auth.uid() = user_id (own listings only)
+   Admin override: auth.email() = 'thasshanrao@gmail.com'
+
+ TABLE: contacts
+   - INSERT: true (allow public enquiries)
+   - SELECT: auth.email() = 'thasshanrao@gmail.com' (admin only)
+
+ TABLE: payments
+   - SELECT: auth.uid() = user_id
+   - INSERT: auth.uid() = user_id
+
+ TABLE: profiles
+   - SELECT: auth.uid() = id
+   - INSERT: auth.uid() = id
+   - UPDATE: auth.uid() = id
+
+ TABLE: providers
+   - SELECT: true (public profiles)
+   - INSERT: auth.uid() = id
+   - UPDATE: auth.uid() = id
+
+ GOOGLE OAUTH SETUP (Supabase):
+   1. Go to Supabase → Authentication → Providers → Google
+   2. Enable Google provider
+   3. Add your Google OAuth Client ID & Secret
+      (Get from console.cloud.google.com → APIs → Credentials)
+   4. Add redirect URL: https://cdxxltgowjlfbhcqjqkr.supabase.co/auth/v1/callback
+   5. In Google Console, add authorized redirect URI (same URL above)
+ ═══════════════════════════════════════════════════════════════
+*/
+</script>
+</body>
+</html>
