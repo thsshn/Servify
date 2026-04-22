@@ -5,6 +5,8 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co; img-src 'self' data: https:; frame-ancestors 'none';">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Provider Profile — Servify</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='20' fill='white'>S</text></svg>">
@@ -529,7 +531,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
     </div>
 
     <div class="profile-actions" id="profile-actions">
-      <button class="btn btn-ghost btn-sm" onclick="openModal('contact-quick-modal')">💬 Message</button>
+      <button class="btn btn-ghost btn-sm" onclick="openContactModal()">💬 WhatsApp</button>
       <button class="btn btn-accent" onclick="openModal('edit-profile-modal')" id="edit-profile-action-btn">✏️ Edit Profile</button>
     </div>
   </div>
@@ -675,11 +677,14 @@ textarea.form-control { resize: vertical; min-height: 90px; }
       <div class="hours-list" id="hours-display"></div>
     </div>
 
-    <!-- Quick Enquiry -->
-    <div class="contact-card" style="background:linear-gradient(135deg,var(--ink),#1a1a2e)">
-      <div class="contact-card-title" style="color:white;margin-bottom:12px">💬 Send an Enquiry</div>
-      <p style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin-bottom:16px;line-height:1.5">Interested in this provider? Send a quick message to get a quote.</p>
-      <button class="btn btn-accent" style="width:100%;justify-content:center" onclick="openModal('contact-quick-modal')">Get a Quote →</button>
+    <!-- Quick Contact via WhatsApp -->
+    <div class="contact-card" style="background:linear-gradient(135deg,#075e54,#128c7e)">
+      <div class="contact-card-title" style="color:white;margin-bottom:8px">💬 Chat on WhatsApp</div>
+      <p style="color:rgba(255,255,255,0.75);font-size:0.82rem;margin-bottom:16px;line-height:1.5">Get a fast response — message this provider directly on WhatsApp.</p>
+      <button class="btn" style="width:100%;justify-content:center;background:#25D366;color:white;border:none;font-weight:700;padding:13px;border-radius:10px" onclick="openContactModal()">
+        <svg width="18" height="18" viewBox="0 0 32 32" fill="white" style="margin-right:6px"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.46.66 4.76 1.8 6.76L2 30l7.48-1.76A13.93 13.93 0 0016 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm7.28 19.44c-.3.84-1.76 1.62-2.44 1.72-.62.1-1.4.14-2.26-.14-.52-.16-1.18-.38-2.04-.74-3.58-1.54-5.92-5.14-6.1-5.38-.18-.24-1.44-1.92-1.44-3.66 0-1.74.9-2.6 1.22-2.96.3-.34.66-.42.88-.42.22 0 .44 0 .64.02.2.02.48-.08.74.58.3.7 1 2.42 1.08 2.6.1.18.16.4.04.64-.12.24-.18.4-.36.62-.18.22-.38.48-.54.64-.18.18-.36.38-.16.74.22.36.96 1.58 2.06 2.56 1.42 1.26 2.6 1.66 2.96 1.84.36.18.58.16.8-.1.22-.26.94-1.1 1.18-1.48.24-.36.5-.3.84-.18.34.12 2.18 1.02 2.56 1.2.36.18.6.26.7.42.08.16.08.92-.22 1.76z"/></svg>
+        WhatsApp Now →
+      </button>
     </div>
 
   </div>
@@ -987,39 +992,35 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 </div>
 
 <!-- Quick Enquiry Modal -->
-<div class="modal-overlay" id="contact-quick-modal">
-  <div class="modal" style="max-width:460px">
-    <div class="modal-header">
-      <div class="modal-title">💬 Send Enquiry</div>
-      <button class="modal-close" onclick="closeModal('contact-quick-modal')">✕</button>
+<div class="modal-overlay" id="contact-quick-modal" onclick="closeModal('contact-quick-modal')">
+  <div class="modal" style="max-width:400px" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal('contact-quick-modal')">✕</button>
+    <div style="text-align:center;padding:8px 0 20px">
+      <div style="width:64px;height:64px;background:#e8f7ef;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px">💬</div>
+      <div class="modal-title" style="margin-bottom:6px">Contact <span id="enquiry-to-name">this Provider</span></div>
+      <p style="font-size:0.875rem;color:var(--muted);line-height:1.55">Reach out directly via WhatsApp — get a response fast.</p>
     </div>
-    <p style="font-size:0.875rem;color:var(--muted);margin-bottom:20px">Send a message to <strong id="enquiry-to-name">this provider</strong></p>
-    <div class="form-group">
-      <label>Your Name *</label>
-      <input type="text" class="form-control" id="enq-name" placeholder="Full name">
+
+    <!-- WhatsApp message preview -->
+    <div style="background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:0.82rem;color:var(--muted);line-height:1.6">
+      <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;color:var(--ink)">📨 Pre-filled message</div>
+      <div id="wa-preview-text" style="font-style:italic"></div>
     </div>
-    <div class="form-group">
-      <label>Your Phone / Email *</label>
-      <input type="text" class="form-control" id="enq-contact" placeholder="0123456789 or email@example.com">
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a id="wa-link" href="#" target="_blank" rel="noopener noreferrer"
+        class="btn" style="justify-content:center;padding:15px;font-size:1rem;font-weight:700;background:#25D366;color:white;border:none;border-radius:12px;text-decoration:none;gap:10px"
+        onclick="closeModal('contact-quick-modal')">
+        <svg width="20" height="20" viewBox="0 0 32 32" fill="white"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.46.66 4.76 1.8 6.76L2 30l7.48-1.76A13.93 13.93 0 0016 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm7.28 19.44c-.3.84-1.76 1.62-2.44 1.72-.62.1-1.4.14-2.26-.14-.52-.16-1.18-.38-2.04-.74-3.58-1.54-5.92-5.14-6.1-5.38-.18-.24-1.44-1.92-1.44-3.66 0-1.74.9-2.6 1.22-2.96.3-.34.66-.42.88-.42.22 0 .44 0 .64.02.2.02.48-.08.74.58.3.7 1 2.42 1.08 2.6.1.18.16.4.04.64-.12.24-.18.4-.36.62-.18.22-.38.48-.54.64-.18.18-.36.38-.16.74.22.36.96 1.58 2.06 2.56 1.42 1.26 2.6 1.66 2.96 1.84.36.18.58.16.8-.1.22-.26.94-1.1 1.18-1.48.24-.36.5-.3.84-.18.34.12 2.18 1.02 2.56 1.2.36.18.6.26.7.42.08.16.08.92-.22 1.76z"/></svg>
+        WhatsApp Now
+      </a>
+      <a id="call-link" href="#"
+        class="btn btn-ghost" style="justify-content:center;padding:13px;text-decoration:none;border-radius:12px"
+        onclick="closeModal('contact-quick-modal')">
+        📞 Call Provider
+      </a>
     </div>
-    <div class="form-group">
-      <label>Service Interested In</label>
-      <select class="form-control" id="enq-service">
-        <option value="">— Select a service —</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Event Date <span style="color:var(--muted);font-weight:400">(optional)</span></label>
-      <input type="date" class="form-control" id="enq-date">
-    </div>
-    <div class="form-group">
-      <label>Message *</label>
-      <textarea class="form-control" id="enq-msg" rows="3" placeholder="Tell the provider what you need..."></textarea>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('contact-quick-modal')">Cancel</button>
-      <button class="btn btn-accent" onclick="sendEnquiry()">Send Enquiry →</button>
-    </div>
+    <p style="text-align:center;font-size:0.72rem;color:var(--muted);margin-top:14px">Your message opens directly in WhatsApp</p>
   </div>
 </div>
 
@@ -1702,7 +1703,19 @@ function renderReviews() {
 // ── CONTACT INFO ──
 function renderContactInfo() {
   const items = [];
-  if (contactData.phone) items.push({ icon:'📱', label:'Phone / WhatsApp', value:`<a href="tel:${encodeURI(contactData.phone)}">${sanitize(contactData.phone)}</a>` });
+  if (contactData.phone) {
+    // FIX #15: digits-only phone for URLs — no injection possible
+    const cleanPhone = contactData.phone.replace(/[^0-9]/g, '');
+    const validPhone = cleanPhone.length >= 9 && cleanPhone.length <= 15;
+    const waText = encodeURIComponent(`Hi ${profileData.businessName || 'there'}, I found your listing on Servify and I'm interested in your service. Could you please provide more details?`);
+    items.push({
+      icon: '📱',
+      label: 'Phone / WhatsApp',
+      value: validPhone
+        ? `<a href="https://wa.me/${cleanPhone}?text=${waText}" target="_blank" rel="noopener noreferrer" style="color:#25D366;font-weight:600">💬 WhatsApp</a> &nbsp;·&nbsp; <a href="tel:+${cleanPhone}">${sanitize(contactData.phone)}</a>`
+        : sanitize(contactData.phone)
+    });
+  }
   if (contactData.email) items.push({ icon:'✉️', label:'Email', value:`<a href="mailto:${encodeURI(contactData.email)}">${sanitize(contactData.email)}</a>` });
   if (contactData.website) items.push({ icon:'🌐', label:'Website', value:`<a href="${encodeURI(contactData.website)}" target="_blank" rel="noopener noreferrer">Visit Website</a>` });
   if (contactData.facebook) items.push({ icon:'📘', label:'Facebook', value:`<a href="${encodeURI(contactData.facebook)}" target="_blank" rel="noopener noreferrer">Facebook Page</a>` });
@@ -1959,67 +1972,60 @@ async function handleSignOut() {
   window.location.href = 'index.html';
 }
 
+// FIX #11 — Idle session timeout on provider profile (30 min for provider edit mode)
+(function setupProviderIdleTimeout() {
+  const IDLE_MS = 30 * 60 * 1000;
+  let _idleTimer;
+  function resetIdleTimer() {
+    clearTimeout(_idleTimer);
+    _idleTimer = setTimeout(async () => {
+      await db.auth.signOut();
+      window.location.replace('index.html');
+    }, IDLE_MS);
+  }
+  ['click','keydown','scroll','touchstart','mousemove'].forEach(e => {
+    document.addEventListener(e, resetIdleTimer, { passive: true });
+  });
+  resetIdleTimer();
+})();
+
 async function handleGoogleSignIn() {
   const { error } = await db.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: window.location.origin + '/dashboard.html',
+      redirectTo: window.location.origin + '/auth-callback.html',
     }
   });
   if (error) showToast('error', 'Google sign-in failed: ' + error.message);
 }
 
-// ── RATE LIMITING for enquiry form ──
-const _enquiryTimestamps = [];
-function _isEnquiryRateLimited() {
-  const now = Date.now();
-  while (_enquiryTimestamps.length && now - _enquiryTimestamps[0] > 10 * 60 * 1000) _enquiryTimestamps.shift();
-  if (_enquiryTimestamps.length >= 3) return true;
-  _enquiryTimestamps.push(now);
-  return false;
-}
+// ── WHATSAPP CONTACT MODAL ──
+function openContactModal() {
+  // FIX #15: Strict phone sanitisation — digits only, validate length
+  const rawPhone = (contactData.phone || '');
+  const safeDigits = rawPhone.replace(/[^0-9]/g, '');
+  const phone = (safeDigits.length >= 9 && safeDigits.length <= 15) ? safeDigits : null;
+  const name  = profileData.businessName || 'this provider';
+  const cat   = profileData.category || 'service';
 
-async function sendEnquiry() {
-  if (_isEnquiryRateLimited()) {
-    showToast('warning', 'Too many enquiries sent. Please wait a few minutes.');
-    return;
-  }
-  const name    = document.getElementById('enq-name');
-  const contact = document.getElementById('enq-contact');
-  const msg     = document.getElementById('enq-msg');
-  if (!name.value.trim() || !contact.value.trim() || !msg.value.trim()) {
-    showToast('error', 'Please fill in all required fields');
-    return;
-  }
+  document.getElementById('enquiry-to-name').textContent = name;
 
-  const btn = document.querySelector('#contact-quick-modal .btn-accent');
-  if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+  const previewMsg = `Hi ${name}, I found your listing on Servify and I'm interested in your ${cat} service. Could you please provide more details and a quote?`;
+  document.getElementById('wa-preview-text').textContent = previewMsg;
 
-  // Get listing ID from URL to link the enquiry
-  const urlParams = new URLSearchParams(window.location.search);
-  const listingId = urlParams.get('id') || null;
-
-  const { error } = await db.from('contacts').insert({
-    name:       name.value.trim(),
-    email:      contact.value.trim(),   // could be email or phone
-    subject:    'Provider Enquiry',
-    message:    msg.value.trim(),
-    listing_id: listingId              // links enquiry to the specific provider listing
-  });
-
-  if (btn) { btn.textContent = 'Send Enquiry'; btn.disabled = false; }
-
-  if (error) {
-    showToast('error', 'Could not send enquiry. Please try again.');
-    console.error('Enquiry error:', error);
-    return;
+  if (phone) {
+    const waText = encodeURIComponent(previewMsg);
+    document.getElementById('wa-link').href = `https://wa.me/${phone}?text=${waText}`;
+    document.getElementById('wa-link').style.display = '';
+    document.getElementById('call-link').href = `tel:+${phone}`;
+    document.getElementById('call-link').style.display = '';
+  } else {
+    document.getElementById('wa-link').style.display = 'none';
+    document.getElementById('call-link').style.display = 'none';
+    document.getElementById('wa-preview-text').textContent = 'This provider has not added a valid contact number yet. Please check back later.';
   }
 
-  closeModal('contact-quick-modal');
-  name.value = '';
-  contact.value = '';
-  msg.value = '';
-  showToast('success', '✅ Enquiry sent! The provider will contact you soon.');
+  openModal('contact-quick-modal');
 }
 
 // ── PROFILE COMPLETENESS ──
