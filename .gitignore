@@ -1,0 +1,17 @@
+# SQL files — run manually in Supabase dashboard, never commit
+*.sql
+SERVIFY_SECURITY_SQL_v3.sql
+REMOVE_DEMO_ACCOUNTS.sql
+
+# Supabase CLI local config (contains secrets)
+.supabase/
+supabase/.temp/
+supabase/config.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
