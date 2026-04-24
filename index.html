@@ -13,7 +13,7 @@
 <meta property="og:title" content="Servify — Services, Simplified">
 <meta property="og:description" content="Find trusted local service professionals in Malaysia. Catering, cleaning, photography, events and more.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://servify.my">
+<meta property="og:url" content="https://servify-wheat.vercel.app">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Servify — Services, Simplified">
 <meta name="twitter:description" content="Find trusted local service professionals in Malaysia.">
@@ -826,1135 +826,7 @@ SessionGuard.init();
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Servi<span>fy</span></a>
-  <div class="nav-links">
-    <a href="#categories">Browse Services</a>
-    <a href="#how">How It Works</a>
-    <a href="#about" onclick="smoothScroll('about');return false;">About</a>
-    <a href="#listings">Listings</a>
-    <a href="#" onclick="openPostModal();return false;">List a Service</a>
-      <a href="#payment" onclick="smoothScroll('payment');return false;">Payments</a>
-  </div>
-  <div class="nav-cta" id="nav-cta">
-    <button class="btn btn-ghost" onclick="openAuthModal('signin')">Sign In</button>
-    <button class="btn btn-accent" onclick="openAuthModal('signup')">Get Started</button>
-  </div>
-  <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
- 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobile-menu">
-  <a href="#categories" onclick="closeMobileMenu()">Browse Services</a>
-  <a href="#how" onclick="closeMobileMenu()">How It Works</a>
-  <a href="#listings" onclick="closeMobileMenu()">Listings</a>
-  <a href="#" onclick="closeMobileMenu();openPostModal();return false;">List a Service</a>
-  <a href="#payment" onclick="closeMobileMenu();smoothScroll('payment');return false;">Payments</a>
-  <div class="mobile-btns">
-    <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeMobileMenu();openAuthModal('signin')">Sign In</button>
-    <button class="btn btn-accent" style="flex:1;justify-content:center" onclick="closeMobileMenu();openAuthModal('signup')">Get Started</button>
-  </div>
-</div>
- 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <div class="hero-label">
-      <span class="hero-label-dot"></span>
-      Now live across Malaysia
-    </div>
-    <h1>Find the <em>right service</em> for every moment</h1>
-    <p class="hero-sub">From catering to cleaning, event planning to photography — Servify connects you with trusted local professionals in minutes.</p>
-    <div class="hero-actions">
-      <button class="btn btn-primary" onclick="document.getElementById('search-section').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('search-input').focus(),500)">Find a Service &rarr;</button>
-      <button class="btn btn-ghost" onclick="openPostModal()">+ List Your Service</button>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><span class="stat-num">12</span><span class="stat-label">Categories</span></div>
-      <div class="stat"><span class="stat-num">20+</span><span class="stat-label">Cities</span></div>
-      <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Support</span></div>
-    </div>
-  </div>
-  <div class="hero-visual">
-    <div class="float-card fc1">
-      <div class="fc-cat">Catering</div>
-      <div class="fc-avatar" style="background:#fff4f0">🍽️</div>
-      <div class="fc-title">Full Event Catering</div>
-      <div class="fc-row"><div class="fc-price">From RM 45/pax</div><div class="fc-rating">⭐ 4.9</div></div>
-    </div>
-    <div class="float-card fc2">
-      <div class="fc-cat">Cleaning</div>
-      <div class="fc-avatar" style="background:#f0f4ff">🧹</div>
-      <div class="fc-title">Deep Home Clean</div>
-      <div class="fc-row"><div class="fc-price">From RM 120</div><div class="fc-badge" style="background:#e8f7ef;color:#1a9e5c">Available Today</div></div>
-    </div>
-    <div class="float-card fc3">
-      <div class="fc-cat">Events</div>
-      <div class="fc-avatar" style="background:#f5f0ff">🎉</div>
-      <div class="fc-title">Wedding Planner</div>
-      <div class="fc-row"><div class="fc-price">From RM 2,000</div><div class="fc-rating">⭐ 5.0</div></div>
-    </div>
-    <div class="float-card fc4">
-      <div class="fc-cat">Photography</div>
-      <div class="fc-avatar" style="background:#fff9e6">📸</div>
-      <div class="fc-title">Event Photography</div>
-      <div class="fc-row"><div class="fc-price">From RM 300/hr</div><div class="fc-rating">⭐ 4.8</div></div>
-    </div>
-  </div>
-</section>
- 
-<!-- SEARCH -->
-<section class="search-section" id="search-section">
-  <div class="search-bar">
-    <input class="search-input" id="search-input" placeholder="What service are you looking for?" type="text" />
-    <div class="search-divider"></div>
-    <select class="search-loc" id="location-select">
-      <option value="">📍 All Locations</option>
-      <option value="Kuala Lumpur">📍 Kuala Lumpur</option>
-      <option value="Selangor">📍 Selangor</option>
-      <option value="Penang">📍 Penang</option>
-      <option value="Johor Bahru">📍 Johor Bahru</option>
-      <option value="Ipoh">📍 Ipoh</option>
-      <option value="Kota Kinabalu">📍 Kota Kinabalu</option>
-      <option value="Kuching">📍 Kuching</option>
-      <option value="Melaka">📍 Melaka</option>
-      <option value="Shah Alam">📍 Shah Alam</option>
-      <option value="Petaling Jaya">📍 Petaling Jaya</option>
-      <option value="Subang Jaya">📍 Subang Jaya</option>
-      <option value="Putrajaya">📍 Putrajaya</option>
-      <option value="Cyberjaya">📍 Cyberjaya</option>
-    </select>
-    <button class="search-btn" onclick="doSearch()">Search</button>
-  </div>
-  <div class="search-tags">
-    <span class="search-tag" onclick="quickSearch('Catering')">🍽️ Catering</span>
-    <span class="search-tag" onclick="quickSearch('Wedding')">💍 Wedding</span>
-    <span class="search-tag" onclick="quickSearch('Cleaning')">🧹 Cleaning</span>
-    <span class="search-tag" onclick="quickSearch('Photography')">📸 Photography</span>
-    <span class="search-tag" onclick="quickSearch('Moving')">📦 Moving</span>
-    <span class="search-tag" onclick="quickSearch('Tutoring')">📚 Tutoring</span>
-    <span class="search-tag" onclick="quickSearch('Repair')">🔧 Repair</span>
-  </div>
-</section>
- 
-<!-- CATEGORIES -->
-<section class="section" id="categories">
-  <div class="section-label">Browse by Category</div>
-  <div class="section-title">Every service,<br>all in one place</div>
-  <p class="section-sub">Explore our wide range of service categories and find exactly what you need.</p>
-  <div class="categories-grid">
-    <div class="cat-card" onclick="jumpToCategory('Catering')"><div class="cat-icon">🍽️</div><div class="cat-name">Catering</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Events')"><div class="cat-icon">🎉</div><div class="cat-name">Event Management</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Cleaning')"><div class="cat-icon">🧹</div><div class="cat-name">Cleaning</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Photography')"><div class="cat-icon">📸</div><div class="cat-name">Photography</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Moving')"><div class="cat-icon">📦</div><div class="cat-name">Moving & Delivery</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Repair')"><div class="cat-icon">🔧</div><div class="cat-name">Home Repair</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Tutoring')"><div class="cat-icon">📚</div><div class="cat-name">Tutoring</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Beauty')"><div class="cat-icon">💄</div><div class="cat-name">Beauty & Wellness</div></div>
-    <div class="cat-card" onclick="jumpToCategory('IT')"><div class="cat-icon">💻</div><div class="cat-name">IT & Tech</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Fitness')"><div class="cat-icon">🏋️</div><div class="cat-name">Fitness & Sports</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Music')"><div class="cat-icon">🎵</div><div class="cat-name">Music & Performing</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Pets')"><div class="cat-icon">🐾</div><div class="cat-name">Pet Care</div></div>
-  </div>
-</section>
- 
-<!-- LISTINGS -->
-<section class="section" id="listings" style="background:var(--cream)">
-  <div class="listings-header">
-    <div>
-      <div class="section-label" id="listings-label">Top Listings</div>
-      <div class="section-title" style="margin-bottom:0" id="listings-title">Featured Services</div>
-    </div>
-    <div class="filters" id="filter-bar">
-      <button class="filter-btn active" onclick="setFilter(this,'All')">All</button>
-      <button class="filter-btn" onclick="setFilter(this,'Catering')">Catering</button>
-      <button class="filter-btn" onclick="setFilter(this,'Events')">Events</button>
-      <button class="filter-btn" onclick="setFilter(this,'Cleaning')">Cleaning</button>
-      <button class="filter-btn" onclick="setFilter(this,'Photography')">Photography</button>
-      <button class="filter-btn" onclick="setFilter(this,'Moving')">Moving</button>
-    </div>
-  </div>
-  <div class="listings-grid" id="listings-grid"></div>
-  <div style="text-align:center;margin-top:40px" id="load-more-wrap">
-    <button class="btn btn-ghost" style="padding:14px 36px;font-size:0.95rem" onclick="showToast('info','More listings coming soon!')">Load more listings</button>
-  </div>
-</section>
- 
-<!-- ABOUT -->
-<section class="section about-section" id="about">
- 
-  <div class="section-label">About Servify</div>
-  <div class="section-title">What is Servify?</div>
-  <p class="section-sub">A smarter way to find and offer services across Malaysia.</p>
- 
-  <div class="about-what">
-    <div class="about-what-text">
-      <p>Servify is a <strong>Malaysian service marketplace</strong> that connects people who need services with skilled professionals who provide them. Whether you need a caterer for your event, a cleaner for your home, a photographer for a special occasion, or a tutor for your kids — Servify is the one place to find them all.</p>
-      <p>We built Servify because finding a reliable, trustworthy service professional in Malaysia was unnecessarily hard. Too many scattered platforms, too many unverified listings, and too little accountability. <strong>We're fixing that.</strong></p>
-      <p>Every provider on Servify goes through a real sign-up process, and every interaction is designed to be fast, simple, and stress-free. We're just getting started — and we'd love you to be part of it.</p>
-    </div>
-    <div class="about-what-stats">
-      <div class="about-stat-card">
-        <div class="about-stat-num">12</div>
-        <div class="about-stat-label">Service categories available</div>
-      </div>
-      <div class="about-stat-card">
-        <div class="about-stat-num">20+</div>
-        <div class="about-stat-label">Cities across Malaysia</div>
-      </div>
-      <div class="about-stat-card">
-        <div class="about-stat-num">Free</div>
-        <div class="about-stat-label">30-day trial for providers</div>
-      </div>
-      <div class="about-stat-card">
-        <div class="about-stat-num">🇲🇾</div>
-        <div class="about-stat-label">Built for Malaysia</div>
-      </div>
-    </div>
-  </div>
- 
-  <hr class="about-divider"/>
- 
-  <div class="section-label">How It Works</div>
-  <div class="section-title">Three steps. That's it.</div>
-  <div class="about-how-grid">
-    <div class="about-how-card">
-      <div class="about-how-num">01</div>
-      <div class="about-how-title">Search or Browse</div>
-      <div class="about-how-desc">Use our smart search bar or browse by category and location to find the exact service you need. Filter by price, rating, and availability.</div>
-    </div>
-    <div class="about-how-card">
-      <div class="about-how-num">02</div>
-      <div class="about-how-title">Compare & Connect</div>
-      <div class="about-how-desc">Read real reviews, compare pricing, and view provider profiles. Then reach out directly to request a quote or book on the spot.</div>
-    </div>
-    <div class="about-how-card">
-      <div class="about-how-num">03</div>
-      <div class="about-how-title">Get It Done</div>
-      <div class="about-how-desc">Your service gets done. Leave an honest review to help the community and build trust for future customers and providers alike.</div>
-    </div>
-  </div>
- 
-  <hr class="about-divider"/>
- 
-  <div class="about-goal">
-    <div class="about-goal-text">
-      <h3>Our Goal</h3>
-      <p>Servify exists to make <strong>quality services accessible to every Malaysian</strong> — regardless of where they live or what they need. At the same time, we want to give every skilled professional in the country a real platform to grow their business, reach more customers, and earn what they deserve. We're not just a directory. We're building the infrastructure for a better service economy in Malaysia.</p>
-    </div>
-    <div class="about-goal-badge">Made in Malaysia 🇲🇾</div>
-  </div>
- 
-</section>
- 
-<!-- HOW IT WORKS -->
-<section class="section how-section" id="how">
-  <div class="section-label">How It Works</div>
-  <div class="section-title">Simple. Fast. Reliable.</div>
-  <p class="section-sub">Get connected with a verified service provider in 3 easy steps.</p>
-  <div class="steps-grid">
-    <div class="step">
-      <div class="step-num">01</div>
-      <div class="step-title">Search & Browse</div>
-      <p class="step-desc">Use our smart search or browse by category to discover services tailored to your needs and location.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <div class="step-title">Compare & Book</div>
-      <p class="step-desc">Read reviews, compare pricing, and connect directly with providers. Request a quote or book instantly.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <div class="step-title">Review & Repeat</div>
-      <p class="step-desc">Service done? Leave a review to help others and earn loyalty rewards for future bookings.</p>
-    </div>
-  </div>
-</section>
- 
-<!-- CTA SPLIT -->
-<section class="cta-section">
-  <div class="cta-pane">
-    <div class="cta-eyebrow">For Service Seekers</div>
-    <div class="cta-title">Find the perfect service for any occasion</div>
-    <p class="cta-sub">Access hundreds of verified providers. Compare, contact, and book with confidence.</p>
-    <button class="btn-white" onclick="document.getElementById('search-section').scrollIntoView({behavior:'smooth'})">Start Searching →</button>
-  </div>
-  <div class="cta-pane">
-    <div class="cta-eyebrow">For Service Providers</div>
-    <div class="cta-title">Grow your business with Servify</div>
-    <p class="cta-sub">List your services, reach thousands of customers, and manage bookings — all in one place. Free to start.</p>
-    <button class="btn-white" onclick="openPostModal()">List Your Service →</button>
-  </div>
-</section>
- 
-<!-- ISSUE 6d FIX: Beta tester social proof (replaces hidden testimonials) -->
-<section class="section" id="testimonials" style="background:var(--cream)">
-  <div class="section-label">Early Community</div>
-  <div class="section-title">What our beta testers say</div>
-  <p class="section-sub">A small group of early users have been testing Servify. Here's what they think about the concept.</p>
-  <div class="testimonials-grid">
-    <div class="testimonial-card">
-      <div class="t-stars">⭐⭐⭐⭐⭐</div>
-      <p class="t-text">"Finally, a marketplace that actually makes sense for Malaysia. I've been looking for a reliable caterer in PJ for months — the way Servify organises listings by location is exactly what was missing."</p>
-      <div class="t-author">
-        <div class="t-avatar" style="background:#fff4f0">👩</div>
-        <div>
-          <div class="t-name">Nurul Ain</div>
-          <div class="t-role">Beta Tester · Petaling Jaya</div>
-        </div>
-      </div>
-    </div>
-    <div class="testimonial-card">
-      <div class="t-stars">⭐⭐⭐⭐⭐</div>
-      <p class="t-text">"As a freelance photographer, I've struggled to get found online. Servify's concept of a single trusted platform for all service types is something I've genuinely needed. Can't wait for the full launch."</p>
-      <div class="t-author">
-        <div class="t-avatar" style="background:#f0f4ff">👨</div>
-        <div>
-          <div class="t-name">Haziq Farhan</div>
-          <div class="t-role">Beta Tester · Kuala Lumpur</div>
-        </div>
-      </div>
-    </div>
-    <div class="testimonial-card">
-      <div class="t-stars">⭐⭐⭐⭐⭐</div>
-      <p class="t-text">"I love that it's built for Malaysia — real local categories, prices in Ringgit, and providers from my area. Most platforms feel foreign or generic. This one actually gets it."</p>
-      <div class="t-author">
-        <div class="t-avatar" style="background:#e8f7ef">👩</div>
-        <div>
-          <div class="t-name">Siti Rahmah</div>
-          <div class="t-role">Beta Tester · Shah Alam</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
- 
-<!-- EARLY ADOPTER CTA (shown while no reviews yet) -->
-<section class="section" id="early-adopter" style="background:var(--cream)">
-  <div style="max-width:640px;margin:0 auto;text-align:center">
-    <div class="section-label">Be First</div>
-    <div class="section-title">We're just getting started 🚀</div>
-    <p class="section-sub" style="max-width:100%;margin-bottom:32px">Servify is a brand new platform built for Malaysia. Be one of our founding service providers and get featured at the top of every search — completely free for 30 days.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-primary" style="padding:14px 32px;font-size:1rem" onclick="openPostModal()">List Your Service Free →</button>
-      <button class="btn btn-ghost" style="padding:14px 32px;font-size:1rem" onclick="openModal('contact-modal')">Get in Touch</button>
-    </div>
-  </div>
-</section>
- 
-<!-- PRICING -->
-<section class="section pricing-section" id="pricing">
-  <div class="section-label" style="text-align:center">Pricing</div>
-  <div class="section-title" style="text-align:center">Simple, transparent pricing</div>
-  <p class="section-sub" style="text-align:center;max-width:100%;margin-left:auto;margin-right:auto;margin-bottom:8px">For service providers only. <strong>Browsing and booking is always free</strong> for service seekers.</p>
-  <p class="section-sub" style="text-align:center;max-width:100%;margin-left:auto;margin-right:auto;margin-bottom:48px">Start free for 30 days. No credit card required.</p>
-  <div class="pricing-grid">
-    <div class="pricing-card">
-      <div class="pricing-label">Free Trial</div>
-      <div class="pricing-price">RM 0</div>
-      <div class="pricing-period">for your first 30 days</div>
-      <ul class="pricing-features">
-        <li>List up to 3 services</li>
-        <li>Full profile visibility</li>
-        <li>Customer enquiries</li>
-        <li>Verified provider badge</li>
-      </ul>
-      <button class="btn btn-ghost" style="width:100%;justify-content:center;padding:13px" onclick="openPostModal()">Start Free Trial →</button>
-    </div>
-    <div class="pricing-card featured">
-      <div class="pricing-badge">Most Popular</div>
-      <div class="pricing-label">Pro Provider</div>
-      <div class="pricing-price">RM 29</div>
-      <div class="pricing-period">per month after trial</div>
-      <ul class="pricing-features">
-        <li>Unlimited service listings</li>
-        <li>Priority search placement</li>
-        <li>Customer enquiries</li>
-        <li>Verified provider badge</li>
-        <li>Analytics & booking stats</li>
-        <li>Dedicated support</li>
-      </ul>
-      <button class="btn btn-accent" style="width:100%;justify-content:center;padding:13px" onclick="openPostModal()">Get Started Free →</button>
-    </div>
-  </div>
-  <p class="pricing-note">After your 30-day free trial, your account will be charged RM 29/month. Cancel anytime before trial ends. Unpaid accounts will be frozen until payment is made. <a href="#payment" onclick="smoothScroll('payment');return false;" style="color:var(--accent);font-weight:600">View payment methods →</a></p>
-</section>
- 
-<!-- PAYMENT METHODS -->
-<section class="section payment-section" id="payment">
-  <div class="section-label">For Service Providers</div>
-  <div class="section-title">How to pay your<br>subscription fee</div>
-  <p class="section-sub">After your 30-day free trial, keep your listing live with a simple RM 29/month subscription. Multiple payment options available.</p>
- 
-  <div class="payment-grid">
-    <div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:16px;letter-spacing:0.02em;color:var(--muted);text-transform:uppercase;font-size:0.78rem">Accepted Payment Methods</div>
-      <div class="payment-methods">
-        <div class="payment-method-card" onclick="openPaymentModal('online-banking')">
-          <div class="payment-method-icon">🏦</div>
-          <div>
-            <div class="payment-method-name">Online Banking (FPX)</div>
-            <div class="payment-method-desc">Maybank2u, CIMB Clicks, RHB, Public Bank & more</div>
-          </div>
-          <div class="payment-method-badge">Instant</div>
-        </div>
-        <div class="payment-method-card" onclick="openPaymentModal('ewallet')">
-          <div class="payment-method-icon">📱</div>
-          <div>
-            <div class="payment-method-name">e-Wallet</div>
-            <div class="payment-method-desc">Touch 'n Go eWallet, GrabPay, Boost</div>
-          </div>
-          <div class="payment-method-badge">Instant</div>
-        </div>
-        <div class="payment-method-card" onclick="openPaymentModal('card')">
-          <div class="payment-method-icon">💳</div>
-          <div>
-            <div class="payment-method-name">Debit / Credit Card</div>
-            <div class="payment-method-desc">Visa, Mastercard — Malaysian & international cards accepted</div>
-          </div>
-          <div class="payment-method-badge">Instant</div>
-        </div>
-        <div class="payment-method-card" onclick="openPaymentModal('transfer')">
-          <div class="payment-method-icon">🔄</div>
-          <div>
-            <div class="payment-method-name">Bank Transfer (DuitNow)</div>
-            <div class="payment-method-desc">Direct transfer to our DuitNow account</div>
-          </div>
-          <div class="payment-method-badge" style="background:#fff9e6;color:#d97706">1–2 days</div>
-        </div>
-      </div>
-    </div>
- 
-    <div class="payment-flow">
-      <div class="payment-flow-title">How subscription billing works</div>
-      <div class="payment-step">
-        <div class="payment-step-num">1</div>
-        <div class="payment-step-content">
-          <div class="payment-step-title">Start your 30-day free trial</div>
-          <div class="payment-step-desc">List your service and get full visibility with zero payment required. No credit card needed to start.</div>
-        </div>
-      </div>
-      <div class="payment-step">
-        <div class="payment-step-num">2</div>
-        <div class="payment-step-content">
-          <div class="payment-step-title">Receive a payment reminder</div>
-          <div class="payment-step-desc">7 days before your trial ends, we'll email you with a secure payment link for RM 29/month.</div>
-        </div>
-      </div>
-      <div class="payment-step">
-        <div class="payment-step-num">3</div>
-        <div class="payment-step-content">
-          <div class="payment-step-title">Choose your payment method</div>
-          <div class="payment-step-desc">Pay via FPX, e-Wallet, card, or DuitNow bank transfer — whichever is most convenient for you.</div>
-        </div>
-      </div>
-      <div class="payment-step">
-        <div class="payment-step-num">4</div>
-        <div class="payment-step-content">
-          <div class="payment-step-title">Stay live, keep growing</div>
-          <div class="payment-step-desc">Your listing stays active. You'll be billed every 30 days. Cancel anytime from your dashboard — no lock-in.</div>
-        </div>
-      </div>
-      <div class="payment-secure-note">
-        🔒 All payments are processed securely. Your data is protected under Malaysia's PDPA 2010.
-      </div>
-    </div>
-  </div>
-</section>
- 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <div class="nav-logo" style="color:var(--accent)">Servi<span>fy</span></div>
-      <p>Connecting service seekers with trusted professionals across Malaysia. Simple, fast, and reliable.</p>
-    </div>
-    <div class="footer-col">
-      <h4>For Seekers</h4>
-      <a href="#categories" onclick="smoothScroll('categories')">Browse Services</a>
-      <a href="#how" onclick="smoothScroll('how')">How It Works</a>
-      <a href="#testimonials" onclick="smoothScroll('testimonials')">Reviews</a>
- 
-    </div>
-    <div class="footer-col">
-      <h4>For Providers</h4>
-      <a href="#" onclick="openPostModal();return false;">List a Service</a>
-      <a href="#how" onclick="smoothScroll('how')">Provider Guide</a>
-      <a href="#pricing" onclick="smoothScroll('pricing')">Pricing Plans</a>
-      <a href="#payment" onclick="smoothScroll('payment')">Payment Methods</a>
-      <a href="#" onclick="openContactModal();return false;">Get Support</a>
-    </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <a href="#about" onclick="smoothScroll('about');return false;">About Us</a>
-      <a href="#" onclick="showToast('info','Blog coming soon!');return false;">Blog</a>
-      <a href="#" onclick="openContactModal();return false;">Contact Us</a>
-      <a href="#" onclick="openPolicyModal('privacy');return false;">Privacy Policy</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2026 Servify Sdn. Bhd. All rights reserved.</p>
-    <p>
-      <a href="#" onclick="openPolicyModal('privacy');return false;" style="color:rgba(255,255,255,0.35);text-decoration:none;margin-right:12px">Privacy Policy</a>
-      <a href="#" onclick="openPolicyModal('terms');return false;" style="color:rgba(255,255,255,0.35);text-decoration:none">Terms of Service</a>
-    </p>
-  </div>
-</footer>
- 
-<!-- AUTH MODAL -->
-<div class="modal-overlay" id="auth-modal" onclick="closeModal('auth-modal')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal('auth-modal')" aria-label="Close">✕</button>
- 
-    <!-- TABS (hidden when on forgot/verify screens) -->
-    <div class="tab-switch" id="auth-tabs">
-      <button class="tab-btn active" id="signin-tab" onclick="switchTab('signin')">Sign In</button>
-      <button class="tab-btn" id="signup-tab" onclick="switchTab('signup')">Create Account</button>
-    </div>
- 
-    <!-- ── SIGN IN ── -->
-    <div id="signin-form">
-      <div class="modal-title">Welcome back</div>
-      <p class="modal-sub">Sign in to your Servify account</p>
-      <div class="form-group">
-        <label for="si-email">Email Address</label>
-        <input class="form-control" type="email" id="si-email" placeholder="you@example.com" autocomplete="email"/>
-        <div class="field-error" id="si-email-err">Please enter a valid email address.</div>
-      </div>
-      <div class="form-group">
-        <label for="si-password" style="display:flex;justify-content:space-between;align-items:center">
-          Password
-          <a href="#" style="font-size:0.78rem;color:var(--accent);text-decoration:none;font-weight:500" onclick="showForgotPassword();return false;">Forgot password?</a>
-        </label>
-        <div style="position:relative">
-          <input class="form-control" type="password" id="si-password" placeholder="••••••••" autocomplete="current-password" style="padding-right:44px"/>
-          <button type="button" onclick="togglePw('si-password',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted)">👁</button>
-        </div>
-        <div class="field-error" id="si-password-err">Password is required.</div>
-      </div>
-      <div class="form-group" style="display:flex;align-items:center;gap:8px;margin-bottom:20px">
-        <input type="checkbox" id="si-remember" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer"/>
-        <label for="si-remember" style="font-size:0.82rem;color:var(--muted);cursor:pointer;margin:0">Keep me signed in</label>
-      </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="handleSignIn()">Sign In →</button>
-      <div class="divider-text">or continue with</div>
-      <button class="btn btn-ghost" style="width:100%;justify-content:center;padding:13px;gap:10px" onclick="handleGoogleSignIn()"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.6 7.3-17.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.9-6c-2.2 1.5-5 2.3-8 2.3-6.1 0-11.3-4.1-13.2-9.7H2.7v6.2C6.7 42.9 14.8 48 24 48z"/><path fill="#FBBC05" d="M10.8 28.8c-.5-1.5-.8-3-.8-4.8s.3-3.3.8-4.8v-6.2H2.7C1 16.3 0 20 0 24s1 7.7 2.7 10.9l8.1-6.1z"/><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.9 2.5 30.5 0 24 0 14.8 0 6.7 5.1 2.7 13.1l8.1 6.2c1.9-5.6 7.1-9.8 13.2-9.8z"/></svg> Continue with Google</button>
-      <p style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:6px">(Coming soon)</p>
-    </div>
- 
-    <!-- ── SIGN UP ── -->
-    <div id="signup-form" style="display:none">
-      <div class="modal-title">Join Servify</div>
-      <p class="modal-sub">Create your free account today</p>
-      <div class="form-group">
-        <label for="su-role">I want to</label>
-        <select class="form-control" id="su-role">
-          <option value="seeker">Find services (Service Seeker)</option>
-          <option value="provider">Offer my services (Service Provider)</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <div class="form-group" style="margin-bottom:0">
-          <label for="su-first">First Name</label>
-          <input class="form-control" type="text" id="su-first" placeholder="Ahmad" autocomplete="given-name"/>
-          <div class="field-error" id="su-first-err">First name is required.</div>
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label for="su-last">Last Name</label>
-          <input class="form-control" type="text" id="su-last" placeholder="bin Razak" autocomplete="family-name"/>
-          <div class="field-error" id="su-last-err">Last name is required.</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="su-email">Email Address</label>
-        <input class="form-control" type="email" id="su-email" placeholder="you@example.com" autocomplete="email"/>
-        <div class="field-error" id="su-email-err">Please enter a valid email address.</div>
-      </div>
-      <div class="form-group" style="margin-bottom:8px">
-        <label for="su-password">Password</label>
-        <div style="position:relative">
-          <input class="form-control" type="password" id="su-password" placeholder="Min. 8 characters" autocomplete="new-password" oninput="updatePasswordStrength(this.value)" style="padding-right:44px"/>
-          <button type="button" onclick="togglePw('su-password',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted)">👁</button>
-        </div>
-        <div class="field-error" id="su-password-err">Password must be at least 8 characters.</div>
-      </div>
-      <!-- Password strength meter -->
-      <div id="pw-strength-wrap" style="margin-bottom:14px;display:none">
-        <div style="display:flex;gap:4px;margin-bottom:4px">
-          <div id="ps1" style="flex:1;height:4px;border-radius:2px;background:var(--border);transition:background 0.3s"></div>
-          <div id="ps2" style="flex:1;height:4px;border-radius:2px;background:var(--border);transition:background 0.3s"></div>
-          <div id="ps3" style="flex:1;height:4px;border-radius:2px;background:var(--border);transition:background 0.3s"></div>
-          <div id="ps4" style="flex:1;height:4px;border-radius:2px;background:var(--border);transition:background 0.3s"></div>
-        </div>
-        <div id="pw-strength-label" style="font-size:0.72rem;color:var(--muted)"></div>
-      </div>
-      <div class="form-group">
-        <label for="su-confirm">Confirm Password</label>
-        <input class="form-control" type="password" id="su-confirm" placeholder="Repeat your password" autocomplete="new-password"/>
-        <div class="field-error" id="su-confirm-err">Passwords do not match.</div>
-      </div>
-      <div class="form-group" style="display:flex;align-items:flex-start;gap:8px;margin-bottom:20px">
-        <input type="checkbox" id="su-terms" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;margin-top:2px;flex-shrink:0"/>
-        <label for="su-terms" style="font-size:0.82rem;color:var(--muted);cursor:pointer;margin:0;line-height:1.5">I agree to Servify's <a href="#" onclick="openPolicyModal('terms');return false;" style="color:var(--accent)">Terms of Service</a> and <a href="#" onclick="openPolicyModal('privacy');return false;" style="color:var(--accent)">Privacy Policy</a></label>
-      </div>
-      <div class="field-error" id="su-terms-err" style="margin-top:-14px;margin-bottom:14px">You must agree to the terms to continue.</div>
-      <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px" onclick="handleSignUp()">Create Account →</button>
-      <div class="divider-text">or continue with</div>
-      <button class="btn btn-ghost" style="width:100%;justify-content:center;padding:13px;gap:10px" onclick="handleGoogleSignIn()"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.6 7.3-17.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.9-6c-2.2 1.5-5 2.3-8 2.3-6.1 0-11.3-4.1-13.2-9.7H2.7v6.2C6.7 42.9 14.8 48 24 48z"/><path fill="#FBBC05" d="M10.8 28.8c-.5-1.5-.8-3-.8-4.8s.3-3.3.8-4.8v-6.2H2.7C1 16.3 0 20 0 24s1 7.7 2.7 10.9l8.1-6.1z"/><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.9 2.5 30.5 0 24 0 14.8 0 6.7 5.1 2.7 13.1l8.1 6.2c1.9-5.6 7.1-9.8 13.2-9.8z"/></svg> Continue with Google</button>
-      <p style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:6px">(Coming soon)</p>
-    </div>
- 
-    <!-- ── FORGOT PASSWORD ── -->
-    <div id="forgot-form" style="display:none">
-      <button onclick="showSignIn()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.82rem;display:flex;align-items:center;gap:4px;margin-bottom:16px;padding:0">← Back to Sign In</button>
-      <div class="modal-title">Reset Password</div>
-      <p class="modal-sub">Enter your email and we'll send you a reset link.</p>
-      <div class="form-group">
-        <label for="fp-email">Email Address</label>
-        <input class="form-control" type="email" id="fp-email" placeholder="you@example.com" autocomplete="email"/>
-        <div class="field-error" id="fp-email-err">Please enter a valid email address.</div>
-      </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="handleForgotPassword()">Send Reset Link →</button>
-    </div>
- 
-    <!-- ── FORGOT PASSWORD SENT ── -->
-    <div id="forgot-sent-form" style="display:none;text-align:center;padding:16px 0">
-      <div style="font-size:3rem;margin-bottom:16px">📬</div>
-      <div class="modal-title" style="text-align:center">Check your inbox</div>
-      <p style="color:var(--muted);font-size:0.9rem;line-height:1.6;margin:12px 0 24px">We've sent a password reset link to <strong id="fp-sent-email"></strong>. Check your inbox (and spam folder) and follow the link to reset your password.</p>
-      <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="showSignIn()">← Back to Sign In</button>
-      <p style="font-size:0.78rem;color:var(--muted);margin-top:14px">Didn't receive it? <a href="#" onclick="resendReset();return false;" style="color:var(--accent)">Resend email</a></p>
-    </div>
- 
-    <!-- ── EMAIL VERIFICATION SENT ── -->
-    <div id="verify-form" style="display:none;text-align:center;padding:16px 0">
-      <div style="font-size:3rem;margin-bottom:16px">✉️</div>
-      <div class="modal-title" style="text-align:center">Verify your email</div>
-      <p style="color:var(--muted);font-size:0.9rem;line-height:1.6;margin:12px 0 8px">We've sent a verification email to <strong id="verify-sent-email"></strong>.</p>
-      <p style="color:var(--muted);font-size:0.9rem;line-height:1.6;margin:0 0 24px">Please check your inbox and click the link to activate your account. It may take a minute or two to arrive.</p>
-      <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:14px 18px;margin-bottom:20px;text-align:left;font-size:0.85rem;color:#166534">
-        <strong>✅ Account created!</strong> Once you verify your email you'll be able to sign in and access all features.
-      </div>
-      <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="closeModal('auth-modal')">Got it, I'll check my email</button>
-      <p style="font-size:0.78rem;color:var(--muted);margin-top:14px">Didn't receive it? <a href="#" onclick="resendVerification();return false;" style="color:var(--accent)">Resend verification email</a></p>
-    </div>
- 
-  </div>
-</div>
- 
-<!-- POST SERVICE MODAL -->
-<div class="modal-overlay" id="post-modal" onclick="closeModal('post-modal')">
-  <div class="modal" onclick="event.stopPropagation()" style="max-width:540px">
-    <button class="modal-close" onclick="closeModal('post-modal')" aria-label="Close">✕</button>
-    <div class="modal-title">List Your Service</div>
-    <p class="modal-sub">Reach thousands of potential customers on Servify</p>
-    <div class="trial-banner">
-      <div class="trial-banner-icon">🎉</div>
-      <p><strong>30 days free</strong> — Your first month is completely free. After that, just <strong>RM 29/month</strong> to keep your listing live and active. Cancel anytime before your trial ends.</p>
-    </div>
-    <div class="form-group">
-      <label for="service-title">Service Title *</label>
-      <input class="form-control" type="text" placeholder="e.g. Professional Wedding Catering" id="service-title" maxlength="80"/>
-      <div class="field-error" id="service-title-err">Please enter a service title.</div>
-    </div>
-    <div class="form-row">
-      <div class="form-group" style="margin-bottom:0">
-        <label for="service-cat">Category *</label>
-        <select class="form-control" id="service-cat">
-          <option value="">Select category…</option>
-          <option value="Catering">Catering</option>
-          <option value="Events">Event Management</option>
-          <option value="Cleaning">Cleaning</option>
-          <option value="Photography">Photography</option>
-          <option value="Moving">Moving & Delivery</option>
-          <option value="Repair">Home Repair</option>
-          <option value="Tutoring">Tutoring</option>
-          <option value="Beauty">Beauty & Wellness</option>
-          <option value="IT">IT & Tech</option>
-          <option value="Fitness">Fitness & Sports</option>
-          <option value="Music">Music & Performing</option>
-          <option value="Pets">Pet Care</option>
-        </select>
-        <div class="field-error" id="service-cat-err">Please select a category.</div>
-      </div>
-      <div class="form-group" style="margin-bottom:0">
-        <label for="service-price">Starting Price (RM) *</label>
-        <input class="form-control" type="number" placeholder="e.g. 150" id="service-price" min="1" max="99999"/>
-        <div class="field-error" id="service-price-err">Please enter a valid price.</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="service-desc">Service Description</label>
-      <textarea class="form-control" rows="3" placeholder="Describe your service, experience, and what makes you stand out…" id="service-desc" style="resize:vertical" maxlength="400"></textarea>
-    </div>
-    <div class="form-row">
-      <div class="form-group" style="margin-bottom:0">
-        <label for="service-provider">Your Name / Business *</label>
-        <input class="form-control" type="text" placeholder="e.g. Sarah's Kitchen" id="service-provider" maxlength="60"/>
-        <div class="field-error" id="service-provider-err">Please enter your name or business name.</div>
-      </div>
-      <div class="form-group" style="margin-bottom:0">
-        <label for="service-location">Location *</label>
-        <select class="form-control" id="service-location">
-          <option value="">Select location…</option>
-          <option>Kuala Lumpur</option><option>Petaling Jaya</option><option>Subang Jaya</option>
-          <option>Shah Alam</option><option>Cyberjaya</option><option>Putrajaya</option>
-          <option>Selangor</option><option>Penang</option><option>Johor Bahru</option>
-          <option>Ipoh</option><option>Melaka</option><option>Seremban</option>
-          <option>Kuantan</option><option>Kota Bharu</option><option>Kuala Terengganu</option>
-          <option>Alor Setar</option><option>Kota Kinabalu</option><option>Sandakan</option>
-          <option>Kuching</option><option>Miri</option>
-        </select>
-        <div class="field-error" id="service-location-err">Please select a location.</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="service-phone">Contact Number *</label>
-      <input class="form-control" type="tel" placeholder="e.g. +60 12-345 6789" id="service-phone" maxlength="20"/>
-      <div class="field-error" id="service-phone-err">Please enter a valid contact number (min 9 digits).</div>
-    </div>
-    <!-- FIX #4: CSRF honeypot — hidden from users, filled only by bots -->
-    <input type="text" id="post-honeypot" name="_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;position:absolute;left:-9999px">
-    <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px;margin-top:4px" onclick="submitService()">Publish My Service →</button>
-  </div>
-</div>
- 
-<!-- LISTING DETAIL MODAL -->
-<div class="modal-overlay detail-modal" id="detail-modal" onclick="closeModal('detail-modal')">
-  <div class="modal" onclick="event.stopPropagation()" style="max-width:600px">
-    <button class="modal-close" onclick="closeModal('detail-modal')" aria-label="Close">✕</button>
-    <div id="detail-content"></div>
-  </div>
-</div>
- 
-<!-- CONTACT MODAL -->
-<div class="modal-overlay contact-modal" id="contact-modal" onclick="closeModal('contact-modal')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal('contact-modal')" aria-label="Close">✕</button>
-    <div class="modal-title">Contact Us</div>
-    <p class="modal-sub">We're here to help. Send us a message and we'll respond within 24 hours.</p>
-    <div class="form-group">
-      <label for="c-name">Your Name</label>
-      <input class="form-control" type="text" id="c-name" placeholder="Ahmad bin Razak"/>
-      <div class="field-error" id="c-name-err">Please enter your name.</div>
-    </div>
-    <div class="form-group">
-      <label for="c-email">Email Address</label>
-      <input class="form-control" type="email" id="c-email" placeholder="you@example.com"/>
-      <div class="field-error" id="c-email-err">Please enter a valid email.</div>
-    </div>
-    <div class="form-group">
-      <label for="c-subject">Subject</label>
-      <select class="form-control" id="c-subject">
-        <option>General Enquiry</option>
-        <option>Booking Support</option>
-        <option>Provider Support</option>
-        <option>Payment Issue</option>
-        <option>Report a Problem</option>
-        <option>Other</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="c-msg" style="display:flex;justify-content:space-between;align-items:center">
-        Message
-        <span id="c-msg-count" style="font-size:0.75rem;color:var(--muted);font-weight:400">0 / 1000</span>
-      </label>
-      <textarea class="form-control" rows="4" id="c-msg" placeholder="How can we help you?" style="resize:vertical" maxlength="1000" oninput="document.getElementById('c-msg-count').textContent=this.value.length+' / 1000'"></textarea>
-      <div class="field-error" id="c-msg-err">Please enter a message.</div>
-    </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="submitContact()">Send Message →</button>
-  </div>
-</div>
- 
-<!-- ABOUT MODAL -->
-<div class="modal-overlay" id="about-modal" onclick="closeModal('about-modal')">
-  <div class="modal" onclick="event.stopPropagation()" style="max-width:560px">
-    <button class="modal-close" onclick="closeModal('about-modal')" aria-label="Close">✕</button>
-    <div class="modal-title">About Servify</div>
-    <p class="modal-sub">Malaysia's trusted services marketplace</p>
-    <div class="policy-content">
-      <p>Servify was founded with one mission: to make finding and hiring local service professionals as simple as possible for everyone in Malaysia.</p>
-      <h3>Our Mission</h3>
-      <p>We believe every Malaysian deserves access to quality, affordable local services — and every skilled professional deserves a platform to grow their business. Servify bridges that gap.</p>
-      <h3>What We Offer</h3>
-      <p>From catering and cleaning to photography, tutoring, and beyond — Servify hosts thousands of verified service listings across every major Malaysian city. All providers are vetted and reviewed by real customers.</p>
-      <h3>Our Values</h3>
-      <p><strong>Trust:</strong> Every provider is screened and reviews are genuine. <strong>Transparency:</strong> Prices are clear, no hidden fees.</p>
-      <h3>Contact</h3>
-      <p>Email: hello@servify.my | Support hours: Mon–Fri, 9am–6pm MYT</p>
-    </div>
-  </div>
-</div>
- 
-<!-- POLICY MODAL -->
-<div class="modal-overlay policy-modal" id="policy-modal" onclick="closeModal('policy-modal')">
-  <div class="modal" onclick="event.stopPropagation()" style="max-width:640px">
-    <button class="modal-close" onclick="closeModal('policy-modal')" aria-label="Close">✕</button>
-    <div id="policy-content-inner"></div>
-  </div>
-</div>
- 
-<!-- PAYMENT MODAL -->
-<div class="modal-overlay payment-modal" id="payment-modal" onclick="closeModal('payment-modal')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal('payment-modal')" aria-label="Close">✕</button>
-    <div class="modal-title">Subscribe to Pro Provider</div>
-    <p class="modal-sub">Complete your payment to keep your listing live</p>
- 
-    <div class="plan-summary">
-      <div>
-        <div class="plan-summary-label">Plan</div>
-        <div class="plan-summary-name">Pro Provider — Monthly</div>
-      </div>
-      <div style="text-align:right">
-        <div class="plan-summary-price">RM 29</div>
-        <div class="plan-summary-period">per month · cancel anytime</div>
-      </div>
-    </div>
- 
-    <div class="payment-tab-bar">
-      <button class="ptab active" id="ptab-fpx" onclick="switchPayTab('fpx')">🏦 FPX</button>
-      <button class="ptab" id="ptab-ewallet" onclick="switchPayTab('ewallet')">📱 eWallet</button>
-      <button class="ptab" id="ptab-card" onclick="switchPayTab('card')">💳 Card</button>
-      <!-- ISSUE 5 FIX: DuitNow removed — using WhatsApp flow instead (see Issue 1) -->
-    </div>
- 
-    <!-- FPX -->
-    <div id="pay-fpx">
-      <div class="form-group">
-        <label>Select your bank</label>
-        <select class="form-control" id="fpx-bank">
-          <option value="">Choose bank…</option>
-          <option>Maybank2u</option>
-          <option>CIMB Clicks</option>
-          <option>RHB Now</option>
-          <option>Public Bank</option>
-          <option>Hong Leong Connect</option>
-          <option>AmOnline</option>
-          <option>Bank Islam</option>
-          <option>Bank Rakyat</option>
-          <option>BSN Online</option>
-          <option>OCBC</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Account holder name</label>
-        <input class="form-control" type="text" id="fpx-name" placeholder="As shown in your bank account"/>
-      </div>
-      <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px" onclick="processPayment('fpx')">Pay RM 29 via FPX →</button>
-    </div>
- 
-    <!-- eWallet -->
-    <div id="pay-ewallet" style="display:none">
-      <div class="form-group">
-        <label>Select e-Wallet</label>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px">
-          <div class="payment-method-card" style="flex-direction:column;align-items:center;text-align:center;padding:16px 12px;gap:8px" id="ew-tng" onclick="selectWallet('tng')">
-            <div style="font-size:1.5rem">💚</div>
-            <div style="font-size:0.78rem;font-weight:600">Touch 'n Go</div>
-          </div>
-          <div class="payment-method-card" style="flex-direction:column;align-items:center;text-align:center;padding:16px 12px;gap:8px" id="ew-grab" onclick="selectWallet('grab')">
-            <div style="font-size:1.5rem">🟢</div>
-            <div style="font-size:0.78rem;font-weight:600">GrabPay</div>
-          </div>
-          <div class="payment-method-card" style="flex-direction:column;align-items:center;text-align:center;padding:16px 12px;gap:8px" id="ew-boost" onclick="selectWallet('boost')">
-            <div style="font-size:1.5rem">🔴</div>
-            <div style="font-size:0.78rem;font-weight:600">Boost</div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Mobile number linked to e-Wallet</label>
-        <input class="form-control" type="tel" id="ew-phone" placeholder="+60 12-345 6789"/>
-      </div>
-      <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px" onclick="processPayment('ewallet')">Pay RM 29 via e-Wallet →</button>
-    </div>
- 
-    <!-- Card -->
-    <div id="pay-card" style="display:none">
-      <div class="form-group">
-        <label>Card number</label>
-        <input class="form-control" type="text" id="card-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNum(this)"/>
-      </div>
-      <div class="form-row">
-        <div class="form-group" style="margin-bottom:0">
-          <label>Expiry date</label>
-          <input class="form-control" type="text" id="card-exp" placeholder="MM / YY" maxlength="7"/>
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label>CVV</label>
-          <input class="form-control" type="text" id="card-cvv" placeholder="123" maxlength="4"/>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Cardholder name</label>
-        <input class="form-control" type="text" id="card-name" placeholder="As shown on card"/>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted);margin-bottom:16px">🔒 Secured by SSL encryption. We never store your card details.</div>
-      <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px" onclick="processPayment('card')">Pay RM 29 →</button>
-    </div>
- 
-    <!-- ISSUE 5 FIX: DuitNow section removed — payments via WhatsApp (Issue 1 fix) -->
- 
-  </div>
-</div>
- 
-<!-- TOAST -->
-<div class="toast" id="toast" role="alert" aria-live="polite">
-  <span class="toast-icon" id="toast-icon"></span>
-  <span id="toast-msg"></span>
-</div>
- 
-<script>
-// ── DATA ──
-// ── LISTINGS FROM SUPABASE ──
-let allServices = [];
-let activeFilter = 'All';
-let currentSearch = '';
- 
-const catEmoji = {
-  'Catering':'🍽️','Event Management':'🎉','Cleaning':'🧹','Photography':'📸',
-  'Moving & Delivery':'📦','Home Repair':'🔧','Tutoring':'📚','Beauty & Wellness':'💄',
-  'IT & Tech':'💻','Fitness & Sports':'🏋️','Music & Performing':'🎵','Pet Care':'🐾'
-};
-const catBg = {
-  'Catering':'#fff4f0','Event Management':'#f5f0ff','Cleaning':'#f0f4ff','Photography':'#fff9e6',
-  'Moving & Delivery':'#f0fff8','Home Repair':'#fff8f0','Tutoring':'#f0f8ff','Beauty & Wellness':'#fff0f8',
-  'IT & Tech':'#f0f4ff','Fitness & Sports':'#f0fff4','Music & Performing':'#fdf4ff','Pet Care':'#fff8f0'
-};
- 
-async function loadListingsFromDB() {
-  const grid = document.getElementById('listings-grid');
-  // Show skeleton cards while loading
-  grid.innerHTML = Array(6).fill(0).map(() => `
-    <div style="background:white;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;animation:shimmer 1.5s infinite">
-      <div style="height:180px;background:linear-gradient(90deg,#f0ede6 25%,#e8e5de 50%,#f0ede6 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
-      <div style="padding:20px">
-        <div style="height:12px;width:60%;background:var(--cream);border-radius:4px;margin-bottom:12px"></div>
-        <div style="height:18px;width:85%;background:var(--cream);border-radius:4px;margin-bottom:8px"></div>
-        <div style="height:12px;width:100%;background:var(--cream);border-radius:4px;margin-bottom:6px"></div>
-        <div style="height:12px;width:70%;background:var(--cream);border-radius:4px"></div>
-      </div>
-    </div>`).join('');
-  // Inject shimmer keyframe if not already present
-  if (!document.getElementById('shimmer-style')) {
-    const s = document.createElement('style');
-    s.id = 'shimmer-style';
-    s.textContent = '@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}';
-    document.head.appendChild(s);
-  }
- 
-  const { data, error } = await db.from('listings').select('*').eq('status','active').order('created_at', {ascending: false});
- 
-  if (error || !data) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Failed to load listings. Please refresh.</div>`;
-    return;
-  }
- 
-  allServices = data;
-  renderListings('All');
-}
- 
-// ── SEARCH ──
-function doSearch() {
-  const q = document.getElementById('search-input').value.trim().toLowerCase();
-  const loc = document.getElementById('location-select').value;
-  currentSearch = q;
- 
-  // Show loading state on button
-  const btn = document.querySelector('.search-btn');
-  const origText = btn ? btn.textContent : '';
-  if (btn) { btn.textContent = '…'; btn.disabled = true; }
- 
-  // Short defer so the UI updates before the (synchronous) filter runs
-  setTimeout(() => {
-    const filtered = allServices.filter(s => {
-      const matchQ = !q ||
-        (s.title||'').toLowerCase().includes(q) ||
-        (s.category||'').toLowerCase().includes(q) ||
-        (s.description||'').toLowerCase().includes(q) ||
-        (s.provider_name||'').toLowerCase().includes(q);
-      const matchLoc = !loc || (s.location||'') === loc || (s.location||'').includes(loc);
-      return matchQ && matchLoc;
-    });
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('.filter-btn').classList.add('active');
-    activeFilter = 'All';
-    renderListings(null, filtered, q || loc ? `Results for "${[q, loc].filter(Boolean).join(', ')}"` : null);
-    document.getElementById('listings').scrollIntoView({behavior:'smooth'});
-    if (btn) { btn.textContent = origText; btn.disabled = false; }
-  }, 50);
-}
- 
-function quickSearch(term) {
-  document.getElementById('search-input').value = term;
-  doSearch();
-}
- 
-// ── LISTINGS ──
-function renderListings(filter, overrideList, labelOverride) {
-  const grid = document.getElementById('listings-grid');
-  let list;
-  if (overrideList) {
-    list = overrideList;
-  } else {
-    const f = filter !== null ? filter : activeFilter;
-    list = f === 'All' ? allServices : allServices.filter(s => s.category === f);
-  }
- 
-  if (labelOverride) {
-    document.getElementById('listings-label').textContent = '';
-    document.getElementById('listings-title').textContent = labelOverride;
-  } else {
-    document.getElementById('listings-label').textContent = 'Live Listings';
-    document.getElementById('listings-title').textContent = 'Active Services';
-  }
- 
-  document.getElementById('load-more-wrap').style.display = 'none';
- 
-  if (list.length === 0) {
-    grid.innerHTML = `<div class="no-results">
-      <div class="no-results-icon">🔍</div>
-      <h3>No services found</h3>
-      <p>Try a different search term, location, or category.</p>
-      <button class="btn btn-primary" onclick="clearSearch()">Clear Search</button>
-    </div>`;
-    return;
-  }
- 
-  grid.innerHTML = list.map(s => {
-    const emoji = catEmoji[s.category] || '⭐';
-    const bg = catBg[s.category] || '#f5f5f5';
-    // Sanitize all user-generated content before injecting into innerHTML
-    const safeTitle    = sanitize(s.title);
-    const safeDesc     = sanitize(s.description || 'Contact provider for details.');
-    const safeCat      = sanitize(s.category || 'Service');
-    const safeLocation = sanitize(s.location || 'Malaysia');
-    // ISSUE 6b: Strip [DEMO] prefix from provider name for display
-    const rawProvider  = (s.provider_name || 'Provider').replace(/^\[DEMO\]\s*/i, '');
-    const safeProvider = sanitize(rawProvider);
-    const safePrice    = parseFloat(s.price||0).toLocaleString();
-    // ISSUE 6b: Detect demo listings
-    const isDemo = (s.provider_name||'').startsWith('[DEMO]');
-    return `
-    <a class="listing-card" href="provider-profile.html?id=${encodeURIComponent(s.id)}" tabindex="0" role="button" aria-label="View ${safeTitle}" style="text-decoration:none;color:inherit;display:block;position:relative">
-      ${isDemo ? `<span style="position:absolute;top:10px;right:10px;z-index:5;background:#f59e0b;color:white;font-size:0.68rem;font-weight:800;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase">DEMO</span>` : ''}
-      <div class="listing-img" style="background:${bg}">
-        <span>${emoji}</span>
-        <span class="listing-badge" style="background:#e8f7ef;color:#1a9e5c">✓ Verified</span>
-      </div>
-      <div class="listing-body">
-        <div class="listing-meta">
-          <span class="listing-cat">${safeCat}</span>
-          <span class="listing-rating">📍 ${safeLocation}</span>
-        </div>
-        <div class="listing-title">${safeTitle}</div>
-        <div class="listing-desc">${safeDesc}</div>
-        <div class="listing-footer">
-          <div class="listing-provider">
-            <div class="provider-avatar" style="background:${bg}">${emoji}</div>
-            <div>
-              <div class="provider-name">${safeProvider}</div>
-              <div class="provider-badge">✓ Verified</div>
-            </div>
-          </div>
-          <div class="listing-price">
-            <div class="price-from">from</div>
-            <div class="price-amount">RM ${safePrice}</div>
-          </div>
-        </div>
-      </div>
-    </a>`;
-  }).join('');
- 
-  // Cards are now <a> tags — keyboard navigation is handled natively.
-}
- 
-function clearSearch() {
-  document.getElementById('search-input').value = '';
-  document.getElementById('location-select').value = '';
-  currentSearch = '';
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.filter-btn').classList.add('active');
-  activeFilter = 'All';
-  renderListings('All');
-}
- 
-function setFilter(btn, cat) {
-  document.getElementById('search-input').value = '';
-  document.getElementById('location-select').value = '';
-  currentSearch = '';
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  activeFilter = cat;
-  renderListings(cat);
-}
- 
-function jumpToCategory(cat) {
-  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
-  setTimeout(() => {
-    const btns = document.querySelectorAll('.filter-btn');
-    btns.forEach(b => {
-      b.classList.remove('active');
-      if(b.textContent === cat || b.textContent.includes(cat)) b.classList.add('active');
-    });
-    renderListings(cat);
-  }, 400);
-}
- 
-// ── LISTING DETAIL ──
-async function openListing(id) {
-  const s = allServices.find(x => x.id === id);
-  if (!s) return;
-  const emoji = catEmoji[s.category] || '⭐';
-  const bg = catBg[s.category] || '#f5f5f5';
-  // Sanitize all user-generated content
-  const safeTitle    = sanitize(s.title);
-  const safeDesc     = sanitize(s.description || 'Contact provider for more details.');
-  const safeProvider = sanitize((s.provider_name || 'Provider').replace(/^\[DEMO\]\s*/i, ''));
-  const safeLocation = sanitize(s.location || 'Malaysia');
-  const safePrice    = parseFloat(s.price||0).toLocaleString();
- 
-  // FIX #15: digits-only phone validation
-  const rawDigits = (s.phone||'').replace(/[^0-9]/g, '');
-  const waPhone = (rawDigits.length >= 9 && rawDigits.length <= 15) ? rawDigits : null;
-  const waText  = encodeURIComponent(`Hi ${s.provider_name||'there'}, I found your listing on Servify and I'm interested in your service: ${s.title||''}. Could you please provide more details?`);
- 
-  // ISSUE 6b/6c: Detect demo listing — show banner and hide contacts
-  const isDemo = (s.provider_name||'').startsWith('[DEMO]');
- 
-  // FIX #8: Gate contact details (phone/WhatsApp) behind authentication
-  const currentUser = await getCurrentUser();
-  let contactHtml;
-  if (isDemo) {
-    contactHtml = `<div style="background:#fff8e6;border:1.5px solid #fde68a;border-radius:12px;padding:16px;text-align:center;font-size:0.875rem;color:#92400e;font-weight:500">🔒 Contact details hidden for demo listings.</div>`;
-  } else if (!currentUser) {
-    contactHtml = `
-      <div style="background:var(--cream);border:1.5px solid var(--border);border-radius:14px;padding:20px;text-align:center;margin-top:4px">
-        <div style="font-size:1.4rem;margin-bottom:8px">🔒</div>
-        <div style="font-size:0.9rem;font-weight:600;margin-bottom:6px">Sign in to contact this provider</div>
-        <div style="font-size:0.8rem;color:var(--muted);margin-bottom:16px;line-height:1.5">Create a free account to view contact details and send enquiries directly.</div>
-        <button class="btn btn-accent" style="width:100%;justify-content:center;padding:12px" onclick="closeModal('detail-modal');openAuthModal('signin')">Sign In to Contact →</button>
-      </div>`;
-  } else if (waPhone) {
-    contactHtml = `
-      <a class="btn" style="justify-content:center;padding:16px;font-size:1rem;font-weight:700;background:#25D366;color:white;border:none;border-radius:12px;text-decoration:none;display:flex;align-items:center;gap:8px"
-        href="https://wa.me/${waPhone}?text=${waText}"
-        target="_blank" rel="noopener noreferrer">
-        💬 WhatsApp Enquiry
-      </a>
-      <a class="btn btn-ghost" style="justify-content:center;padding:14px;text-decoration:none;border-radius:12px" href="tel:+${waPhone}">
-        📞 Call Provider
-      </a>
-      <div style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:8px">🔒 Your enquiry goes directly to the provider</div>`;
-  } else {
-    contactHtml = `<div style="text-align:center;color:var(--muted);font-size:0.875rem;padding:12px">No contact info available for this listing.</div>`;
-  }
- 
-  document.getElementById('detail-content').innerHTML = `
-    ${isDemo ? `<div style="background:#fff8e6;border:1.5px solid #fde68a;border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:0.875rem;color:#92400e;line-height:1.55">
-      ⚠️ <strong>This is a demo listing</strong> — do not attempt to book. Real listings coming soon.
-    </div>` : ''}
+  ` : ''}
     <div class="detail-header">
       <div class="detail-icon" style="background:${bg}">${emoji}</div>
       <div>
@@ -2037,7 +909,7 @@ function openPolicyModal(type) {
       <p>We retain your account data for as long as your account remains active. Upon account deletion, personal data is removed within 30 days except where retention is required by Malaysian law (e.g. financial records retained for 7 years per the Companies Act 2016 and Income Tax Act 1967). Anonymised, aggregated analytics data may be retained indefinitely.</p>
  
       <h3>8. Your Rights Under PDPA 2010</h3>
-      <p>Under the Personal Data Protection Act 2010 (Malaysia), you have the right to: access personal data we hold about you; correct inaccurate or incomplete data; withdraw consent for processing; and request deletion of your account and associated data. To exercise any right, email us at <strong>privacy@servify.my</strong>. We will respond within 14 business days. We may request proof of identity before processing your request.</p>
+      <p>Under the Personal Data Protection Act 2010 (Malaysia), you have the right to: access personal data we hold about you; correct inaccurate or incomplete data; withdraw consent for processing; and request deletion of your account and associated data. To exercise any right, email us at <strong>thasshanrao@gmail.com</strong>. We will respond within 14 business days. We may request proof of identity before processing your request.</p>
  
       <h3>9. Children</h3>
       <p>Servify is strictly for users aged 18 and above. We do not knowingly collect data from minors. If you believe a minor has registered, contact us immediately and we will delete their account.</p>
@@ -2046,7 +918,7 @@ function openPolicyModal(type) {
       <p>We may update this Privacy Policy at any time. Material changes will be notified by email or prominent in-platform notice at least 7 days before taking effect. Continued use after changes take effect constitutes acceptance of the updated policy.</p>
  
       <h3>11. Contact</h3>
-      <p>Privacy enquiries: <strong>privacy@servify.my</strong><br>Servify &middot; Ipoh, Perak, Malaysia</p>
+      <p>Privacy enquiries: <strong>thasshanrao@gmail.com</strong><br>Servify &middot; Ipoh, Perak, Malaysia</p>
     </div>`;
  
   const terms = `
@@ -2060,7 +932,7 @@ function openPolicyModal(type) {
       <p>You must be at least 18 years of age to register or use Servify. By creating an account, you represent and warrant that: (a) you are at least 18 years old; (b) you have the legal capacity to enter into binding contracts under Malaysian law; (c) all registration information you provide is accurate, current, and complete; and (d) you will maintain the accuracy of such information. Servify reserves the right to terminate accounts of users who misrepresent their age or identity.</p>
  
       <h3>3. Account Security</h3>
-      <p>You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately at <strong>hello@servify.my</strong> upon becoming aware of any unauthorised access or security breach. Servify shall not be liable for any loss resulting from unauthorised use of your account where you have failed to maintain reasonable security of your credentials.</p>
+      <p>You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately at <strong>thasshanrao@gmail.com</strong> upon becoming aware of any unauthorised access or security breach. Servify shall not be liable for any loss resulting from unauthorised use of your account where you have failed to maintain reasonable security of your credentials.</p>
  
       <h3>4. Service Provider Obligations</h3>
       <p>Service providers who list services on Servify expressly represent, warrant, and agree that: (a) all listing information is accurate, complete, and not misleading in any way; (b) they hold all licences, permits, certifications, and authorisations required under Malaysian law to provide the listed services; (c) they will deliver services as described to customers in a professional and timely manner; (d) they will not engage in any conduct that is unlawful, fraudulent, discriminatory, or harmful; (e) they will not use the Platform to solicit customers to transact outside of Servify for the purpose of avoiding subscription fees. Breach of any of these warranties may result in immediate listing removal and account termination without refund.</p>
@@ -2069,7 +941,7 @@ function openPolicyModal(type) {
       <p>Service providers receive a 30-day free trial upon registration. No credit card is required during the trial period. Upon expiry of the trial, a subscription fee of <strong>RM 29.00 per month</strong> is required to maintain active listings on the Platform. Unpaid accounts will be automatically frozen — listings will be hidden from public search results until payment is received. Subscriptions renew monthly on the same calendar date as activation. You may cancel your subscription at any time; cancellation takes effect at the end of the current billing period with no pro-rata refund. Servify reserves the right to modify subscription pricing with 30 days' written notice to existing subscribers.</p>
  
       <h3>6. Payments</h3>
-      <p>All payments are processed in Malaysian Ringgit (RM) through regulated Malaysian payment channels including FPX and local bank transfer via ToyyibPay. By submitting payment, you authorise Servify to charge the stated amount to your selected payment method. All stated prices are inclusive of applicable Malaysian taxes (SST) unless otherwise stated. Servify does not store your full payment credentials. Payment disputes must be raised within 30 days of the charge date by contacting <strong>billing@servify.my</strong>.</p>
+      <p>All payments are processed in Malaysian Ringgit (RM) through regulated Malaysian payment channels including FPX and local bank transfer via ToyyibPay. By submitting payment, you authorise Servify to charge the stated amount to your selected payment method. All stated prices are inclusive of applicable Malaysian taxes (SST) unless otherwise stated. Servify does not store your full payment credentials. Payment disputes must be raised within 30 days of the charge date by contacting <strong>thasshanrao@gmail.com</strong>.</p>
  
       <h3>7. Prohibited Conduct</h3>
       <p>You must not: (a) post false, fraudulent, exaggerated, or misleading listings or reviews; (b) impersonate any person, entity, or Servify staff; (c) harass, threaten, intimidate, defame, or abuse any user; (d) attempt to circumvent Servify's subscription model by diverting customers to transact externally; (e) scrape, copy, or reproduce any Platform content without written permission; (f) introduce viruses, malware, or malicious code; (g) use automated bots or scripts to access the Platform; (h) use the Platform for any purpose that is unlawful under Malaysian law; or (i) engage in any conduct that could damage Servify's reputation or operations. Violations may result in immediate termination and may be referred to the relevant Malaysian authorities including MCMC and the Royal Malaysia Police.</p>
@@ -2090,7 +962,7 @@ function openPolicyModal(type) {
       <p>You may delete your account at any time from Dashboard &rarr; Settings &rarr; Delete Account. Servify may suspend or terminate your account immediately and without notice if you breach these Terms, engage in fraudulent activity, or pose a risk to other users or the Platform. Upon termination: your listings will be permanently removed; you lose access to your account and data; no refund will be provided for any prepaid subscription period. Provisions of these Terms that by their nature should survive termination (including Sections 8, 9, 10, 11, and 13) shall survive.</p>
  
       <h3>13. Governing Law & Dispute Resolution</h3>
-      <p>These Terms and any dispute or claim arising out of or in connection with them shall be governed by and construed in accordance with the laws of Malaysia. The parties irrevocably submit to the exclusive jurisdiction of the courts of Ipoh, Perak, Malaysia. Before initiating legal proceedings, both parties agree to attempt good-faith resolution of disputes by contacting <strong>legal@servify.my</strong> and allowing 30 days for resolution.</p>
+      <p>These Terms and any dispute or claim arising out of or in connection with them shall be governed by and construed in accordance with the laws of Malaysia. The parties irrevocably submit to the exclusive jurisdiction of the courts of Ipoh, Perak, Malaysia. Before initiating legal proceedings, both parties agree to attempt good-faith resolution of disputes by contacting <strong>thasshanrao@gmail.com</strong> and allowing 30 days for resolution.</p>
  
       <h3>14. Severability</h3>
       <p>If any provision of these Terms is found by a court of competent jurisdiction to be invalid, illegal, or unenforceable, that provision shall be modified to the minimum extent necessary to make it enforceable, and the remaining provisions shall continue in full force and effect.</p>
@@ -2099,8 +971,8 @@ function openPolicyModal(type) {
       <p>These Terms, together with our Privacy Policy, constitute the entire agreement between you and Servify with respect to the Platform and supersede all prior agreements, understandings, and communications, whether written or oral.</p>
  
       <h3>16. Contact</h3>
-      <p>Legal enquiries: <strong>legal@servify.my</strong><br>
-      General support: <strong>hello@servify.my</strong><br>
+      <p>Legal enquiries: <strong>thasshanrao@gmail.com</strong><br>
+      General support: <strong>thasshanrao@gmail.com</strong><br>
       Servify &middot; Ipoh, Perak, Malaysia</p>
     </div>`;
  
@@ -2831,6 +1703,213 @@ async function seedDemoListings() {
  
   localStorage.setItem('demo_seeded', '1');
   console.log('[seedDemoListings] 6 demo listings seeded successfully.');
+}
+ 
+ 
+async function loadListingsFromDB() {
+  const grid = document.getElementById('listings-grid');
+  // Show skeleton cards while loading
+  grid.innerHTML = Array(6).fill(0).map(() => `
+    <div style="background:white;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;animation:shimmer 1.5s infinite">
+      <div style="height:180px;background:linear-gradient(90deg,#f0ede6 25%,#e8e5de 50%,#f0ede6 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
+      <div style="padding:20px">
+        <div style="height:12px;width:60%;background:var(--cream);border-radius:4px;margin-bottom:12px"></div>
+        <div style="height:18px;width:85%;background:var(--cream);border-radius:4px;margin-bottom:8px"></div>
+        <div style="height:12px;width:100%;background:var(--cream);border-radius:4px;margin-bottom:6px"></div>
+        <div style="height:12px;width:70%;background:var(--cream);border-radius:4px"></div>
+      </div>
+    </div>`).join('');
+  // Inject shimmer keyframe if not already present
+  if (!document.getElementById('shimmer-style')) {
+    const s = document.createElement('style');
+    s.id = 'shimmer-style';
+    s.textContent = '@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}';
+    document.head.appendChild(s);
+  }
+ 
+  const { data, error } = await db.from('listings').select('*').eq('status','active').order('created_at', {ascending: false});
+ 
+  if (error || !data) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Failed to load listings. Please refresh.</div>`;
+    return;
+  }
+ 
+  allServices = data;
+  renderListings('All');
+}
+ 
+// ── SEARCH ──
+function doSearch() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const loc = document.getElementById('location-select').value;
+  currentSearch = q;
+ 
+  // Show loading state on button
+  const btn = document.querySelector('.search-btn');
+  const origText = btn ? btn.textContent : '';
+  if (btn) { btn.textContent = '…'; btn.disabled = true; }
+ 
+  // Short defer so the UI updates before the (synchronous) filter runs
+  setTimeout(() => {
+    const filtered = allServices.filter(s => {
+      const matchQ = !q ||
+        (s.title||'').toLowerCase().includes(q) ||
+        (s.category||'').toLowerCase().includes(q) ||
+        (s.description||'').toLowerCase().includes(q) ||
+        (s.provider_name||'').toLowerCase().includes(q);
+      const matchLoc = !loc || (s.location||'') === loc || (s.location||'').includes(loc);
+      return matchQ && matchLoc;
+    });
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-btn').classList.add('active');
+    activeFilter = 'All';
+    renderListings(null, filtered, q || loc ? `Results for "${[q, loc].filter(Boolean).join(', ')}"` : null);
+    document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+    if (btn) { btn.textContent = origText; btn.disabled = false; }
+  }, 50);
+}
+ 
+function quickSearch(term) {
+  document.getElementById('search-input').value = term;
+  doSearch();
+}
+ 
+// ── LISTINGS ──
+function renderListings(filter, overrideList, labelOverride) {
+  const grid = document.getElementById('listings-grid');
+  let list;
+  if (overrideList) {
+    list = overrideList;
+  } else {
+    const f = filter !== null ? filter : activeFilter;
+    list = f === 'All' ? allServices : allServices.filter(s => s.category === f);
+  }
+ 
+  if (labelOverride) {
+    document.getElementById('listings-label').textContent = '';
+    document.getElementById('listings-title').textContent = labelOverride;
+  } else {
+    document.getElementById('listings-label').textContent = 'Live Listings';
+    document.getElementById('listings-title').textContent = 'Active Services';
+  }
+ 
+  document.getElementById('load-more-wrap').style.display = 'none';
+ 
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="no-results">
+      <div class="no-results-icon">🔍</div>
+      <h3>No services found</h3>
+      <p>Try a different search term, location, or category.</p>
+      <button class="btn btn-primary" onclick="clearSearch()">Clear Search</button>
+    </div>`;
+    return;
+  }
+ 
+  grid.innerHTML = list.map(s => {
+    const emoji = catEmoji[s.category] || '⭐';
+    const bg = catBg[s.category] || '#f5f5f5';
+    // Sanitize all user-generated content before injecting into innerHTML
+    const safeTitle    = sanitize(s.title);
+    const safeDesc     = sanitize(s.description || 'Contact provider for details.');
+    const safeCat      = sanitize(s.category || 'Service');
+    const safeLocation = sanitize(s.location || 'Malaysia');
+    // ISSUE 6b: Strip [DEMO] prefix from provider name for display
+    const rawProvider  = (s.provider_name || 'Provider').replace(/^\[DEMO\]\s*/i, '');
+    const safeProvider = sanitize(rawProvider);
+    const safePrice    = parseFloat(s.price||0).toLocaleString();
+    // ISSUE 6b: Detect demo listings
+    const isDemo = (s.provider_name||'').startsWith('[DEMO]') || (s.metadata && s.metadata.is_demo);
+    return `
+    <a class="listing-card" href="provider-profile.html?id=${encodeURIComponent(s.id)}" tabindex="0" role="button" aria-label="View ${safeTitle}" style="text-decoration:none;color:inherit;display:block;position:relative">
+      ${isDemo ? `<span style="position:absolute;top:10px;right:10px;z-index:5;background:#f59e0b;color:white;font-size:0.68rem;font-weight:800;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase">DEMO</span>` : ''}
+      <div class="listing-img" style="background:${bg}">
+        <span>${emoji}</span>
+        <span class="listing-badge" style="background:#e8f7ef;color:#1a9e5c">✓ Verified</span>
+      </div>
+      <div class="listing-body">
+        <div class="listing-meta">
+          <span class="listing-cat">${safeCat}</span>
+          <span class="listing-rating">📍 ${safeLocation}</span>
+        </div>
+        <div class="listing-title">${safeTitle}</div>
+        <div class="listing-desc">${safeDesc}</div>
+        <div class="listing-footer">
+          <div class="listing-provider">
+            <div class="provider-avatar" style="background:${bg}">${emoji}</div>
+            <div>
+              <div class="provider-name">${safeProvider}</div>
+              <div class="provider-badge">✓ Verified</div>
+            </div>
+          </div>
+          <div class="listing-price">
+            <div class="price-from">from</div>
+            <div class="price-amount">RM ${safePrice}</div>
+          </div>
+        </div>
+      </div>
+    </a>`;
+  }).join('');
+ 
+  // Cards are now <a> tags — keyboard navigation is handled natively.
+}
+ 
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('location-select').value = '';
+  currentSearch = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  activeFilter = 'All';
+  renderListings('All');
+}
+ 
+function setFilter(btn, cat) {
+  document.getElementById('search-input').value = '';
+  document.getElementById('location-select').value = '';
+  currentSearch = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeFilter = cat;
+  renderListings(cat);
+}
+ 
+function jumpToCategory(cat) {
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+  setTimeout(() => {
+    const btns = document.querySelectorAll('.filter-btn');
+    btns.forEach(b => {
+      b.classList.remove('active');
+      if(b.textContent === cat || b.textContent.includes(cat)) b.classList.add('active');
+    });
+    renderListings(cat);
+  }, 400);
+}
+ 
+ 
+// ── LOAD MORE LISTINGS ──
+let _listingsOffset = 6;
+ 
+async function loadMoreListings() {
+  const btn = document.getElementById('load-more-btn');
+  if (btn) { btn.textContent = 'Loading…'; btn.disabled = true; }
+  const { data, error } = await db.from('listings')
+    .select('*')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .range(_listingsOffset, _listingsOffset + 5);
+  if (error || !data || !data.length) {
+    if (btn) btn.style.display = 'none';
+    showToast('info', 'No more listings.');
+    return;
+  }
+  // Append to existing global allListings and re-render
+  if (typeof allServices !== 'undefined') {
+    allServices = allServices.concat(data);
+    renderListings('All');
+  }
+  _listingsOffset += 6;
+  if (btn) { btn.textContent = 'Load more listings'; btn.disabled = false; }
+  if (data.length < 6) { if (btn) btn.style.display = 'none'; }
 }
  
 // ── INIT ──
