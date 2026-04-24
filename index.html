@@ -2007,80 +2007,101 @@ function openAboutModal() {
   document.getElementById('about-modal').classList.add('open');
 }
 function openPolicyModal(type) {
+  const TODAY = 'April 2026';
+ 
   const privacy = `
     <div class="modal-title">Privacy Policy</div>
-    <p class="modal-sub">Last updated: January 2026 · Servify (Malaysia)</p>
+    <p class="modal-sub">Last updated: ${TODAY} &middot; Servify &middot; Ipoh, Perak, Malaysia</p>
     <div class="policy-content">
-      <h3>1. Information We Collect</h3>
-      <p>We collect information you provide directly when you create an account, list a service, submit an enquiry, or contact us. This includes your full name, email address, phone number, location, and payment details. We also collect information automatically when you use Servify, such as your IP address, browser type, device information, pages visited, and time spent on the platform.</p>
+      <h3>1. Who We Are</h3>
+      <p>Servify ("we", "us", "our") is an online marketplace platform operated in Malaysia, headquartered in Ipoh, Perak. We connect service seekers with service providers across Malaysia. By using Servify, you consent to the data practices described in this Privacy Policy.</p>
  
-      <h3>2. How We Use Your Information</h3>
-      <p>We use the information we collect to operate and improve the Servify platform, process payments and manage subscriptions, send transactional emails (booking confirmations, account alerts, receipts), respond to your support requests, detect and prevent fraud or abuse, and comply with legal obligations under Malaysian law. We do not sell your personal data to third parties for marketing purposes.</p>
+      <h3>2. Information We Collect</h3>
+      <p><strong>Information you provide:</strong> Full name, email address, phone number, location, profile photos, business details, and any content you submit to the platform.</p>
+      <p><strong>Information collected automatically:</strong> IP address, browser type, device information, pages visited, time on platform, and referral source. This is collected via standard server logs and browser storage — we do not use third-party advertising trackers.</p>
  
-      <h3>3. Sharing Your Information</h3>
-      <p>When you contact a service provider through Servify, your name and contact details are shared with that provider so they can respond to your enquiry. Service providers' business names, categories, locations, and contact numbers are publicly visible on their listing pages. We may share your data with trusted third-party service providers (such as payment processors and email delivery services) who assist us in operating the platform — these parties are bound by confidentiality agreements and may not use your data for any other purpose.</p>
+      <h3>3. How We Use Your Information</h3>
+      <p>We use your data to: operate and maintain the Servify platform; process your account registration and login; display your listing to potential customers; send transactional emails (account verification, subscription notices, enquiry alerts); respond to support requests; detect and prevent fraud, abuse, and policy violations; and comply with our legal obligations under Malaysian law including the Personal Data Protection Act 2010 (PDPA).</p>
+      <p>We do not sell, rent, or trade your personal data to third parties for marketing or advertising purposes.</p>
  
-      <h3>4. Data Security</h3>
-      <p>We implement industry-standard security measures including SSL/TLS encryption for all data in transit, secure authentication via Supabase Auth, and Row Level Security (RLS) policies on our database to ensure users can only access their own data. Payment transactions are processed through regulated Malaysian payment gateways (FPX, DuitNow). We never store full card numbers on our servers.</p>
+      <h3>4. Sharing Your Information</h3>
+      <p>Your data is shared only in these limited circumstances: (a) <strong>With other users:</strong> when you contact a provider, your name and email are shared with them to facilitate communication; providers' business name, category, location, and contact number are publicly visible. (b) <strong>With service providers:</strong> we use Supabase (database & authentication) and Resend (transactional email) — these vendors process your data solely on our behalf under confidentiality obligations. (c) <strong>Legal requirements:</strong> we may disclose data when required by Malaysian law, court order, or to protect the rights and safety of our users or the public.</p>
  
-      <h3>5. Cookies & Local Storage</h3>
-      <p>We use browser storage to maintain your login session and remember your preferences. Session tokens are managed by Supabase Auth and automatically expire. You may clear your browser storage at any time, though this will sign you out of your account. We do not use third-party advertising cookies.</p>
+      <h3>5. Data Security</h3>
+      <p>We implement industry-standard technical and organisational security measures including: SSL/TLS encryption for all data in transit; AES-256 encryption at rest via Supabase infrastructure; Row Level Security (RLS) database policies ensuring users can only access their own data; and session timeout controls. While we take all reasonable precautions, no method of transmission over the internet is 100% secure and we cannot guarantee absolute security.</p>
  
-      <h3>6. Data Retention</h3>
-      <p>We retain your account information for as long as your account remains active. If you delete your account, we will remove your personal data within 30 days, except where we are required to retain it for legal, tax, or fraud-prevention purposes. Enquiry records and payment receipts may be retained for up to 7 years in accordance with Malaysian financial regulations.</p>
+      <h3>6. Cookies & Browser Storage</h3>
+      <p>We use browser sessionStorage and localStorage solely to maintain your login session and remember your preferences. We do not use advertising cookies or cross-site tracking. You may clear browser storage at any time, though this will sign you out. We do not use Google Analytics or any third-party analytics.</p>
  
-      <h3>7. Your Rights (PDPA 2010)</h3>
-      <p>Under Malaysia's Personal Data Protection Act (PDPA) 2010, you have the right to access the personal data we hold about you, request correction of inaccurate data, withdraw consent for processing (where consent is the legal basis), and request deletion of your account and associated data. To exercise any of these rights, email us at <strong>privacy@servify.my</strong> with your request. We will respond within 14 business days.</p>
+      <h3>7. Data Retention</h3>
+      <p>We retain your account data for as long as your account remains active. Upon account deletion, personal data is removed within 30 days except where retention is required by Malaysian law (e.g. financial records retained for 7 years per the Companies Act 2016 and Income Tax Act 1967). Anonymised, aggregated analytics data may be retained indefinitely.</p>
  
-      <h3>8. Children's Privacy</h3>
-      <p>Servify is not intended for users under the age of 18. We do not knowingly collect personal information from minors. If you believe a minor has provided us with personal data, please contact us immediately so we can delete it.</p>
+      <h3>8. Your Rights Under PDPA 2010</h3>
+      <p>Under the Personal Data Protection Act 2010 (Malaysia), you have the right to: access personal data we hold about you; correct inaccurate or incomplete data; withdraw consent for processing; and request deletion of your account and associated data. To exercise any right, email us at <strong>privacy@servify.my</strong>. We will respond within 14 business days. We may request proof of identity before processing your request.</p>
  
-      <h3>9. Changes to This Policy</h3>
-      <p>We may update this Privacy Policy from time to time. We will notify you of material changes by email or by displaying a prominent notice on the platform. Continued use of Servify after changes take effect constitutes your acceptance of the updated policy.</p>
+      <h3>9. Children</h3>
+      <p>Servify is strictly for users aged 18 and above. We do not knowingly collect data from minors. If you believe a minor has registered, contact us immediately and we will delete their account.</p>
  
-      <h3>10. Contact Us</h3>
-      <p>For privacy-related enquiries or data requests: <strong>privacy@servify.my</strong><br>Servify · Kuala Lumpur, Malaysia</p>
+      <h3>10. Changes to This Policy</h3>
+      <p>We may update this Privacy Policy at any time. Material changes will be notified by email or prominent in-platform notice at least 7 days before taking effect. Continued use after changes take effect constitutes acceptance of the updated policy.</p>
+ 
+      <h3>11. Contact</h3>
+      <p>Privacy enquiries: <strong>privacy@servify.my</strong><br>Servify &middot; Ipoh, Perak, Malaysia</p>
     </div>`;
  
   const terms = `
     <div class="modal-title">Terms of Service</div>
-    <p class="modal-sub">Last updated: January 2026 · Servify (Malaysia)</p>
+    <p class="modal-sub">Last updated: ${TODAY} &middot; Servify &middot; Ipoh, Perak, Malaysia</p>
     <div class="policy-content">
-      <h3>1. Acceptance of Terms</h3>
-      <p>By accessing or using Servify ("the Platform"), you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, please do not use the Platform. We reserve the right to update these terms at any time, and your continued use constitutes acceptance of any changes.</p>
+      <h3>1. Agreement to Terms</h3>
+      <p>By accessing, registering on, or using the Servify platform ("Platform", "we", "us"), you ("User", "you") agree to be legally bound by these Terms of Service ("Terms") and our Privacy Policy. If you do not agree, you must not use the Platform. Your continued use of the Platform after any amendment to these Terms constitutes acceptance of the amended Terms. These Terms constitute a binding legal agreement between you and Servify.</p>
  
-      <h3>2. Eligibility & Accounts</h3>
-      <p>You must be at least 18 years old to create an account on Servify. You agree to provide accurate, current, and complete information during registration and to keep your account details up to date. You are responsible for maintaining the security of your password and for all activity that occurs under your account. Notify us immediately at <strong>hello@servify.my</strong> if you suspect unauthorised access.</p>
+      <h3>2. Eligibility</h3>
+      <p>You must be at least 18 years of age to register or use Servify. By creating an account, you represent and warrant that: (a) you are at least 18 years old; (b) you have the legal capacity to enter into binding contracts under Malaysian law; (c) all registration information you provide is accurate, current, and complete; and (d) you will maintain the accuracy of such information. Servify reserves the right to terminate accounts of users who misrepresent their age or identity.</p>
  
-      <h3>3. Service Providers</h3>
-      <p>Providers who list services on Servify represent and warrant that: (a) all information in their listing is accurate and not misleading; (b) they hold any licences or permits required to provide the listed service under Malaysian law; (c) they will deliver services as described; and (d) they will deal with customers professionally and in good faith. Servify reserves the right to remove, suspend, or reject any listing at any time without notice.</p>
+      <h3>3. Account Security</h3>
+      <p>You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately at <strong>hello@servify.my</strong> upon becoming aware of any unauthorised access or security breach. Servify shall not be liable for any loss resulting from unauthorised use of your account where you have failed to maintain reasonable security of your credentials.</p>
  
-      <h3>4. Free Trial & Subscription</h3>
-      <p>Service providers receive a 30-day free trial upon registration. After the trial period, a subscription fee of RM 29/month is required to keep listings active. Unpaid accounts will be frozen and listings will no longer appear in search results until payment is made. Subscriptions auto-renew monthly. You may cancel at any time before the next billing date. No refunds are provided for partial months already charged.</p>
+      <h3>4. Service Provider Obligations</h3>
+      <p>Service providers who list services on Servify expressly represent, warrant, and agree that: (a) all listing information is accurate, complete, and not misleading in any way; (b) they hold all licences, permits, certifications, and authorisations required under Malaysian law to provide the listed services; (c) they will deliver services as described to customers in a professional and timely manner; (d) they will not engage in any conduct that is unlawful, fraudulent, discriminatory, or harmful; (e) they will not use the Platform to solicit customers to transact outside of Servify for the purpose of avoiding subscription fees. Breach of any of these warranties may result in immediate listing removal and account termination without refund.</p>
  
-      <h3>5. Payments</h3>
-      <p>All payments on Servify are processed through regulated Malaysian payment channels (FPX, DuitNow, e-Wallets, and debit/credit cards). By submitting payment, you authorise Servify to charge the stated amount to your chosen payment method. All prices are displayed in Malaysian Ringgit (RM) and are inclusive of applicable taxes unless otherwise stated.</p>
+      <h3>5. Free Trial & Subscription</h3>
+      <p>Service providers receive a 30-day free trial upon registration. No credit card is required during the trial period. Upon expiry of the trial, a subscription fee of <strong>RM 29.00 per month</strong> is required to maintain active listings on the Platform. Unpaid accounts will be automatically frozen — listings will be hidden from public search results until payment is received. Subscriptions renew monthly on the same calendar date as activation. You may cancel your subscription at any time; cancellation takes effect at the end of the current billing period with no pro-rata refund. Servify reserves the right to modify subscription pricing with 30 days' written notice to existing subscribers.</p>
  
-      <h3>6. Prohibited Conduct</h3>
-      <p>Users must not: post false, misleading, or fraudulent listings; impersonate any person or entity; harass, threaten, or abuse other users; attempt to bypass the platform to avoid Servify's subscription fees; scrape, copy, or reproduce content from the Platform without permission; use Servify for any unlawful purpose; or upload viruses or malicious code. Violations may result in immediate account suspension or termination and may be reported to relevant authorities.</p>
+      <h3>6. Payments</h3>
+      <p>All payments are processed in Malaysian Ringgit (RM) through regulated Malaysian payment channels including FPX and local bank transfer via ToyyibPay. By submitting payment, you authorise Servify to charge the stated amount to your selected payment method. All stated prices are inclusive of applicable Malaysian taxes (SST) unless otherwise stated. Servify does not store your full payment credentials. Payment disputes must be raised within 30 days of the charge date by contacting <strong>billing@servify.my</strong>.</p>
  
-      <h3>7. Disputes Between Users</h3>
-      <p>Servify is a marketplace platform that connects seekers and providers. We facilitate connections but are not a party to the service agreements between users. Any disputes about service quality, delivery, or payment should first be resolved directly between the parties. Servify may, at its discretion, assist in mediation but is not obligated to do so and is not liable for outcomes.</p>
+      <h3>7. Prohibited Conduct</h3>
+      <p>You must not: (a) post false, fraudulent, exaggerated, or misleading listings or reviews; (b) impersonate any person, entity, or Servify staff; (c) harass, threaten, intimidate, defame, or abuse any user; (d) attempt to circumvent Servify's subscription model by diverting customers to transact externally; (e) scrape, copy, or reproduce any Platform content without written permission; (f) introduce viruses, malware, or malicious code; (g) use automated bots or scripts to access the Platform; (h) use the Platform for any purpose that is unlawful under Malaysian law; or (i) engage in any conduct that could damage Servify's reputation or operations. Violations may result in immediate termination and may be referred to the relevant Malaysian authorities including MCMC and the Royal Malaysia Police.</p>
  
-      <h3>8. Limitation of Liability</h3>
-      <p>To the maximum extent permitted by Malaysian law, Servify and its directors, employees, and agents shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Platform, including but not limited to loss of revenue, data, or business opportunity. Our total liability to you for any claim shall not exceed the amount you paid to Servify in the 3 months preceding the claim.</p>
+      <h3>8. Marketplace Disclaimer</h3>
+      <p>Servify is a technology platform that connects service seekers and service providers. <strong>Servify is not a party to any service agreement between users.</strong> We do not employ, supervise, or control service providers. We do not verify the quality of services delivered. Any service agreement is strictly between the seeker and the provider. Seekers engage providers entirely at their own risk. Servify makes no representations or warranties regarding the quality, safety, legality, or reliability of any service listed on the Platform.</p>
  
-      <h3>9. Intellectual Property</h3>
-      <p>All content on the Servify platform — including the name, logo, design, text, and software — is owned by Servify and protected by Malaysian intellectual property laws. You may not reproduce, distribute, or create derivative works from our content without express written permission. You retain ownership of content you submit (listings, photos, descriptions) but grant Servify a non-exclusive licence to display and promote it on the Platform.</p>
+      <h3>9. Limitation of Liability</h3>
+      <p>To the fullest extent permitted by the laws of Malaysia, Servify, its directors, employees, agents, and affiliates shall not be liable for: (a) any indirect, incidental, special, exemplary, punitive, or consequential damages; (b) loss of profits, revenue, data, goodwill, or business opportunity; (c) any damages arising from your use of or inability to use the Platform; (d) the conduct, services, or representations of any service provider; or (e) any unauthorised access to or use of your data. In no event shall Servify's total cumulative liability to you exceed the total fees you paid to Servify in the three (3) months immediately preceding the event giving rise to the claim. Nothing in these Terms limits liability for death, personal injury, or fraud caused by our wilful misconduct or gross negligence.</p>
  
-      <h3>10. Termination</h3>
-      <p>You may delete your account at any time from the Dashboard under Settings. Servify may terminate or suspend your account at any time if you violate these Terms, without refund of any prepaid fees. Upon termination, your listings will be removed and you will lose access to your account data.</p>
+      <h3>10. Indemnification</h3>
+      <p>You agree to fully indemnify, defend, and hold harmless Servify and its directors, employees, and agents from and against any claims, liabilities, damages, losses, costs, and expenses (including reasonable legal fees) arising out of or in any way connected with: (a) your use of or access to the Platform; (b) your breach of these Terms; (c) your violation of any applicable Malaysian law or regulation; (d) your listings, content, or conduct on the Platform; or (e) any dispute between you and another user.</p>
  
-      <h3>11. Governing Law</h3>
-      <p>These Terms are governed by the laws of Malaysia. Any disputes arising from these Terms or your use of Servify shall be subject to the exclusive jurisdiction of the courts of Malaysia.</p>
+      <h3>11. Intellectual Property</h3>
+      <p>All Platform content including the Servify name, logo, design, software, and text is owned by Servify and protected under Malaysian intellectual property laws including the Copyright Act 1987 and Trade Marks Act 2019. You may not reproduce, modify, distribute, or create derivative works without prior written consent. You retain ownership of content you submit to the Platform (listings, photos, descriptions) but grant Servify a non-exclusive, royalty-free, worldwide licence to display, reproduce, and promote your content solely in connection with operating and marketing the Platform.</p>
  
-      <h3>12. Contact</h3>
-      <p>For legal or contractual enquiries: <strong>legal@servify.my</strong><br>Servify · Kuala Lumpur, Malaysia</p>
+      <h3>12. Termination</h3>
+      <p>You may delete your account at any time from Dashboard &rarr; Settings &rarr; Delete Account. Servify may suspend or terminate your account immediately and without notice if you breach these Terms, engage in fraudulent activity, or pose a risk to other users or the Platform. Upon termination: your listings will be permanently removed; you lose access to your account and data; no refund will be provided for any prepaid subscription period. Provisions of these Terms that by their nature should survive termination (including Sections 8, 9, 10, 11, and 13) shall survive.</p>
+ 
+      <h3>13. Governing Law & Dispute Resolution</h3>
+      <p>These Terms and any dispute or claim arising out of or in connection with them shall be governed by and construed in accordance with the laws of Malaysia. The parties irrevocably submit to the exclusive jurisdiction of the courts of Ipoh, Perak, Malaysia. Before initiating legal proceedings, both parties agree to attempt good-faith resolution of disputes by contacting <strong>legal@servify.my</strong> and allowing 30 days for resolution.</p>
+ 
+      <h3>14. Severability</h3>
+      <p>If any provision of these Terms is found by a court of competent jurisdiction to be invalid, illegal, or unenforceable, that provision shall be modified to the minimum extent necessary to make it enforceable, and the remaining provisions shall continue in full force and effect.</p>
+ 
+      <h3>15. Entire Agreement</h3>
+      <p>These Terms, together with our Privacy Policy, constitute the entire agreement between you and Servify with respect to the Platform and supersede all prior agreements, understandings, and communications, whether written or oral.</p>
+ 
+      <h3>16. Contact</h3>
+      <p>Legal enquiries: <strong>legal@servify.my</strong><br>
+      General support: <strong>hello@servify.my</strong><br>
+      Servify &middot; Ipoh, Perak, Malaysia</p>
     </div>`;
  
   document.getElementById('policy-content-inner').innerHTML = type === 'privacy' ? privacy : terms;
