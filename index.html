@@ -2549,13 +2549,22 @@ async function submitContact() {
   if (btn) { btn.textContent = 'Send Message'; btn.disabled = false; }
 
   if (error) {
-    showToast('error', 'Could not send message. Please try again.');
-    console.error('Contact error:', error);
+    // Fallback: open mailto if DB fails
+    const subject = encodeURIComponent(_safeContact.subject || 'Enquiry from Servify');
+    const body    = encodeURIComponent(`Name: ${_safeContact.name}\nEmail: ${_safeContact.email}\n\n${_safeContact.message}`);
+    window.location.href = `mailto:thasshanrao@gmail.com?subject=${subject}&body=${body}`;
     return;
   }
 
+  // Also send email notification via edge function (non-blocking — don't wait)
+  db.functions.invoke('send-contact-email', { body: _safeContact }).catch(() => {});
+
   closeModal('contact-modal');
-  showToast('success', "✅ Message sent! We'll get back to you within 24 hours.");
+  // Clear form
+  document.getElementById('c-name').value = '';
+  document.getElementById('c-email').value = '';
+  document.getElementById('c-msg').value = '';
+  showToast('success', "✅ Message sent! We\'ll get back to you within 24 hours.");
 }
 
 // ── MOBILE MENU ──
