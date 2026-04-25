@@ -2082,6 +2082,9 @@ async function handleSignIn() {
 
 // ── SIGN UP ──
 async function handleSignUp() {
+  // Rate limit: max 5 signup attempts per hour (reuses auth rate limiter)
+  if (!_checkAuthRateLimit()) return;
+
   const first   = document.getElementById('su-first');
   const last    = document.getElementById('su-last');
   const emailEl = document.getElementById('su-email');
