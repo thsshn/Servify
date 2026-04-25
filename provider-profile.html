@@ -872,6 +872,17 @@ SessionGuard.init();
 </div>
  
  
+ 
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="modal-overlay" id="lightbox-modal" onclick="closeLightbox()" style="background:rgba(0,0,0,0.92);z-index:600">
+  <div style="position:relative;max-width:90vw;max-height:90vh;display:flex;align-items:center;justify-content:center" onclick="event.stopPropagation()">
+    <button onclick="lightboxNav(-1)" style="position:absolute;left:-50px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;padding:10px">‹</button>
+    <img id="lightbox-img" src="" alt="" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px">
+    <button onclick="lightboxNav(1)" style="position:absolute;right:-50px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;padding:10px">›</button>
+    <button onclick="closeLightbox()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer">✕</button>
+  </div>
+</div>
+ 
 <!-- ═══════════════════ MODALS ═══════════════════ -->
  
 <!-- Edit Profile Modal -->
@@ -1804,14 +1815,40 @@ async function saveServices() {
 }
  
 // ── GALLERY ──
+ 
+// ── LIGHTBOX ──
+let _lbIdx = 0;
+function openLightbox(idx) {
+  if (isEditMode) return;
+  _lbIdx = idx;
+  document.getElementById('lightbox-img').src = galleryImages[_lbIdx].url || galleryImages[_lbIdx].dataUrl || '';
+  document.getElementById('lightbox-modal').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox-modal').classList.remove('open');
+}
+function lightboxNav(dir) {
+  _lbIdx = (_lbIdx + dir + galleryImages.length) % galleryImages.length;
+  document.getElementById('lightbox-img').src = galleryImages[_lbIdx].url || galleryImages[_lbIdx].dataUrl || '';
+}
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox-modal');
+  if (!lb || !lb.classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') lightboxNav(-1);
+  if (e.key === 'ArrowRight') lightboxNav(1);
+  if (e.key === 'Escape') closeLightbox();
+});
+ 
 function renderGallery() {
   const grid = document.getElementById('gallery-grid');
   const addBtn = `<div class="gallery-item add-photo ${isEditMode ? '' : 'view-only'}" onclick="openModal('gallery-modal')">📷<span>Add Photo</span></div>`;
   if (!galleryImages.length) {
     grid.innerHTML = addBtn + `<div class="gallery-item" style="grid-column:span 2;font-size:1rem;color:var(--muted);flex-direction:column;gap:8px"><div>No photos yet</div><div style="font-size:0.75rem">Add photos to attract more clients</div></div>`;
   } else {
-    grid.innerHTML = galleryImages.map(img => `
-      <div class="gallery-item"><img src="${img.url || img.dataUrl}" alt="${img.name || ''}"></div>`).join('') + addBtn;
+    grid.innerHTML = galleryImages.map((img, idx) => `
+      <div class="gallery-item" onclick="openLightbox(${idx})" style="cursor:${isEditMode ? 'default' : 'pointer'}">
+        <img src="${img.url || img.dataUrl}" alt="${img.name || ''}">
+      </div>`).join('') + addBtn;
   }
   renderUploadPreview();
 }
@@ -2458,4 +2495,3 @@ function showToast(type, msg) {
 </script>
 </body>
 </html>
- 
