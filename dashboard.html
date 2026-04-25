@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-
+ 
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; img-src 'self' data: https:; upgrade-insecure-requests; form-action 'self'; base-uri 'self'">
@@ -45,7 +45,7 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
-
+ 
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:68px;background:rgba(245,242,235,0.97);border-bottom:1.5px solid var(--border);backdrop-filter:blur(12px)}
 .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.04em;text-decoration:none}
@@ -57,10 +57,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .btn-success{background:var(--success);color:white}
 .btn-danger{background:var(--danger);color:white}
 .btn-sm{padding:6px 12px;font-size:0.78rem}
-
+ 
 /* ── LAYOUT ── */
 .dashboard-layout{display:flex;margin-top:68px;min-height:calc(100vh - 68px)}
-
+ 
 /* ── SIDEBAR ── */
 .sidebar{width:var(--sidebar-w);flex-shrink:0;background:white;border-right:1.5px solid var(--border);position:fixed;top:68px;left:0;height:calc(100vh - 68px);overflow-y:auto;display:flex;flex-direction:column}
 .sidebar-user{padding:24px 20px;border-bottom:1.5px solid var(--border)}
@@ -70,7 +70,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .user-role-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.72rem;font-weight:600}
 .role-provider{background:#fff4ee;color:var(--accent)}
 .role-seeker{background:#eef2ff;color:var(--accent2)}
-
+ 
 .sidebar-nav{padding:12px 0;flex:1}
 .sidebar-section{padding:8px 20px 4px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted)}
 .sidebar-link{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:0.875rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;border-radius:0}
@@ -80,31 +80,31 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .sidebar-link{position:relative}
 .sidebar-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
 .sb-badge{margin-left:auto;background:var(--danger);color:white;font-size:0.65rem;font-weight:700;padding:2px 6px;border-radius:100px}
-
+ 
 .sidebar-footer{padding:16px 20px;border-top:1.5px solid var(--border)}
-
+ 
 /* ── MAIN CONTENT ── */
 .main-content{margin-left:var(--sidebar-w);flex:1;padding:32px}
-
+ 
 /* ── PAGES ── */
 .page{display:none}.page.active{display:block}
 .page-header{margin-bottom:28px}
 .page-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.04em;margin-bottom:4px}
 .page-sub{color:var(--muted);font-size:0.9rem}
-
+ 
 /* ── STATS ── */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
 .stat-card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:20px;position:relative;overflow:hidden}
 .stat-card-icon{font-size:1.8rem;margin-bottom:10px}
 .stat-card-val{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-0.04em;line-height:1;margin-bottom:4px}
 .stat-card-label{font-size:0.78rem;color:var(--muted);font-weight:500}
-
+ 
 /* ── CARDS ── */
 .card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
 .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-
+ 
 /* ── TRIAL BANNER ── */
 .trial-card{background:linear-gradient(135deg,#fff4ee,#ffe8dd);border:1.5px solid #fcd5c4;border-radius:16px;padding:24px;margin-bottom:20px;display:flex;align-items:center;gap:20px}
 .trial-card.expired{background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#fecaca}
@@ -114,7 +114,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .trial-sub{font-size:0.85rem;color:var(--muted);margin-bottom:12px;line-height:1.5}
 .trial-bar-wrap{background:rgba(0,0,0,0.08);border-radius:100px;height:6px;margin-bottom:12px;overflow:hidden}
 .trial-bar{height:100%;border-radius:100px;background:var(--accent);transition:width 0.5s}
-
+ 
 /* ── LISTINGS ── */
 .listing-item{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--border)}
 .listing-item:last-child{border-bottom:none}
@@ -129,7 +129,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .badge-blue{background:#eef2ff;color:var(--accent2)}
 .badge-red{background:#fef2f2;color:var(--danger)}
 .badge-grey{background:var(--cream);color:var(--muted)}
-
+ 
 /* ── FORM ── */
 .form-group{margin-bottom:18px}
 .form-group label{display:block;font-size:0.82rem;font-weight:600;margin-bottom:7px}
@@ -137,13 +137,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .form-control:focus{border-color:var(--accent)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 textarea.form-control{resize:vertical;min-height:80px}
-
+ 
 /* ── EMPTY STATE ── */
 .empty-state{text-align:center;padding:48px 20px}
 .empty-icon{font-size:2.5rem;margin-bottom:12px}
 .empty-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:6px}
 .empty-sub{color:var(--muted);font-size:0.85rem;margin-bottom:20px}
-
+ 
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
@@ -152,28 +152,28 @@ textarea.form-control{resize:vertical;min-height:80px}
 .modal-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:4px}
 .modal-sub{color:var(--muted);font-size:0.85rem;margin-bottom:24px}
 .modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:var(--cream);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center}
-
+ 
 /* ── TOAST ── */
 .toast{position:fixed;bottom:28px;right:28px;z-index:999;background:var(--ink);color:white;padding:12px 22px;border-radius:10px;font-size:0.85rem;font-weight:500;transform:translateY(60px);opacity:0;transition:all 0.3s;display:flex;align-items:center;gap:8px;max-width:320px}
 .toast.show{transform:translateY(0);opacity:1}
-
+ 
 /* ── PROFILE ── */
 .profile-avatar-big{width:80px;height:80px;border-radius:50%;background:var(--accent);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .profile-stat{background:var(--paper);border-radius:12px;padding:16px;text-align:center}
 .profile-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent)}
 .profile-stat-label{font-size:0.75rem;color:var(--muted);margin-top:2px}
-
+ 
 /* ── ACTIVITY ── */
 .activity-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
 .activity-item:last-child{border-bottom:none}
 .activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;background:var(--accent)}
 .activity-text{font-size:0.85rem;line-height:1.5}
 .activity-time{font-size:0.75rem;color:var(--muted);margin-top:2px}
-
+ 
 /* ── SAVED SERVICES ── */
 .saved-card{background:white;border:1.5px solid var(--border);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start}
 .saved-emoji{width:44px;height:44px;border-radius:10px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
-
+ 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   .sidebar{transform:translateX(-100%);transition:transform 0.3s;z-index:90}
@@ -191,11 +191,11 @@ textarea.form-control{resize:vertical;min-height:80px}
   .main-content{padding:16px 14px}
 }
 .mobile-menu-btn{display:none;width:38px;height:38px;border-radius:8px;border:1.5px solid var(--border);background:white;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem}
-
+ 
 /* ── SIDEBAR BACKDROP (mobile) ── */
 #sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:89;backdrop-filter:blur(2px);transition:opacity 0.3s}
 @media(max-width:900px){#sidebar-backdrop.open{display:block}}
-
+ 
 /* loading */
 .loading-screen{position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:300;flex-direction:column;gap:16px}
 .loading-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--accent)}
@@ -211,7 +211,7 @@ textarea.form-control{resize:vertical;min-height:80px}
 //  - Session integrity checks
 //  - XSS & injection prevention
 // ═══════════════════════════════════════════════════════
-
+ 
 // ── AES-256-GCM Encryption (Web Crypto API) ──
 const ServifyCrypto = (() => {
   // Derive a per-browser key from a combo of origin + user agent
@@ -222,7 +222,7 @@ const ServifyCrypto = (() => {
     const hash = await crypto.subtle.digest('SHA-256', enc);
     return crypto.subtle.importKey('raw', hash, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
   }
-
+ 
   async function encrypt(plaintext) {
     try {
       const key = await _deriveKey();
@@ -236,7 +236,7 @@ const ServifyCrypto = (() => {
       return btoa(String.fromCharCode(...combined));
     } catch { return null; }
   }
-
+ 
   async function decrypt(b64) {
     try {
       const key  = await _deriveKey();
@@ -247,7 +247,7 @@ const ServifyCrypto = (() => {
       return new TextDecoder().decode(pt);
     } catch { return null; }
   }
-
+ 
   // Encrypted sessionStorage wrapper
   const secureStore = {
     async set(key, value) {
@@ -261,17 +261,17 @@ const ServifyCrypto = (() => {
     },
     remove(key) { sessionStorage.removeItem('_s_' + key); }
   };
-
+ 
   return { encrypt, decrypt, secureStore };
 })();
-
+ 
 // ── Input Hardening ──
 const SecureInput = (() => {
   // Strip any HTML/script tags from user input
   function stripTags(str) {
     return String(str || '').replace(/<[^>]*>/g, '').trim();
   }
-
+ 
   // Validate and sanitize all form inputs before DB submission
   function sanitizeObject(obj) {
     const out = {};
@@ -284,40 +284,40 @@ const SecureInput = (() => {
     }
     return out;
   }
-
+ 
   // SQL injection pattern detection (defence in depth — RLS is primary defence)
   function hasSQLInjection(str) {
     const patterns = [/(\'|\"|;|-{2}|\/\*|\*\/|xp_|UNION\s+SELECT|DROP\s+TABLE|INSERT\s+INTO|DELETE\s+FROM|EXEC\s*\()/i];
     return patterns.some(p => p.test(str));
   }
-
+ 
   // Check all string fields in an object for injection attempts
   function isSafe(obj) {
     return !Object.values(obj).some(v => typeof v === 'string' && hasSQLInjection(v));
   }
-
+ 
   return { stripTags, sanitizeObject, hasSQLInjection, isSafe };
 })();
-
+ 
 // ── Session Integrity ──
 const SessionGuard = (() => {
   let _lastActivity = Date.now();
   const IDLE_LIMIT  = 30 * 60 * 1000; // 30 minutes
-
+ 
   function touch() { _lastActivity = Date.now(); }
-
+ 
   function isExpired() { return Date.now() - _lastActivity > IDLE_LIMIT; }
-
+ 
   // Bind activity listeners once
   function init() {
     ['click','keydown','scroll','mousemove','touchstart'].forEach(ev =>
       document.addEventListener(ev, touch, { passive: true })
     );
   }
-
+ 
   return { touch, isExpired, init };
 })();
-
+ 
 // ── Anti-Enumeration: Constant-time string comparison ──
 function safeEqual(a, b) {
   // Prevents timing attacks on string comparison
@@ -326,7 +326,7 @@ function safeEqual(a, b) {
   for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return diff === 0;
 }
-
+ 
 // ── Output Encoding ──
 // Already defined as sanitize() in each page — this is the canonical version
 function secureEncode(str) {
@@ -334,7 +334,7 @@ function secureEncode(str) {
   d.textContent = String(str || '');
   return d.innerHTML;
 }
-
+ 
 // ── URL Safety ──
 function isSafeUrl(url) {
   if (!url) return false;
@@ -343,7 +343,7 @@ function isSafeUrl(url) {
     return ['https:', 'http:'].includes(u.protocol);
   } catch { return false; }
 }
-
+ 
 // Prevent open redirect attacks — only allow same-origin redirects
 function safeRedirect(url) {
   try {
@@ -355,19 +355,19 @@ function safeRedirect(url) {
     window.location.href = u.href;
   } catch { window.location.href = '/'; }
 }
-
+ 
 // ── Init ──
 SessionGuard.init();
 </script>
 </head>
 <body>
-
+ 
 <!-- Loading screen -->
 <div class="loading-screen" id="loading-screen">
   <div class="loading-logo">Servify</div>
   <div class="loading-spinner"></div>
 </div>
-
+ 
 <!-- NAV -->
 <nav>
   <div style="display:flex;align-items:center;gap:12px">
@@ -386,9 +386,9 @@ SessionGuard.init();
     }
   </style>
 </nav>
-
+ 
 <div class="dashboard-layout">
-
+ 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-user">
@@ -397,7 +397,7 @@ SessionGuard.init();
       <div class="user-email" id="sb-email"></div>
       <span class="user-role-badge" id="sb-role-badge">...</span>
     </div>
-
+ 
     <div class="sidebar-nav">
       <!-- Common -->
       <div class="sidebar-section">Overview</div>
@@ -407,7 +407,7 @@ SessionGuard.init();
       <button class="sidebar-link" onclick="goTo('profile',this)">
         <span class="sidebar-icon">👤</span> My Profile
       </button>
-
+ 
       <!-- Provider only -->
       <div class="sidebar-section provider-only" style="display:none">For Providers</div>
       <a class="sidebar-link provider-only" style="display:none;text-decoration:none;color:inherit" href="provider-profile.html">
@@ -429,7 +429,7 @@ SessionGuard.init();
       <button class="sidebar-link provider-only" style="display:none" onclick="goTo('analytics',this)">
         <span class="sidebar-icon">📈</span> Analytics
       </button>
-
+ 
       <!-- Seeker only -->
       <div class="sidebar-section seeker-only" style="display:none">For Seekers</div>
       <button class="sidebar-link seeker-only" style="display:none" onclick="goTo('saved',this)">
@@ -438,14 +438,14 @@ SessionGuard.init();
       <button class="sidebar-link seeker-only" style="display:none" onclick="goTo('enquiries',this)">
         <span class="sidebar-icon">📩</span> My Enquiries
       </button>
-
+ 
       <!-- Admin only -->
       <div class="sidebar-section admin-only" style="display:none">Admin</div>
       <button class="sidebar-link admin-only" style="display:none" onclick="goTo('admin',this)">
         <span class="sidebar-icon">🛡️</span> Admin Panel
         <span class="sb-badge" id="admin-pending-badge" style="display:none">0</span>
       </button>
-
+ 
       <!-- Common bottom -->
       <div class="sidebar-section">Account</div>
       <button class="sidebar-link" onclick="goTo('notifications',this)">
@@ -459,22 +459,22 @@ SessionGuard.init();
         <span class="sidebar-icon">❓</span> Help & Support
       </button>
     </div>
-
+ 
     <div class="sidebar-footer">
       <button class="btn btn-ghost" style="width:100%;justify-content:center;font-size:0.82rem" onclick="handleSignOut()">Sign Out</button>
     </div>
   </aside>
-
+ 
   <!-- MAIN -->
   <main class="main-content" id="main-content">
-
+ 
     <!-- ══════════ OVERVIEW ══════════ -->
     <div class="page active" id="page-overview">
       <div class="page-header">
         <div class="page-title" id="overview-greeting">Welcome back!</div>
         <div class="page-sub">Here's what's happening with your Servify account.</div>
       </div>
-
+ 
       <!-- Provider stats -->
       <div id="provider-stats" style="display:none">
         <div class="stats-grid">
@@ -500,7 +500,7 @@ SessionGuard.init();
           </div>
         </div>
       </div>
-
+ 
       <!-- Seeker stats -->
       <div id="seeker-stats" style="display:none">
         <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
@@ -521,10 +521,10 @@ SessionGuard.init();
           </div>
         </div>
       </div>
-
+ 
       <!-- Trial banner (provider only) -->
       <div id="trial-banner-wrap" style="display:none"></div>
-
+ 
       <!-- Provider onboarding checklist (shown until all steps complete) -->
       <div id="onboarding-checklist" style="display:none;margin-bottom:20px">
         <div class="card" style="border:1.5px solid #fcd5c4;background:linear-gradient(135deg,#fff9f7,#fff4ee)">
@@ -546,7 +546,7 @@ SessionGuard.init();
           </div>
         </div>
       </div>
-
+ 
       <div class="grid2">
         <!-- Recent listings / activity -->
         <div class="card" id="overview-card-left">
@@ -562,7 +562,7 @@ SessionGuard.init();
             </div>
           </div>
         </div>
-
+ 
         <!-- Quick actions -->
         <div class="card">
           <div class="card-header">
@@ -571,7 +571,7 @@ SessionGuard.init();
           <div id="quick-actions" style="display:flex;flex-direction:column;gap:10px"></div>
         </div>
       </div>
-
+ 
       <!-- Recent activity -->
       <div class="card">
         <div class="card-header">
@@ -588,7 +588,7 @@ SessionGuard.init();
         </div>
       </div>
     </div>
-
+ 
     <!-- ══════════ PROFILE ══════════ -->
     <div class="page" id="page-profile">
       <div class="page-header">
@@ -664,7 +664,7 @@ SessionGuard.init();
             </div>
           </div>
         </div>
-
+ 
         <div>
           <!-- Provider business info -->
           <div class="card provider-only" id="biz-card" style="display:none">
@@ -713,7 +713,7 @@ SessionGuard.init();
               </div>
             </div>
           </div>
-
+ 
           <!-- Profile stats -->
           <div class="card">
             <div class="card-title" style="margin-bottom:16px">Account Stats</div>
@@ -739,7 +739,7 @@ SessionGuard.init();
         </div>
       </div>
     </div>
-
+ 
     <!-- ══════════ MY LISTINGS (Provider) ══════════ -->
     <div class="page" id="page-my-listings">
       <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
@@ -760,7 +760,7 @@ SessionGuard.init();
         </div>
       </div>
     </div>
-
+ 
     <!-- ══════════ ADD LISTING (Provider) ══════════ -->
     <div class="page" id="page-add-listing">
       <div class="page-header">
@@ -815,7 +815,7 @@ SessionGuard.init();
         <p style="font-size:0.78rem;color:var(--muted);margin-top:12px;text-align:center">Your listing will be reviewed by our team before going live — usually within 24 hours.</p>
       </div>
     </div>
-
+ 
     <!-- ══════════ SUBSCRIPTION (Provider) ══════════ -->
     <div class="page" id="page-subscription">
       <div class="page-header">
@@ -824,7 +824,7 @@ SessionGuard.init();
       </div>
       <div id="subscription-content"></div>
     </div>
-
+ 
     <!-- ══════════ ANALYTICS (Provider) ══════════ -->
     <div class="page" id="page-analytics">
       <div class="page-header">
@@ -856,7 +856,7 @@ SessionGuard.init();
         </div>
       </div>
     </div>
-
+ 
     <!-- ══════════ SAVED SERVICES (Seeker) ══════════ -->
     <div class="page" id="page-saved">
       <div class="page-header" style="display:flex;align-items:flex-end;justify-content:space-between">
@@ -870,7 +870,7 @@ SessionGuard.init();
         <div class="card"><div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div></div>
       </div>
     </div>
-
+ 
     <!-- ══════════ ENQUIRIES (Seeker) ══════════ -->
     <div class="page" id="page-enquiries">
       <div class="page-header" style="display:flex;align-items:flex-end;justify-content:space-between">
@@ -884,14 +884,14 @@ SessionGuard.init();
         <div class="card"><div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div></div>
       </div>
     </div>
-
+ 
     <!-- ══════════ SETTINGS ══════════ -->
     <div class="page" id="page-settings">
       <div class="page-header">
         <div class="page-title">Settings</div>
         <div class="page-sub">Manage your account preferences</div>
       </div>
-
+ 
       <div class="card" style="margin-bottom:20px">
         <div class="card-title" style="margin-bottom:20px">🔐 Change Password</div>
         <div style="max-width:400px">
@@ -907,7 +907,7 @@ SessionGuard.init();
           <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
         </div>
       </div>
-
+ 
       <div class="card" style="margin-bottom:20px">
         <div class="card-title" style="margin-bottom:20px">🔔 Notifications</div>
         <div style="display:flex;flex-direction:column;gap:14px">
@@ -931,14 +931,14 @@ SessionGuard.init();
           </div>
         </div>
       </div>
-
+ 
       <div class="card" style="border-color:#fecaca">
         <div class="card-title" style="margin-bottom:8px;color:var(--danger)">⚠️ Danger Zone</div>
         <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">These actions are permanent and cannot be undone.</p>
         <button class="btn btn-danger btn-sm" onclick="confirmDeleteAccount()">Delete My Account</button>
       </div>
     </div>
-
+ 
     <!-- ══════════ HELP ══════════ -->
     <div class="page" id="page-help">
       <div class="page-header">
@@ -985,7 +985,7 @@ SessionGuard.init();
         </div>
       </div>
     </div>
-
+ 
     <!-- ══════════ NOTIFICATIONS ══════════ -->
     <div class="page" id="page-notifications">
       <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
@@ -1009,7 +1009,7 @@ SessionGuard.init();
         </div>
       </div>
     </div>
-
+ 
     <!-- ══════════ ADMIN PANEL ══════════ -->
     <div class="page" id="page-admin">
       <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:20px">
@@ -1019,7 +1019,7 @@ SessionGuard.init();
         </div>
         <button class="btn btn-ghost btn-sm" onclick="adminRefreshAll()">🔄 Refresh</button>
       </div>
-
+ 
       <!-- Admin Stats Row -->
       <div class="stats-grid" style="margin-bottom:24px">
         <div class="stat-card" style="cursor:pointer" onclick="switchAdminTab('listings')">
@@ -1043,15 +1043,16 @@ SessionGuard.init();
           <div class="stat-card-label">Banned Users</div>
         </div>
       </div>
-
+ 
       <!-- Admin Section Tabs -->
       <div style="display:flex;gap:4px;margin-bottom:20px;background:var(--cream);padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap">
         <button class="admin-section-tab active" id="atab-listings" onclick="switchAdminTab('listings')">📋 Listings</button>
         <button class="admin-section-tab" id="atab-users" onclick="switchAdminTab('users')">👥 Users</button>
         <button class="admin-section-tab" id="atab-logs" onclick="switchAdminTab('logs')">📜 Activity Log</button>
         <button class="admin-section-tab" id="atab-settings" onclick="switchAdminTab('settings')">⚙️ Settings</button>
+        <button class="admin-section-tab" id="atab-trials" onclick="switchAdminTab('trials')">⏳ Trials <span id="trials-badge" style="background:#e8521a;color:white;border-radius:999px;padding:1px 7px;font-size:0.72rem;margin-left:4px;display:none">!</span></button>
       </div>
-
+ 
       <!-- ── TAB: LISTINGS ── -->
       <div id="admin-tab-listings">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
@@ -1075,7 +1076,7 @@ SessionGuard.init();
           </div>
         </div>
       </div>
-
+ 
       <!-- ── TAB: USERS ── -->
       <div id="admin-tab-users" style="display:none">
         <div style="background:#fff8f5;border:1.5px solid #fcd5c4;border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:0.82rem;color:var(--muted)">
@@ -1100,7 +1101,7 @@ SessionGuard.init();
           </div>
         </div>
       </div>
-
+ 
       <!-- ── TAB: ACTIVITY LOG ── -->
       <div id="admin-tab-logs" style="display:none">
         <div class="card" style="margin-bottom:16px">
@@ -1121,7 +1122,7 @@ SessionGuard.init();
           </div>
         </div>
       </div>
-
+ 
       <!-- ── TAB: SETTINGS ── -->
       <div id="admin-tab-settings" style="display:none">
         <div class="grid2" style="margin-bottom:20px">
@@ -1152,14 +1153,26 @@ SessionGuard.init();
           </div>
         </div>
       </div>
-
+ 
+ 
+      <!-- ── TAB: TRIALS ── -->
+      <div id="admin-tab-trials" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div style="font-weight:600;font-size:1rem">Provider Trial Tracker</div>
+          <button class="btn btn-ghost btn-sm" onclick="loadTrialTracker()">🔄 Refresh</button>
+        </div>
+        <div id="trial-tracker-content">
+          <div style="color:var(--muted);font-size:0.875rem">Loading…</div>
+        </div>
+      </div>
+ 
     </div><!-- end page-admin -->
-
+ 
   </main>
 </div>
-
-
-
+ 
+ 
+ 
 <!-- Admin Listing Detail Modal -->
 <div class="modal-overlay" id="admin-detail-modal" onclick="closeModal('admin-detail-modal')">
   <div class="modal" onclick="event.stopPropagation()" style="max-width:520px;width:95%">
@@ -1171,13 +1184,13 @@ SessionGuard.init();
     <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap" id="admin-modal-actions"></div>
   </div>
 </div>
-
+ 
 <!-- Sidebar backdrop for mobile -->
 <div id="sidebar-backdrop" onclick="toggleSidebar()"></div>
-
+ 
 <!-- TOAST -->
 <div class="toast" id="toast"><span id="toast-icon"></span><span id="toast-msg"></span></div>
-
+ 
 <!-- Confirm delete modal -->
 <div class="modal-overlay" id="delete-modal">
   <div class="modal" onclick="event.stopPropagation()">
@@ -1191,13 +1204,13 @@ SessionGuard.init();
     </div>
   </div>
 </div>
-
+ 
 <style>
 .toggle-btn{width:44px;height:24px;background:var(--border);border-radius:100px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;border:none}
 .toggle-btn.on{background:var(--success)}
 .toggle-btn span{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;transition:left 0.2s;display:block}
 .toggle-btn.on span{left:23px}
-
+ 
 /* ── ADMIN ── */
 .admin-tab{padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.15s}
 .admin-tab.active{background:var(--ink);color:white;border-color:var(--ink)}
@@ -1221,7 +1234,7 @@ SessionGuard.init();
   .admin-table th:nth-child(4),.admin-table td:nth-child(4){display:none}
 }
 </style>
-
+ 
 <script>
 // ════════════════════════════════════
 // FIX #9 — sanitize() defined here (was missing in dashboard.html)
@@ -1238,13 +1251,13 @@ function sanitize(str) {
 let currentUser = null;
 let userProfile = null;
 let userListings = [];
-
+ 
 // ════════════════════════════════════
 // INIT — strict auth guard
 // ════════════════════════════════════
 // Hide body instantly to prevent flash of unauthenticated content
 document.documentElement.style.visibility = 'hidden';
-
+ 
 window.addEventListener('DOMContentLoaded', async () => {
   // Safety net: if loading takes more than 10s, show error instead of spinning forever
   const loadingTimeout = setTimeout(() => {
@@ -1262,7 +1275,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         </div>`;
     }
   }, 10000);
-
+ 
   try {
     const { data: { session } } = await db.auth.getSession();
     if (!session) {
@@ -1297,7 +1310,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       document.documentElement.style.visibility = '';
     }
   }
-
+ 
   // Listen for sign-out events (e.g. session expired in another tab)
   db.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_OUT' || !session) {
@@ -1305,22 +1318,22 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   });
 });
-
+ 
 async function initDashboard(user) {
   const name = (user.user_metadata?.full_name || user.email).split(/[ @]/)[0];
   const fullName = user.user_metadata?.full_name || name;
   const role = user.user_metadata?.role || 'seeker';
   const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
   const joinedDate = new Date(user.created_at).toLocaleDateString('en-MY', {day:'numeric',month:'long',year:'numeric'});
-
+ 
   // Nav
   document.getElementById('nav-greeting').textContent = `Hi, ${name} 👋`;
-
+ 
   // Sidebar
   document.getElementById('sb-avatar').textContent = initials;
   document.getElementById('sb-name').textContent = fullName;
   document.getElementById('sb-email').textContent = user.email;
-
+ 
   // Profile page
   document.getElementById('profile-avatar-big').textContent = initials;
   document.getElementById('profile-fullname').textContent = fullName;
@@ -1329,12 +1342,12 @@ async function initDashboard(user) {
   document.getElementById('pv-email').textContent = user.email;
   document.getElementById('pv-joined').textContent = joinedDate;
   document.getElementById('account-created-time').textContent = joinedDate;
-
+ 
   // Greetings
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
   document.getElementById('overview-greeting').textContent = `${greeting}, ${name}! 👋`;
-
+ 
   // Admin check — if admin, skip provider/seeker UI entirely
   if (isAdmin(user)) {
     // Set admin badge
@@ -1358,13 +1371,13 @@ async function initDashboard(user) {
   } else {
     setupSeekerUI(user);
   }
-
-
+ 
+ 
   // Load profile data and notifications — non-blocking so dashboard shows immediately
   loadProfileData(user.id, role).catch(e => console.warn('[loadProfileData]', e));
   loadNotifications(user);
 }
-
+ 
 // ════════════════════════════════════
 // PROVIDER SETUP
 // ════════════════════════════════════
@@ -1372,16 +1385,16 @@ function setupProviderUI(user, name, joinedDate) {
   // Show provider sidebar items
   document.querySelectorAll('.provider-only').forEach(el => el.style.display = '');
   document.getElementById('provider-stats').style.display = '';
-
+ 
   const badge = document.getElementById('sb-role-badge');
   badge.textContent = '🏪 Service Provider';
   badge.className = 'user-role-badge role-provider';
-
+ 
   document.getElementById('profile-role-badge').textContent = '🏪 Service Provider';
   document.getElementById('profile-role-badge').className = 'user-role-badge role-provider';
-
+ 
   document.getElementById('biz-card').style.display = '';
-
+ 
   // Quick actions
   document.getElementById('quick-actions').innerHTML = `
     <button class="btn btn-accent" style="justify-content:flex-start" onclick="goTo('add-listing')">➕ Add New Listing</button>
@@ -1391,7 +1404,7 @@ function setupProviderUI(user, name, joinedDate) {
     <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('profile')">👤 Account Settings</button>
     <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('subscription')">💳 Subscription</button>
   `;
-
+ 
   // Populate the public profile links with the actual listing ID once listings load
   db.from('listings').select('id').eq('user_id', user.id).eq('status', 'active').limit(1).maybeSingle().then(({ data }) => {
     if (data) {
@@ -1402,20 +1415,20 @@ function setupProviderUI(user, name, joinedDate) {
       if (sbLink) sbLink.href = url;
     }
   });
-
+ 
   // Trial banner
   setupTrialBanner();
-
+ 
   // Onboarding checklist (for new/incomplete providers)
   setupOnboardingChecklist(user);
-
+ 
   // Load listings
   loadMyListings(user.id);
-
+ 
   // Subscription page
   setupSubscriptionPage(user);
 }
-
+ 
 // ════════════════════════════════════
 // PROVIDER ONBOARDING CHECKLIST
 // ════════════════════════════════════
@@ -1443,7 +1456,7 @@ async function setupOnboardingChecklist(user) {
       actionLabel: 'Edit Profile →',
     },
   ];
-
+ 
   // Check completion state — wrapped in try/catch so missing tables don't hang the dashboard
   let listings = null, profile = null, provider = null;
   try {
@@ -1457,23 +1470,23 @@ async function setupOnboardingChecklist(user) {
     console.warn('[setupOnboardingChecklist] DB error — tables may not exist yet:', e.message);
     return; // Skip checklist silently rather than crashing dashboard
   }
-
+ 
   const done = [
     !!(listings && listings.length > 0),
     !!(profile && profile.phone && profile.location),
     !!(provider && provider.business_name && provider.category),
   ];
-
+ 
   // If all done, don't show checklist
   if (done.every(Boolean)) return;
-
+ 
   const completedCount = done.filter(Boolean).length;
   const pct = Math.round((completedCount / steps.length) * 100);
-
+ 
   document.getElementById('onboarding-checklist').style.display = '';
   document.getElementById('onboarding-pct').textContent = pct + '%';
   document.getElementById('onboarding-bar').style.width = pct + '%';
-
+ 
   document.getElementById('onboarding-steps').innerHTML = steps.map((s, i) => `
     <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:${done[i] ? '#e8f7ef' : 'white'};border:1.5px solid ${done[i] ? '#bbf7d0' : 'var(--border)'}">
       <div style="width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;
@@ -1489,16 +1502,16 @@ async function setupOnboardingChecklist(user) {
 }
 function setupSeekerUI(user) {
   document.querySelectorAll('.seeker-only').forEach(el => el.style.display = '');
-
+ 
   const badge = document.getElementById('sb-role-badge');
   badge.textContent = '🔍 Service Seeker';
   badge.className = 'user-role-badge role-seeker';
-
+ 
   document.getElementById('profile-role-badge').textContent = '🔍 Service Seeker';
   document.getElementById('profile-role-badge').className = 'user-role-badge role-seeker';
-
+ 
   document.getElementById('seeker-stats').style.display = '';
-
+ 
   document.getElementById('overview-left-title').textContent = 'Recently Viewed';
   document.getElementById('overview-left-content').innerHTML = `
     <div class="empty-state" style="padding:24px">
@@ -1507,7 +1520,7 @@ function setupSeekerUI(user) {
       <div class="empty-sub">Browse services and save the ones you like.</div>
       <a href="index.html#listings" class="btn btn-accent btn-sm">Browse Services →</a>
     </div>`;
-
+ 
   document.getElementById('quick-actions').innerHTML = `
     <a href="index.html#listings" class="btn btn-accent" style="justify-content:flex-start">🔍 Browse Services</a>
     <a href="index.html#categories" class="btn btn-ghost" style="justify-content:flex-start">📂 Browse Categories</a>
@@ -1515,7 +1528,7 @@ function setupSeekerUI(user) {
     <button class="btn btn-ghost" style="justify-content:flex-start" onclick="goTo('enquiries')">📩 My Enquiries</button>
   `;
 }
-
+ 
 // ════════════════════════════════════
 // LOAD PROFILE FROM DB
 // ════════════════════════════════════
@@ -1533,7 +1546,7 @@ async function loadProfileData(userId, role) {
     if (profile.phone) document.getElementById('edit-phone').value = profile.phone;
     if (profile.location) document.getElementById('edit-location').value = profile.location;
   }
-
+ 
   if (role === 'provider') {
     const { data: provider } = await db.from('providers').select('*').eq('id', userId).single();
     if (provider) {
@@ -1546,7 +1559,7 @@ async function loadProfileData(userId, role) {
     }
   }
 }
-
+ 
 // ════════════════════════════════════
 // LOAD MY LISTINGS
 // ════════════════════════════════════
@@ -1562,21 +1575,21 @@ async function loadMyListings(userId) {
   }
   if (!listings) return;
   userListings = listings;
-
+ 
   document.getElementById('stat-listings').textContent = listings.filter(l => l.status === 'active').length;
   document.getElementById('ps-listings').textContent = listings.length;
-
+ 
   const pendingCount = listings.filter(l => l.status === 'pending').length;
   if (pendingCount > 0) {
     document.getElementById('pending-listings-badge').style.display = '';
     document.getElementById('pending-listings-badge').textContent = pendingCount;
   }
-
+ 
   if (!listings.length) return;
-
+ 
   const catEmoji = {'Catering':'🍽️','Events':'🎉','Cleaning':'🧹','Photography':'📸','Moving':'📦','Repair':'🔧','Tutoring':'📚','Beauty':'💄','IT':'💻','Fitness':'🏋️','Music':'🎵','Pets':'🐾'};
   const statusBadge = {active:'<span class="badge badge-green">✅ Active</span>',pending:'<span class="badge badge-orange">⏳ Pending</span>',rejected:'<span class="badge badge-red">❌ Rejected</span>'};
-
+ 
   const html = listings.map(l => `
     <div class="listing-item">
       <div class="listing-emoji">${catEmoji[l.category]||'⭐'}</div>
@@ -1587,7 +1600,7 @@ async function loadMyListings(userId) {
       <div class="listing-status">${statusBadge[l.status]||'<span class="badge badge-grey">Unknown</span>'}</div>
     </div>
   `).join('');
-
+ 
   // Overview card
   document.getElementById('overview-left-content').innerHTML = `<div>${listings.slice(0,3).map(l => `
     <div class="listing-item">
@@ -1597,11 +1610,11 @@ async function loadMyListings(userId) {
         <div class="listing-meta">${sanitize(l.category)} · ${statusBadge[l.status]||''}</div>
       </div>
     </div>`).join('')}</div>`;
-
+ 
   // My listings page
   document.getElementById('my-listings-content').innerHTML = html;
 }
-
+ 
 // ════════════════════════════════════
 // TRIAL BANNER — uses auth created_at (tamper-proof, not localStorage)
 // ════════════════════════════════════
@@ -1610,16 +1623,16 @@ function setupTrialBanner() {
   // Use Supabase auth account creation date — cannot be manipulated by user
   const signupDate = currentUser?.created_at;
   if (!signupDate) return;
-
+ 
   const start = new Date(signupDate);
   const now = new Date();
   const daysElapsed = Math.floor((now - start) / (1000*60*60*24));
   const daysLeft = TRIAL_DAYS - daysElapsed;
   const pct = Math.max(0, Math.min(100, (daysLeft/TRIAL_DAYS)*100));
-
+ 
   const wrap = document.getElementById('trial-banner-wrap');
   wrap.style.display = '';
-
+ 
   if (daysLeft <= 0) {
     wrap.innerHTML = `
       <div class="trial-card expired">
@@ -1652,7 +1665,7 @@ function setupTrialBanner() {
         </div>
       </div>`;
   }
-
+ 
   // Subscription page
   document.getElementById('subscription-content').innerHTML = `
     <div class="grid2">
@@ -1684,7 +1697,7 @@ function setupTrialBanner() {
       </div>
     </div>`;
 }
-
+ 
 // ════════════════════════════════════
 // SUBMIT NEW LISTING
 // ════════════════════════════════════
@@ -1694,14 +1707,14 @@ async function submitNewListing() {
   const price = document.getElementById('new-price').value;
   const location = document.getElementById('new-location').value;
   const phone = document.getElementById('new-phone').value.trim();
-
+ 
   if (!title || !cat || !price || !location || !phone) {
     showToast('error', 'Please fill in all required fields'); return;
   }
-
+ 
   const btn = document.querySelector('#page-add-listing .btn-accent');
   btn.textContent = 'Publishing…'; btn.disabled = true;
-
+ 
   const { error } = await db.from('listings').insert({
     title, category: cat,
     price: parseFloat(price),
@@ -1711,17 +1724,17 @@ async function submitNewListing() {
     status: 'pending',
     user_id: currentUser.id
   });
-
+ 
   btn.textContent = 'Publish Listing →'; btn.disabled = false;
-
+ 
   if (error) { showToast('error', 'Failed to submit. Please try again.'); return; }
-
+ 
   showToast('success', '🚀 Listing submitted! We\'ll review it within 24 hours.');
   ['new-title','new-cat','new-price','new-desc','new-location','new-phone'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   await loadMyListings(currentUser.id);
   goTo('my-listings');
 }
-
+ 
 // ════════════════════════════════════
 // SAVE PROFILE
 // ════════════════════════════════════
@@ -1730,20 +1743,20 @@ async function saveProfile() {
   const last = document.getElementById('edit-last').value.trim();
   const phone = document.getElementById('edit-phone').value.trim();
   const location = document.getElementById('edit-location').value;
-
+ 
   const btn = document.querySelector('#profile-edit .btn-accent');
   btn.textContent = 'Saving…'; btn.disabled = true;
-
+ 
   // Update auth metadata
   if (first || last) {
     await db.auth.updateUser({ data: { full_name: `${first} ${last}`.trim() } });
   }
-
+ 
   // Upsert profile row
   await db.from('profiles').upsert({ id: currentUser.id, full_name: `${first} ${last}`.trim(), phone, location });
-
+ 
   btn.textContent = 'Save Changes'; btn.disabled = false;
-
+ 
   // Update UI
   const fullName = `${first} ${last}`.trim() || document.getElementById('pv-name').textContent;
   document.getElementById('pv-name').textContent = fullName;
@@ -1751,24 +1764,24 @@ async function saveProfile() {
   if (location) document.getElementById('pv-location').textContent = location;
   document.getElementById('profile-fullname').textContent = fullName;
   document.getElementById('sb-name').textContent = fullName;
-
+ 
   toggleEditProfile();
   showToast('success', '✅ Profile updated!');
 }
-
+ 
 async function saveBizInfo() {
   const biz = document.getElementById('edit-biz').value.trim();
   const cat = document.getElementById('edit-cat').value;
   const desc = document.getElementById('edit-biz-desc').value.trim();
-
+ 
   await db.from('providers').upsert({ id: currentUser.id, business_name: biz, category: cat, description: desc });
-
+ 
   document.getElementById('pv-biz').textContent = biz || '—';
   document.getElementById('pv-cat').textContent = cat || '—';
   toggleEditBiz();
   showToast('success', '✅ Business info updated!');
 }
-
+ 
 function toggleEditProfile() {
   const view = document.getElementById('profile-view');
   const edit = document.getElementById('profile-edit');
@@ -1781,7 +1794,7 @@ function toggleEditProfile() {
     document.getElementById('edit-last').value = nameParts.slice(1).join(' ') || '';
   }
 }
-
+ 
 function toggleEditBiz() {
   const view = document.getElementById('biz-view');
   const edit = document.getElementById('biz-edit');
@@ -1789,7 +1802,7 @@ function toggleEditBiz() {
   view.style.display = isEditing ? 'block' : 'none';
   edit.style.display = isEditing ? 'none' : 'block';
 }
-
+ 
 // ════════════════════════════════════
 // CHANGE PASSWORD
 // ════════════════════════════════════
@@ -1797,27 +1810,27 @@ async function changePassword() {
   const pw = document.getElementById('new-pw').value;
   const pw2 = document.getElementById('new-pw-confirm').value;
   const err = document.getElementById('pw-change-err');
-
+ 
   if (pw.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.style.display='block'; return; }
   if (pw !== pw2) { err.textContent = 'Passwords do not match.'; err.style.display='block'; return; }
   err.style.display = 'none';
-
+ 
   const { error } = await db.auth.updateUser({ password: pw });
   if (error) { err.textContent = error.message; err.style.display='block'; return; }
-
+ 
   document.getElementById('new-pw').value = '';
   document.getElementById('new-pw-confirm').value = '';
   showToast('success', '✅ Password updated successfully!');
 }
-
+ 
 function confirmDeleteAccount() { openModal('delete-modal'); }
 async function deleteAccount() {
   const input = document.getElementById('delete-confirm-input').value;
   if (input !== 'DELETE') { showToast('error', 'Please type DELETE to confirm'); return; }
-
+ 
   const btn = document.querySelector('#delete-modal .btn-danger');
   if (btn) { btn.textContent = 'Deleting…'; btn.disabled = true; }
-
+ 
   try {
     // FIX #14: Call Edge Function for real deletion (PDPA compliant)
     const { error } = await db.functions.invoke('delete-account', { body: { confirm: 'DELETE' } });
@@ -1849,25 +1862,25 @@ async function deleteAccount() {
     msgOverlay.addEventListener('click', e => { if (e.target === msgOverlay) msgOverlay.remove(); });
   }
 }
-
+ 
 // ════════════════════════════════════
 // HELP SUBMIT
 // ════════════════════════════════════
 async function submitHelp() {
   const msg = document.getElementById('help-msg').value.trim();
   if (!msg) { showToast('error', 'Please enter a message'); return; }
-
+ 
   await db.from('contacts').insert({
     name: currentUser.user_metadata?.full_name || '',
     email: currentUser.email,
     subject: document.getElementById('help-subject').value,
     message: msg
   });
-
+ 
   document.getElementById('help-msg').value = '';
   showToast('success', '✅ Message sent! We\'ll reply within 24 hours.');
 }
-
+ 
 // ════════════════════════════════════
 // SIGN OUT
 // ════════════════════════════════════
@@ -1875,7 +1888,7 @@ async function handleSignOut() {
   await db.auth.signOut();
   window.location.href = 'index.html';
 }
-
+ 
 // ════════════════════════════════════
 // FIX #11 — IDLE SESSION TIMEOUT (30 min)
 // Auto sign-out after 30 minutes of inactivity on dashboard
@@ -1896,7 +1909,7 @@ async function handleSignOut() {
   });
   resetIdleTimer();
 })();
-
+ 
 // ════════════════════════════════════
 // ════════════════════════════════════
 // ENQUIRIES (messages sent by this user)
@@ -1905,37 +1918,37 @@ async function loadEnquiries() {
   const container = document.getElementById('enquiries-content');
   if (!container) return;
   container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div></div>';
-
+ 
   const role = currentUser?.user_metadata?.role || 'seeker';
   const isProviderRole = role === 'provider';
-
+ 
   if (isProviderRole) {
     // Provider: show messages received about their listings
     document.getElementById('enquiries-page-title').textContent = 'Received Enquiries';
     document.getElementById('enquiries-page-sub').textContent = 'Messages customers sent about your services';
-
+ 
     // Get this provider's listing IDs first
     const { data: myListings } = await db.from('listings').select('id,title').eq('user_id', currentUser.id);
     if (!myListings || !myListings.length) {
       container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No listings yet</div><div class="empty-sub">Add a listing first so customers can contact you.</div><button class="btn btn-accent btn-sm" onclick="goTo(&quot;add-listing&quot;)">Add Listing →</button></div></div>';
       return;
     }
-
+ 
     // Fetch contacts that mention the listing title or came from logged-in users
     const { data: msgs } = await db.from('contacts')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(50);
-
+ 
     const relevant = (msgs || []).filter(m =>
       myListings.some(l => m.subject?.includes(l.title) || m.message?.includes(l.title))
     );
-
+ 
     if (!relevant.length) {
       container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No enquiries yet</div><div class="empty-sub">When customers contact you, their messages will appear here.</div></div></div>';
       return;
     }
-
+ 
     container.innerHTML = '<div class="card">' + relevant.map(m => `
       <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px">
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -1947,17 +1960,17 @@ async function loadEnquiries() {
         <div style="font-size:0.875rem;color:var(--ink);line-height:1.55">${sanitize(m.message)}</div>
         ${m.email ? `<a href="mailto:${sanitize(m.email)}" class="btn btn-ghost btn-sm" style="width:fit-content;margin-top:4px">↩ Reply via Email</a>` : ''}
       </div>`).join('') + '</div>';
-
+ 
   } else {
     // Seeker: show messages they sent
     document.getElementById('enquiries-page-title').textContent = 'My Enquiries';
     document.getElementById('enquiries-page-sub').textContent = 'Messages you\'ve sent to providers';
-
+ 
     const { data: msgs } = await db.from('contacts')
       .select('*')
       .eq('user_id', currentUser.id)
       .order('created_at', { ascending: false });
-
+ 
     if (!msgs || !msgs.length) {
       container.innerHTML = `<div class="card"><div class="empty-state">
         <div class="empty-icon">📩</div>
@@ -1967,7 +1980,7 @@ async function loadEnquiries() {
       </div></div>`;
       return;
     }
-
+ 
     container.innerHTML = '<div class="card">' + msgs.map(m => `
       <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px">
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -1979,9 +1992,148 @@ async function loadEnquiries() {
       </div>`).join('') + '</div>';
   }
 }
-
-
-
+ 
+ 
+ 
+ 
+// ════════════════════════════════════
+// TRIAL TRACKER
+// ════════════════════════════════════
+async function loadTrialTracker() {
+  const container = document.getElementById('trial-tracker-content');
+  if (!container) return;
+  container.innerHTML = '<div style="color:var(--muted);font-size:0.875rem">Loading trial data…</div>';
+ 
+  // Get all provider profiles with trial info
+  const { data: profiles, error } = await db
+    .from('profiles')
+    .select('id, full_name, trial_started_at, subscription_status, role')
+    .eq('role', 'provider')
+    .order('trial_started_at', { ascending: true });
+ 
+  if (error || !profiles) {
+    container.innerHTML = '<div style="color:var(--muted)">Could not load trial data.</div>';
+    return;
+  }
+ 
+  const now = new Date();
+  const TRIAL_DAYS = 30;
+ 
+  const rows = await Promise.all(profiles.map(async p => {
+    const started = p.trial_started_at ? new Date(p.trial_started_at) : new Date(now - 1);
+    const daysUsed = Math.floor((now - started) / (1000 * 60 * 60 * 24));
+    const daysLeft = TRIAL_DAYS - daysUsed;
+    const status = p.subscription_status || 'trial';
+ 
+    // Get their listing status
+    const { data: listing } = await db.from('listings').select('status, title').eq('user_id', p.id).limit(1).maybeSingle();
+ 
+    return { ...p, daysLeft, daysUsed, started, status, listing };
+  }));
+ 
+  // Sort: expired first, then ending soon, then active
+  rows.sort((a, b) => a.daysLeft - b.daysLeft);
+ 
+  // Count urgent
+  const urgent = rows.filter(r => r.daysLeft <= 7 && r.status !== 'active').length;
+  const badge = document.getElementById('trials-badge');
+  if (badge) {
+    badge.style.display = urgent > 0 ? 'inline' : 'none';
+    badge.textContent = urgent;
+  }
+ 
+  if (!rows.length) {
+    container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">No providers yet</div></div></div>';
+    return;
+  }
+ 
+  const statusBadge = (r) => {
+    if (r.status === 'active') return '<span style="background:#dcfce7;color:#166534;padding:3px 10px;border-radius:999px;font-size:0.75rem;font-weight:600">✓ Paid</span>';
+    if (r.daysLeft < 0) return '<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:999px;font-size:0.75rem;font-weight:600">⚠ Expired</span>';
+    if (r.daysLeft <= 3) return `<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:999px;font-size:0.75rem;font-weight:600">🔴 ${r.daysLeft}d left</span>`;
+    if (r.daysLeft <= 7) return `<span style="background:#fef9c3;color:#854d0e;padding:3px 10px;border-radius:999px;font-size:0.75rem;font-weight:600">🟡 ${r.daysLeft}d left</span>`;
+    return `<span style="background:#f0fdf4;color:#166534;padding:3px 10px;border-radius:999px;font-size:0.75rem;font-weight:600">🟢 ${r.daysLeft}d left</span>`;
+  };
+ 
+  const waMsg = (name) => encodeURIComponent(`Hi ${name}, your 30-day free trial on Servify is ending soon. To keep your listing active, subscribe for RM29/month. Reply here to activate!`);
+ 
+  container.innerHTML = \`
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px">
+      <div style="background:#fee2e2;border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:1.5rem;font-weight:700;color:#991b1b">\${rows.filter(r => r.daysLeft < 0 && r.status !== 'active').length}</div>
+        <div style="font-size:0.75rem;color:#991b1b;margin-top:2px">Expired</div>
+      </div>
+      <div style="background:#fef9c3;border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:1.5rem;font-weight:700;color:#854d0e">\${rows.filter(r => r.daysLeft >= 0 && r.daysLeft <= 7 && r.status !== 'active').length}</div>
+        <div style="font-size:0.75rem;color:#854d0e;margin-top:2px">Ending soon</div>
+      </div>
+      <div style="background:#f0fdf4;border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:1.5rem;font-weight:700;color:#166534">\${rows.filter(r => r.status === 'active').length}</div>
+        <div style="font-size:0.75rem;color:#166534;margin-top:2px">Paid</div>
+      </div>
+      <div style="background:var(--cream);border-radius:12px;padding:16px;text-align:center">
+        <div style="font-size:1.5rem;font-weight:700">\${rows.length}</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:2px">Total</div>
+      </div>
+    </div>
+    <div class="card" style="overflow:hidden">
+      <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);text-align:left">
+            <th style="padding:10px 12px;color:var(--muted);font-weight:500">Provider</th>
+            <th style="padding:10px 12px;color:var(--muted);font-weight:500">Listing</th>
+            <th style="padding:10px 12px;color:var(--muted);font-weight:500">Trial Started</th>
+            <th style="padding:10px 12px;color:var(--muted);font-weight:500">Status</th>
+            <th style="padding:10px 12px;color:var(--muted);font-weight:500">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          \${rows.map(r => \`
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:12px">\${sanitize(r.full_name || 'Unknown')}</td>
+              <td style="padding:12px;color:var(--muted);font-size:0.8rem">\${r.listing ? sanitize(r.listing.title) : '—'}</td>
+              <td style="padding:12px;color:var(--muted);font-size:0.8rem">\${r.started.toLocaleDateString('en-MY', {day:'numeric',month:'short',year:'numeric'})}</td>
+              <td style="padding:12px">\${statusBadge(r)}</td>
+              <td style="padding:12px">
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <a href="https://wa.me/601136181913?text=\${waMsg(r.full_name || 'there')}" target="_blank" class="btn btn-ghost btn-sm" style="text-decoration:none;font-size:0.75rem">💬 Remind</a>
+                  \${r.status !== 'active' ? \`<button class="btn btn-accent btn-sm" style="font-size:0.75rem" onclick="markSubscribed('\${r.id}')">✓ Mark Paid</button>\` : \`<button class="btn btn-ghost btn-sm" style="font-size:0.75rem" onclick="markTrialOnly('\${r.id}')">↩ Revert</button>\`}
+                  \${r.listing && r.listing.status === 'active' ? \`<button class="btn btn-sm" style="background:#fee2e2;color:#991b1b;border:none;font-size:0.75rem;padding:4px 10px;border-radius:6px;cursor:pointer" onclick="freezeProvider('\${r.id}')">🔒 Freeze</button>\` : \`<button class="btn btn-ghost btn-sm" style="font-size:0.75rem" onclick="unfreeze('\${r.id}')">🔓 Unfreeze</button>\`}
+                </div>
+              </td>
+            </tr>
+          \`).join('')}
+        </tbody>
+      </table>
+    </div>
+  \`;
+}
+ 
+async function markSubscribed(userId) {
+  await db.from('profiles').update({ subscription_status: 'active' }).eq('id', userId);
+  await db.from('listings').update({ status: 'active' }).eq('user_id', userId);
+  showToast('success', '✅ Marked as paid — listing activated.');
+  loadTrialTracker();
+}
+ 
+async function markTrialOnly(userId) {
+  await db.from('profiles').update({ subscription_status: 'trial' }).eq('id', userId);
+  showToast('success', 'Reverted to trial status.');
+  loadTrialTracker();
+}
+ 
+async function freezeProvider(userId) {
+  await db.from('listings').update({ status: 'rejected' }).eq('user_id', userId);
+  showToast('success', '🔒 Provider frozen — listings hidden.');
+  loadTrialTracker();
+}
+ 
+async function unfreeze(userId) {
+  await db.from('listings').update({ status: 'active' }).eq('user_id', userId);
+  showToast('success', '🔓 Provider unfrozen — listings visible.');
+  loadTrialTracker();
+}
+ 
 // ════════════════════════════════════
 // SAVED SERVICES
 // ════════════════════════════════════
@@ -1989,11 +2141,11 @@ async function loadSavedServices() {
   const container = document.getElementById('saved-content');
   if (!container || !currentUser) return;
   container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div></div>';
-
+ 
   // Saved listings stored in profiles.saved_listings as array of listing IDs
   const { data: profile } = await db.from('profiles').select('saved_listings').eq('id', currentUser.id).single();
   const savedIds = profile?.saved_listings || [];
-
+ 
   if (!savedIds.length) {
     container.innerHTML = `<div class="card"><div class="empty-state">
       <div class="empty-icon">🤍</div>
@@ -2003,14 +2155,14 @@ async function loadSavedServices() {
     </div></div>`;
     return;
   }
-
+ 
   const { data: listings } = await db.from('listings').select('*').in('id', savedIds).eq('status', 'active');
-
+ 
   if (!listings || !listings.length) {
     container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">🤍</div><div class="empty-title">No saved services found</div><div class="empty-sub">Some saved services may have been removed.</div></div></div>';
     return;
   }
-
+ 
   container.innerHTML = '<div class="card">' + listings.map(l => `
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);gap:12px">
       <div style="flex:1;min-width:0">
@@ -2024,7 +2176,7 @@ async function loadSavedServices() {
       </div>
     </div>`).join('') + '</div>';
 }
-
+ 
 async function unsaveService(listingId) {
   const { data: profile } = await db.from('profiles').select('saved_listings').eq('id', currentUser.id).single();
   const savedIds = (profile?.saved_listings || []).filter(id => id !== listingId);
@@ -2032,7 +2184,7 @@ async function unsaveService(listingId) {
   loadSavedServices();
   showToast('success', 'Removed from saved services.');
 }
-
+ 
 // ════════════════════════════════════
 // ANALYTICS
 // ════════════════════════════════════
@@ -2043,13 +2195,13 @@ async function loadAnalytics() {
     const { count: lCount } = await db.from('listings').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('status', 'active');
     const el = document.getElementById('an-listings');
     if (el) el.textContent = lCount || 0;
-
+ 
     // Enquiries count (contacts saved by this user's listings)
     const { data: myListings } = await db.from('listings').select('id,title').eq('user_id', currentUser.id);
     const { count: eCount } = await db.from('contacts').select('id', { count: 'exact', head: true });
     const el2 = document.getElementById('an-enquiries');
     if (el2) el2.textContent = eCount || 0;
-
+ 
     // Reviews count + avg rating
     if (myListings && myListings.length) {
       const ids = myListings.map(l => l.id);
@@ -2062,7 +2214,7 @@ async function loadAnalytics() {
         el4.textContent = avg + ' ★';
       } else if (el4) el4.textContent = '—';
     }
-
+ 
     // Recent enquiries
     const { data: recentMsgs } = await db.from('contacts').select('*').order('created_at', { ascending: false }).limit(5);
     const container = document.getElementById('an-recent-enquiries');
@@ -2082,7 +2234,7 @@ async function loadAnalytics() {
     }
   } catch(e) { console.warn('[loadAnalytics]', e.message); }
 }
-
+ 
 // ════════════════════════════════════
 // NOTIFICATION PREFERENCES
 // ════════════════════════════════════
@@ -2103,7 +2255,7 @@ async function saveNotifPref(key, btn) {
     showToast('success', val ? '🔔 Notifications enabled' : '🔕 Notifications disabled');
   }
 }
-
+ 
 async function loadNotifPrefs() {
   const { data } = await db.from('profiles').select('notif_prefs').eq('id', currentUser.id).single();
   if (!data?.notif_prefs) return;
@@ -2113,7 +2265,7 @@ async function loadNotifPrefs() {
   if (emailBtn && prefs.email_notif === false) emailBtn.classList.remove('on');
   if (enquiryBtn && prefs.enquiry_notif === false) enquiryBtn.classList.remove('on');
 }
-
+ 
 // ════════════════════════════════════
 // NAVIGATION
 // ════════════════════════════════════
@@ -2138,19 +2290,19 @@ function goTo(page, el) {
   if (page === 'settings')  loadNotifPrefs();
   if (page === 'notifications') loadNotifications(currentUser);
 }
-
+ 
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-backdrop').classList.toggle('open');
 }
-
+ 
 // ════════════════════════════════════
 // MODAL
 // ════════════════════════════════════
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); });
-
+ 
 // ════════════════════════════════════
 // TOAST
 // ════════════════════════════════════
@@ -2164,7 +2316,7 @@ function showToast(type, msg) {
   clearTimeout(toastT);
   toastT = setTimeout(() => t.classList.remove('show'), 4000);
 }
-
+ 
 // ════════════════════════════════════
 // ADMIN — config
 // FIX #1: NOTE — this email check is for UI only. Real access
@@ -2172,15 +2324,15 @@ function showToast(type, msg) {
 // supabase-rls-policies.sql for the correct server-side setup.
 // ════════════════════════════════════
 const ADMIN_EMAILS = ['thasshanrao@gmail.com'];
-
+ 
 let allAdminListings = [];
 let filteredAdminListings = [];
 let currentAdminFilter = 'all';
-
+ 
 function isAdmin(user) {
   return ADMIN_EMAILS.includes(user?.email?.toLowerCase());
 }
-
+ 
 // ════════════════════════════════════
 // ADMIN INIT
 // ════════════════════════════════════
@@ -2189,7 +2341,7 @@ async function initAdminPanel(user) {
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
   await loadAdminListings();
 }
-
+ 
 async function loadAdminListings() {
   let listings = [], error = null;
   try {
@@ -2201,15 +2353,15 @@ async function loadAdminListings() {
     return;
   }
   if (error) { showToast('error', 'Failed to load admin data: ' + error.message); return; }
-
+ 
   allAdminListings = listings || [];
-
+ 
   // Stats
   const pending  = allAdminListings.filter(l => l.status === 'pending').length;
   const active   = allAdminListings.filter(l => l.status === 'active').length;
   const rejected = allAdminListings.filter(l => l.status === 'rejected').length;
   const uniqueUsers = new Set(allAdminListings.map(l => l.user_id)).size;
-
+ 
   // BUG 4 FIX: Use correct DOM IDs — admin-stat-active and admin-stat-rejected don't exist
   // DOM has: admin-stat-total, admin-stat-pending, admin-stat-users, admin-stat-banned
   document.getElementById('admin-stat-total').textContent   = allAdminListings.length;
@@ -2218,7 +2370,7 @@ async function loadAdminListings() {
   // admin-stat-banned needs real ban data — set placeholder until users tab loads
   const bannedEl = document.getElementById('admin-stat-banned');
   if (bannedEl && bannedEl.textContent === '—') bannedEl.textContent = '…';
-
+ 
   // Badge in sidebar
   const badge = document.getElementById('admin-pending-badge');
   if (pending > 0) {
@@ -2227,10 +2379,10 @@ async function loadAdminListings() {
   } else {
     badge.style.display = 'none';
   }
-
+ 
   filterAdminListings(currentAdminFilter, null);
 }
-
+ 
 function filterAdminListings(filter, el) {
   currentAdminFilter = filter;
   if (el) {
@@ -2242,7 +2394,7 @@ function filterAdminListings(filter, el) {
     : allAdminListings.filter(l => l.status === filter);
   renderAdminTable(filteredAdminListings);
 }
-
+ 
 function searchAdminListings() {
   const q = document.getElementById('admin-search').value.toLowerCase();
   const base = currentAdminFilter === 'all' ? allAdminListings : allAdminListings.filter(l => l.status === currentAdminFilter);
@@ -2254,20 +2406,20 @@ function searchAdminListings() {
   );
   renderAdminTable(results);
 }
-
+ 
 function renderAdminTable(listings) {
   const container = document.getElementById('admin-listings-container');
   if (!listings.length) {
     container.innerHTML = `<div class="empty-state" style="padding:40px"><div class="empty-icon">📭</div><div class="empty-title">No listings found</div></div>`;
     return;
   }
-
+ 
   const statusBadge = {
     active:   '<span class="badge badge-green">✅ Active</span>',
     pending:  '<span class="badge badge-orange">⏳ Pending</span>',
     rejected: '<span class="badge badge-red">❌ Rejected</span>'
   };
-
+ 
   const rows = listings.map(l => `
     <tr>
       <td>
@@ -2287,7 +2439,7 @@ function renderAdminTable(listings) {
       </td>
     </tr>
   `).join('');
-
+ 
   container.innerHTML = `
     <div style="overflow-x:auto">
       <table class="admin-table">
@@ -2304,7 +2456,7 @@ function renderAdminTable(listings) {
       </table>
     </div>`;
 }
-
+ 
 async function updateListingStatus(id, status) {
   const realId = decodeURIComponent(id);
   const btns = document.querySelectorAll(`[onclick*="${id}"]`);
@@ -2327,7 +2479,7 @@ async function updateListingStatus(id, status) {
   closeModal('admin-detail-modal');
   await loadAdminListings();
 }
-
+ 
 async function adminDeleteListing(id) {
   const realId = decodeURIComponent(id);
   const confirmed = await _customConfirm({
@@ -2342,17 +2494,17 @@ async function adminDeleteListing(id) {
   showToast('success', '🗑️ Listing deleted');
   await loadAdminListings();
 }
-
+ 
 function viewAdminListing(id) {
   const l = allAdminListings.find(x => x.id === decodeURIComponent(id));
   if (!l) return;
-
+ 
   const statusBadge = {
     active:   '<span class="badge badge-green">✅ Active</span>',
     pending:  '<span class="badge badge-orange">⏳ Pending</span>',
     rejected: '<span class="badge badge-red">❌ Rejected</span>'
   };
-
+ 
   document.getElementById('admin-modal-title').textContent = l.title || 'Listing Details';
   document.getElementById('admin-modal-body').innerHTML = `
     <div style="display:flex;flex-direction:column;gap:10px;font-size:0.875rem">
@@ -2379,16 +2531,16 @@ function viewAdminListing(id) {
       </div>
       ${l.description ? `<div style="padding:8px 0"><span style="color:var(--muted);display:block;margin-bottom:4px">Description</span><span>${sanitize(l.description)}</span></div>` : ''}
     </div>`;
-
+ 
   document.getElementById('admin-modal-actions').innerHTML = `
     ${l.status !== 'active'   ? `<button class="btn btn-success" onclick="updateListingStatus('${encodeURIComponent(l.id)}','active')">✅ Approve</button>` : ''}
     ${l.status !== 'rejected' ? `<button class="btn btn-danger"  onclick="updateListingStatus('${encodeURIComponent(l.id)}','rejected')">❌ Reject</button>` : ''}
     <button class="btn btn-ghost" onclick="closeModal('admin-detail-modal')">Close</button>
   `;
-
+ 
   openModal('admin-detail-modal');
 }
-
+ 
 async function approveAllPending() {
   const pending = allAdminListings.filter(l => l.status === 'pending');
   if (!pending.length) { showToast('info', 'No pending listings to approve'); return; }
@@ -2422,10 +2574,10 @@ async function approveAllPending() {
   showToast('success', `✅ ${count} listing(s) approved!`);
   await loadAdminListings();
 }
-
+ 
 // Setup subscription page placeholder
 function setupSubscriptionPage(user) { /* Called after trial banner setup */ }
-
+ 
 // ════════════════════════════════════
 // NOTIFICATIONS
 // ════════════════════════════════════
@@ -2434,7 +2586,7 @@ async function loadNotifications(user) {
   const role = user.user_metadata?.role || 'seeker';
   const container = document.getElementById('notifications-content');
   const items = [];
-
+ 
   try {
     if (role === 'provider' || isAdmin(user)) {
       // Fetch enquiries sent to this provider's listings in the last 30 days
@@ -2449,7 +2601,7 @@ async function loadNotifications(user) {
           .gte('created_at', since)
           .order('created_at', { ascending: false })
           .limit(20);
-
+ 
         if (contacts && contacts.length) {
           const listingMap = {};
           myListings.forEach(l => { listingMap[l.id] = l.title; });
@@ -2464,14 +2616,14 @@ async function loadNotifications(user) {
           });
         }
       }
-
+ 
       // Fetch recent listing status changes
       const { data: listings } = await db.from('listings')
         .select('title,status,updated_at')
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false })
         .limit(5);
-
+ 
       if (listings) {
         listings.forEach(l => {
           const isNew = new Date(l.updated_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
@@ -2484,10 +2636,10 @@ async function loadNotifications(user) {
         });
       }
     }
-
+ 
     // Sort by recency — newer items first
     items.sort((a, b) => (a.isNew === b.isNew ? 0 : a.isNew ? -1 : 1));
-
+ 
     if (!items.length) {
       container.innerHTML = `
         <div class="empty-state">
@@ -2501,7 +2653,7 @@ async function loadNotifications(user) {
         </div>`;
       return;
     }
-
+ 
     // Show badge count
     const newCount = items.filter(i => i.isNew).length;
     const badge = document.getElementById('notifications-badge');
@@ -2509,7 +2661,7 @@ async function loadNotifications(user) {
       badge.style.display = '';
       badge.textContent = newCount;
     }
-
+ 
     container.innerHTML = items.map(item => `
       <div class="activity-item" style="${item.isNew ? 'background:var(--paper);border-radius:10px;padding:12px;margin-bottom:4px' : ''}">
         <div class="activity-dot" style="${item.isNew ? 'background:var(--accent)' : 'background:var(--border)'}"></div>
@@ -2522,7 +2674,7 @@ async function loadNotifications(user) {
     container.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load notifications</div></div>`;
   }
 }
-
+ 
 function _timeAgo(iso) {
   if (!iso) return '';
   const diff = Date.now() - new Date(iso).getTime();
@@ -2535,38 +2687,38 @@ function _timeAgo(iso) {
   if (d < 7) return `${d}d ago`;
   return new Date(iso).toLocaleDateString('en-MY', { day:'numeric', month:'short' });
 }
-
+ 
 /*
  ═══════════════════════════════════════════════════════════════
  SUPABASE ROW LEVEL SECURITY (RLS) — SET THESE UP IN DASHBOARD
  ═══════════════════════════════════════════════════════════════
  Go to Supabase → Table Editor → [table] → RLS Policies
-
+ 
  TABLE: listings
    - SELECT: status = 'active' OR auth.uid() = user_id
    - INSERT: auth.uid() = user_id (must be logged in)
    - UPDATE: auth.uid() = user_id (own listings only)
    - DELETE: auth.uid() = user_id (own listings only)
    Admin override: auth.email() = 'thasshanrao@gmail.com'
-
+ 
  TABLE: contacts
    - INSERT: true (allow public enquiries)
    - SELECT: auth.email() = 'thasshanrao@gmail.com' (admin only)
-
+ 
  TABLE: payments
    - SELECT: auth.uid() = user_id
    - INSERT: auth.uid() = user_id
-
+ 
  TABLE: profiles
    - SELECT: auth.uid() = id
    - INSERT: auth.uid() = id
    - UPDATE: auth.uid() = id
-
+ 
  TABLE: providers
    - SELECT: true (public profiles)
    - INSERT: auth.uid() = id
    - UPDATE: auth.uid() = id
-
+ 
  GOOGLE OAUTH SETUP (Supabase):
    1. Go to Supabase → Authentication → Providers → Google
    2. Enable Google provider
@@ -2576,12 +2728,12 @@ function _timeAgo(iso) {
    5. In Google Console, add authorized redirect URI (same URL above)
  ═══════════════════════════════════════════════════════════════
 */
-
+ 
 // ════════════════════════════════════
 // ADMIN — TAB SWITCHING
 // ════════════════════════════════════
 const ADMIN_TABS = ['listings','users','logs','settings'];
-
+ 
 function switchAdminTab(tab) {
   ADMIN_TABS.forEach(t => {
     document.getElementById('admin-tab-' + t).style.display = t === tab ? '' : 'none';
@@ -2592,10 +2744,10 @@ function switchAdminTab(tab) {
   if (tab === 'users' && !_usersLoaded) loadAdminUsers();
   if (tab === 'logs'  && !_logsLoaded)  loadActivityLog();
 }
-
+ 
 let _usersLoaded = false;
 let _logsLoaded  = false;
-
+ 
 function adminRefreshAll() {
   _usersLoaded = false;
   _logsLoaded  = false;
@@ -2605,53 +2757,53 @@ function adminRefreshAll() {
   if (activeTab === 'logs')  { _logsLoaded  = false; loadActivityLog(); }
   showToast('info', 'Admin data refreshed');
 }
-
+ 
 // ════════════════════════════════════
 // ADMIN — LOAD STATS (BUG 4 FIX: duplicate loadAdminListings removed)
 // The original loadAdminListings above is the single source of truth.
 // ════════════════════════════════════
-
+ 
 // ════════════════════════════════════
 // ADMIN — USER MANAGEMENT
 // ════════════════════════════════════
 let allAdminUsers = [];
 let filteredAdminUsers = [];
 let currentUserFilter = 'all';
-
+ 
 async function loadAdminUsers() {
   _usersLoaded = true;
   const container = document.getElementById('admin-users-container');
   container.innerHTML = '<div class="empty-state" style="padding:40px"><div class="empty-icon">⏳</div><div class="empty-title">Loading users…</div><div class="empty-sub">Calling admin-users Edge Function</div></div>';
-
+ 
   try {
     const { data: { session } } = await db.auth.getSession();
     if (!session) { showToast('error', 'Not authenticated'); return; }
-
+ 
     const res = await db.functions.invoke('admin-users', {
       headers: { Authorization: 'Bearer ' + session.access_token }
     });
-
+ 
     if (res.error) throw res.error;
-
+ 
     const users = res.data?.users || [];
     allAdminUsers = users;
-
+ 
     // Update user count stat card
     const el = document.getElementById('admin-stat-users');
     if (el) el.textContent = users.length;
-
+ 
     const banned = users.filter(u => u.banned_until && u.banned_until !== 'none').length;
     const bannedEl = document.getElementById('admin-stat-banned');
     if (bannedEl) bannedEl.textContent = banned;
-
+ 
     // Cross-reference with profiles for ban flag
     const { data: profiles } = await db.from('profiles').select('id,banned');
     const bannedMap = {};
     (profiles || []).forEach(p => { bannedMap[p.id] = p.banned; });
     allAdminUsers = users.map(u => ({ ...u, _banned: bannedMap[u.id] || false }));
-
+ 
     filterAdminUsers(currentUserFilter, null);
-
+ 
   } catch (err) {
     console.error('[admin-users]', err);
     // ISSUE 4 FIX: Edge Function not deployed — fallback to profiles table
@@ -2659,7 +2811,7 @@ async function loadAdminUsers() {
     try {
       const { data: profiles, error: profileErr } = await db.from('profiles').select('id, email, role, banned, created_at').order('created_at', { ascending: false });
       if (profileErr) throw profileErr;
-
+ 
       allAdminUsers = (profiles || []).map(p => ({
         id: p.id,
         email: p.email || '—',
@@ -2671,12 +2823,12 @@ async function loadAdminUsers() {
         last_sign_in_at: null, // not available without Edge Function
         email_confirmed_at: null,
       }));
-
+ 
       const el = document.getElementById('admin-stat-users');
       if (el) el.textContent = allAdminUsers.length;
-
+ 
       filterAdminUsers(currentUserFilter, null);
-
+ 
       // Show limited-view notice at top of container
       const notice = document.createElement('div');
       notice.style.cssText = 'background:#fffbeb;border:1.5px solid #fde68a;border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:0.82rem;color:#92400e';
@@ -2684,7 +2836,7 @@ async function loadAdminUsers() {
         <code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px">supabase functions deploy admin-users</code>`;
       const userContainer = document.getElementById('admin-users-container');
       if (userContainer) userContainer.prepend(notice);
-
+ 
     } catch (fallbackErr) {
       console.error('[admin-users fallback]', fallbackErr);
       container.innerHTML = `
@@ -2702,7 +2854,7 @@ async function loadAdminUsers() {
     }
   }
 }
-
+ 
 function filterAdminUsers(filter, el) {
   currentUserFilter = filter;
   if (el) {
@@ -2715,7 +2867,7 @@ function filterAdminUsers(filter, el) {
   else if (filter === 'banned')   filteredAdminUsers = allAdminUsers.filter(u => u._banned || (u.banned_until && u.banned_until !== 'none'));
   renderAdminUsersTable(filteredAdminUsers);
 }
-
+ 
 function searchAdminUsers() {
   const q = document.getElementById('user-search').value.toLowerCase();
   const base = currentUserFilter === 'all' ? allAdminUsers
@@ -2728,14 +2880,14 @@ function searchAdminUsers() {
     (u.full_name||'').toLowerCase().includes(q)
   ));
 }
-
+ 
 function renderAdminUsersTable(users) {
   const container = document.getElementById('admin-users-container');
   if (!users.length) {
     container.innerHTML = '<div class="empty-state" style="padding:40px"><div class="empty-icon">👥</div><div class="empty-title">No users found</div></div>';
     return;
   }
-
+ 
   const rows = users.map(u => {
     const isBanned = u._banned || (u.banned_until && u.banned_until !== 'none');
     const roleBadge = u.role === 'provider'
@@ -2746,7 +2898,7 @@ function renderAdminUsersTable(users) {
     const verified = u.email_confirmed_at
       ? '<span style="color:var(--success);font-size:0.75rem">✓ Verified</span>'
       : '<span style="color:var(--muted);font-size:0.75rem">Unverified</span>';
-
+ 
     return `<tr class="${isBanned ? 'user-row-banned' : ''}">
       <td>
         <div style="font-weight:600;font-size:0.875rem">${sanitize(u.full_name || '—')}</div>
@@ -2767,7 +2919,7 @@ function renderAdminUsersTable(users) {
       </td>
     </tr>`;
   }).join('');
-
+ 
   container.innerHTML = `
     <div style="overflow-x:auto">
       <table class="admin-table">
@@ -2787,12 +2939,12 @@ function renderAdminUsersTable(users) {
       Showing ${users.length} user${users.length !== 1 ? 's' : ''}
     </div>`;
 }
-
+ 
 function viewAdminUser(encodedId) {
   const u = allAdminUsers.find(x => x.id === decodeURIComponent(encodedId));
   if (!u) return;
   const isBanned = u._banned || (u.banned_until && u.banned_until !== 'none');
-
+ 
   document.getElementById('admin-modal-title').textContent = u.full_name || u.email || 'User Details';
   document.getElementById('admin-modal-body').innerHTML = `
     <div style="display:flex;flex-direction:column;gap:0;font-size:0.875rem">
@@ -2804,21 +2956,21 @@ function viewAdminUser(encodedId) {
       <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Joined</span><span>${u.created_at ? new Date(u.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'long',year:'numeric'}) : '—'}</span></div>
       <div style="display:flex;justify-content:space-between;padding:9px 0"><span style="color:var(--muted)">Last Sign In</span><span>${u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : 'Never'}</span></div>
     </div>`;
-
+ 
   document.getElementById('admin-modal-actions').innerHTML = `
     ${!isBanned
       ? `<button class="btn btn-danger" onclick="banUser('${encodeURIComponent(u.id)}',true,'${sanitize(u.email||'')}');closeModal('admin-detail-modal')">🚫 Ban User</button>`
       : `<button class="btn btn-success" onclick="banUser('${encodeURIComponent(u.id)}',false,'${sanitize(u.email||'')}');closeModal('admin-detail-modal')">✅ Unban User</button>`
     }
     <button class="btn btn-ghost" onclick="closeModal('admin-detail-modal')">Close</button>`;
-
+ 
   openModal('admin-detail-modal');
 }
-
+ 
 async function banUser(encodedId, suspend, email) {
   const targetId = decodeURIComponent(encodedId);
   const action = suspend ? 'ban' : 'unban';
-
+ 
   if (suspend) {
     const confirmed = await _customConfirm({
       title: `Ban ${email}?`,
@@ -2828,35 +2980,35 @@ async function banUser(encodedId, suspend, email) {
     });
     if (!confirmed) return;
   }
-
+ 
   showToast('info', `${suspend ? 'Banning' : 'Unbanning'} user…`);
-
+ 
   try {
     const { data: { session } } = await db.auth.getSession();
     const res = await db.functions.invoke('admin-ban-user', {
       body: { targetUserId: targetId, suspend },
       headers: { Authorization: 'Bearer ' + session.access_token }
     });
-
+ 
     if (res.error) throw res.error;
-
+ 
     // Update local state immediately
     allAdminUsers = allAdminUsers.map(u =>
       u.id === targetId ? { ...u, _banned: suspend } : u
     );
     filterAdminUsers(currentUserFilter, null);
-
+ 
     showToast('success', `✅ User ${suspend ? 'banned' : 'unbanned'} successfully`);
-
+ 
     // Refresh listings if banning (banned users' listings get frozen)
     if (suspend) await loadAdminListings();
-
+ 
   } catch (err) {
     console.error('[ban-user]', err);
     showToast('error', 'Ban failed — is admin-ban-user Edge Function deployed?');
   }
 }
-
+ 
 // ════════════════════════════════════
 // ADMIN — ACTIVITY LOG
 // ════════════════════════════════════
@@ -2864,14 +3016,14 @@ async function loadActivityLog() {
   _logsLoaded = true;
   const logContainer = document.getElementById('admin-log-container');
   const enquiriesContainer = document.getElementById('admin-enquiries-container');
-
+ 
   try {
     // Recent listing changes (last 50, all statuses)
     const { data: listings } = await db.from('listings')
       .select('id,title,status,provider_name,category,created_at,updated_at')
       .order('updated_at', { ascending: false })
       .limit(50);
-
+ 
     if (!listings || !listings.length) {
       logContainer.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">📋</div><div class="empty-title">No listing activity yet</div></div>';
     } else {
@@ -2888,13 +3040,13 @@ async function loadActivityLog() {
           </div>
         </div>`).join('');
     }
-
+ 
     // Recent contact enquiries (admin-only via RLS)
     const { data: contacts } = await db.from('contacts')
       .select('id,name,email,subject,message,created_at')
       .order('created_at', { ascending: false })
       .limit(30);
-
+ 
     if (!contacts || !contacts.length) {
       enquiriesContainer.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">📩</div><div class="empty-title">No enquiries yet</div></div>';
     } else {
@@ -2912,12 +3064,12 @@ async function loadActivityLog() {
           </div>
         </div>`).join('');
     }
-
+ 
   } catch (err) {
     logContainer.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load activity log</div><div class="empty-sub">Check RLS policies on listings and contacts tables</div></div>';
   }
 }
-
+ 
 // ════════════════════════════════════
 // CUSTOM CONFIRM DIALOG (replaces native confirm())
 // Accessible, consistent, supports typed confirmation
@@ -2956,7 +3108,7 @@ function _customConfirm({ title, body, confirmLabel = 'Confirm', confirmClass = 
     setTimeout(() => overlay.querySelector('input,button')?.focus(), 50);
   });
 }
-
+ 
 // ════════════════════════════════════
 // ADMIN — DANGER ZONE
 // ════════════════════════════════════
@@ -2975,5 +3127,5 @@ async function adminRejectAllPending() {
   showToast('success', `❌ ${pending.length} listings rejected`);
   await loadAdminListings();
 }
-
+ 
 </script>
