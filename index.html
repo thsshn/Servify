@@ -2718,9 +2718,13 @@ checkAndFreezeExpiredTrials();
 // to prevent trial reset abuse.
 const TRIAL_DAYS_TOTAL = 30;
 
+const ADMIN_EMAILS = ['thasshanrao@gmail.com', 'servify.my@gmail.com'];
+
 async function getTrialState() {
   const { data: { user } } = await db.auth.getUser();
   if (!user) return null;
+  // Never show trial bar to admins
+  if (ADMIN_EMAILS.includes(user.email?.toLowerCase())) return null;
   // Use account creation date from Supabase auth (tamper-proof)
   const start = new Date(user.created_at);
   const now = new Date();
