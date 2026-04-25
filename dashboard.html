@@ -832,31 +832,42 @@ SessionGuard.init();
         <div class="page-sub">Track your listing performance</div>
       </div>
       <div class="card">
-        <div class="empty-state">
-          <div class="empty-icon">📈</div>
-          <div class="empty-title">Analytics coming soon</div>
-          <div class="empty-sub">Once you have active listings, you'll see views, clicks, and enquiry data here.</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px">
+          <div style="text-align:center;padding:20px;background:var(--cream);border-radius:12px">
+            <div style="font-size:1.8rem;font-weight:700" id="an-listings">—</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px">Active Listings</div>
+          </div>
+          <div style="text-align:center;padding:20px;background:var(--cream);border-radius:12px">
+            <div style="font-size:1.8rem;font-weight:700" id="an-enquiries">—</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px">Total Enquiries</div>
+          </div>
+          <div style="text-align:center;padding:20px;background:var(--cream);border-radius:12px">
+            <div style="font-size:1.8rem;font-weight:700" id="an-reviews">—</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px">Reviews</div>
+          </div>
+          <div style="text-align:center;padding:20px;background:var(--cream);border-radius:12px">
+            <div style="font-size:1.8rem;font-weight:700" id="an-rating">—</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px">Avg Rating</div>
+          </div>
+        </div>
+        <div style="margin-top:8px">
+          <div style="font-weight:600;margin-bottom:12px">Recent Enquiries</div>
+          <div id="an-recent-enquiries"><div style="color:var(--muted);font-size:0.875rem">Loading…</div></div>
         </div>
       </div>
     </div>
 
     <!-- ══════════ SAVED SERVICES (Seeker) ══════════ -->
     <div class="page" id="page-saved">
-      <div class="page-header">
-        <div class="page-title">Saved Services</div>
-        <div class="page-sub">Services you've bookmarked</div>
-      </div>
-      <div class="card">
-        <div class="empty-state">
-          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:14px">
-            <circle cx="36" cy="36" r="36" fill="#ede9df"/>
-            <path d="M36 52s-18-11.5-18-22a12 12 0 0 1 18-10.39A12 12 0 0 1 54 30c0 10.5-18 22-18 22z" fill="#fcd5c4" stroke="#e8521a" stroke-width="2.5" stroke-linejoin="round"/>
-            <path d="M36 48s-13-8.5-13-18a8 8 0 0 1 13-6.24" stroke="#e8521a" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.35"/>
-          </svg>
-          <div class="empty-title">No saved services yet</div>
-          <div class="empty-sub">Browse services and tap the heart icon to save ones you like.</div>
-          <a href="index.html#listings" class="btn btn-accent">Browse Services →</a>
+      <div class="page-header" style="display:flex;align-items:flex-end;justify-content:space-between">
+        <div>
+          <div class="page-title">Saved Services</div>
+          <div class="page-sub">Services you've bookmarked</div>
         </div>
+        <button class="btn btn-ghost btn-sm" onclick="loadSavedServices()">🔄 Refresh</button>
+      </div>
+      <div id="saved-content">
+        <div class="card"><div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div></div>
       </div>
     </div>
 
@@ -967,7 +978,7 @@ SessionGuard.init();
           <div class="card">
             <div class="card-title" style="margin-bottom:12px">📞 Direct Contact</div>
             <div style="font-size:0.875rem;display:flex;flex-direction:column;gap:8px">
-              <div>📧 <a href="mailto:hello@servify.my" style="color:var(--accent)">hello@servify.my</a></div>
+              <div>📧 <a href="mailto:thasshanrao@gmail.com" style="color:var(--accent)">thasshanrao@gmail.com</a></div>
               <div style="color:var(--muted);font-size:0.78rem">Response time: within 24 hours<br>Mon–Fri, 9am–6pm MYT</div>
             </div>
           </div>
@@ -1660,13 +1671,13 @@ function setupTrialBanner() {
         <!-- ISSUE 1 FIX: Payment coming soon — WhatsApp flow -->
         <div style="background:#e8f7ef;border:1.5px solid #bbf7d0;border-radius:12px;padding:16px;margin-bottom:16px">
           <div style="font-weight:700;color:var(--success);margin-bottom:6px">💬 Subscribe via WhatsApp</div>
-          <div style="font-size:0.85rem;color:var(--muted);line-height:1.55">Online payments are coming soon. To subscribe to Pro, WhatsApp us at <strong>+60XX-XXXXXXX</strong> and we'll activate your account manually.</div>
-          <!-- ⚠️ REPLACE +60XXXXXXXXX below with your actual WhatsApp number before going live -->
+          <div style="font-size:0.85rem;color:var(--muted);line-height:1.55">To subscribe, send us a WhatsApp message (text only — no calls) and we\'ll activate your account within 24 hours.</div>
+          <!-- ⚠️ REPLACE +601136181913 below with your actual WhatsApp number before going live -->
         </div>
-        <a href="https://wa.me/60XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20subscribe%20to%20Servify%20Pro" target="_blank" rel="noopener noreferrer" class="btn" style="width:100%;justify-content:center;padding:14px;background:#25D366;color:white;border-radius:10px;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:8px">💬 WhatsApp Us to Subscribe →</a>
+        <a href="https://wa.me/601136181913?text=Hi%20Servify%2C%20I%27d%20like%20to%20subscribe%20to%20Pro%20(RM29%2Fmonth).%20My%20email%3A%20" target="_blank" rel="noopener noreferrer" class="btn" style="width:100%;justify-content:center;padding:14px;background:#25D366;color:white;border-radius:10px;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:8px">💬 WhatsApp Us to Subscribe →</a>
       </div>
       <div class="card">
-        <div class="card-title" style="margin-bottom:16px">What's included</div>
+        <div class="card-title" style="margin-bottom:16px">What\'s included</div>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:0.875rem">
           ${['Unlimited service listings','Priority search placement','Customer enquiries','Verified provider badge','Analytics & booking stats','Dedicated support'].map(f=>`<div style="display:flex;align-items:center;gap:8px"><span style="color:var(--success)">✓</span>${f}</div>`).join('')}
         </div>
@@ -1826,11 +1837,11 @@ async function deleteAccount() {
       <div style="background:white;border-radius:20px;padding:32px;width:100%;max-width:460px;position:relative" onclick="event.stopPropagation()">
         <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:8px;color:var(--danger)">Account Deletion</div>
         <p style="font-size:0.875rem;color:var(--muted);margin-bottom:16px;line-height:1.65">
-          Account deletion is temporarily unavailable via the app. Please email us and we'll delete your account within 24 hours.
+          Account deletion is temporarily unavailable via the app. Please email us and we\'ll delete your account within 24 hours.
         </p>
-        <a href="mailto:hello@servify.my?subject=Account%20Deletion%20Request&body=Please%20delete%20my%20account%20associated%20with%20this%20email%20address."
+        <a href="mailto:thasshanrao@gmail.com?subject=Account%20Deletion%20Request&body=Please%20delete%20my%20account%20associated%20with%20this%20email%20address."
            class="btn btn-accent" style="width:100%;justify-content:center;padding:13px;text-decoration:none;display:flex;margin-bottom:10px">
-          📧 Email hello@servify.my →
+          📧 Email thasshanrao@gmail.com →
         </a>
         <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('.modal-overlay').remove()">Close</button>
       </div>`;
@@ -1969,6 +1980,109 @@ async function loadEnquiries() {
   }
 }
 
+
+
+// ════════════════════════════════════
+// SAVED SERVICES
+// ════════════════════════════════════
+async function loadSavedServices() {
+  const container = document.getElementById('saved-content');
+  if (!container || !currentUser) return;
+  container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div></div>';
+
+  // Saved listings stored in profiles.saved_listings as array of listing IDs
+  const { data: profile } = await db.from('profiles').select('saved_listings').eq('id', currentUser.id).single();
+  const savedIds = profile?.saved_listings || [];
+
+  if (!savedIds.length) {
+    container.innerHTML = `<div class="card"><div class="empty-state">
+      <div class="empty-icon">🤍</div>
+      <div class="empty-title">No saved services yet</div>
+      <div class="empty-sub">Browse services and tap the ♡ icon to save ones you like.</div>
+      <a href="index.html#listings" class="btn btn-accent btn-sm" style="margin-top:12px">Browse Services →</a>
+    </div></div>`;
+    return;
+  }
+
+  const { data: listings } = await db.from('listings').select('*').in('id', savedIds).eq('status', 'active');
+
+  if (!listings || !listings.length) {
+    container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">🤍</div><div class="empty-title">No saved services found</div><div class="empty-sub">Some saved services may have been removed.</div></div></div>';
+    return;
+  }
+
+  container.innerHTML = '<div class="card">' + listings.map(l => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);gap:12px">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:0.9rem;margin-bottom:2px">${sanitize(l.title)}</div>
+        <div style="font-size:0.78rem;color:var(--muted)">${sanitize(l.category)} · ${sanitize(l.location || 'Malaysia')}</div>
+        <div style="font-size:0.82rem;color:var(--accent);margin-top:2px;font-weight:600">RM ${parseFloat(l.price||0).toLocaleString()}</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <a href="provider-profile.html?id=${encodeURIComponent(l.id)}" class="btn btn-ghost btn-sm" style="text-decoration:none">View →</a>
+        <button class="btn btn-ghost btn-sm" onclick="unsaveService('${l.id}')" title="Remove from saved">🗑</button>
+      </div>
+    </div>`).join('') + '</div>';
+}
+
+async function unsaveService(listingId) {
+  const { data: profile } = await db.from('profiles').select('saved_listings').eq('id', currentUser.id).single();
+  const savedIds = (profile?.saved_listings || []).filter(id => id !== listingId);
+  await db.from('profiles').update({ saved_listings: savedIds }).eq('id', currentUser.id);
+  loadSavedServices();
+  showToast('success', 'Removed from saved services.');
+}
+
+// ════════════════════════════════════
+// ANALYTICS
+// ════════════════════════════════════
+async function loadAnalytics() {
+  if (!currentUser) return;
+  try {
+    // Active listings count
+    const { count: lCount } = await db.from('listings').select('id', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('status', 'active');
+    const el = document.getElementById('an-listings');
+    if (el) el.textContent = lCount || 0;
+
+    // Enquiries count (contacts saved by this user's listings)
+    const { data: myListings } = await db.from('listings').select('id,title').eq('user_id', currentUser.id);
+    const { count: eCount } = await db.from('contacts').select('id', { count: 'exact', head: true });
+    const el2 = document.getElementById('an-enquiries');
+    if (el2) el2.textContent = eCount || 0;
+
+    // Reviews count + avg rating
+    if (myListings && myListings.length) {
+      const ids = myListings.map(l => l.id);
+      const { data: reviews } = await db.from('reviews').select('rating').in('listing_id', ids);
+      const el3 = document.getElementById('an-reviews');
+      const el4 = document.getElementById('an-rating');
+      if (el3) el3.textContent = reviews ? reviews.length : 0;
+      if (el4 && reviews && reviews.length) {
+        const avg = (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1);
+        el4.textContent = avg + ' ★';
+      } else if (el4) el4.textContent = '—';
+    }
+
+    // Recent enquiries
+    const { data: recentMsgs } = await db.from('contacts').select('*').order('created_at', { ascending: false }).limit(5);
+    const container = document.getElementById('an-recent-enquiries');
+    if (container) {
+      if (!recentMsgs || !recentMsgs.length) {
+        container.innerHTML = '<div style="color:var(--muted);font-size:0.875rem">No enquiries yet.</div>';
+      } else {
+        container.innerHTML = recentMsgs.map(m => `
+          <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+            <div>
+              <div style="font-weight:600;font-size:0.875rem">${sanitize(m.name || 'Anonymous')}</div>
+              <div style="font-size:0.8rem;color:var(--muted);margin-top:2px">${sanitize(m.subject || 'General enquiry')}</div>
+            </div>
+            <div style="font-size:0.75rem;color:var(--muted);flex-shrink:0">${new Date(m.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'short'})}</div>
+          </div>`).join('');
+      }
+    }
+  } catch(e) { console.warn('[loadAnalytics]', e.message); }
+}
+
 // ════════════════════════════════════
 // NOTIFICATION PREFERENCES
 // ════════════════════════════════════
@@ -2019,6 +2133,8 @@ function goTo(page, el) {
   window.scrollTo({top: 0, behavior: 'smooth'});
   // Lazy-load page data when first navigated to
   if (page === 'enquiries') loadEnquiries();
+  if (page === 'analytics') loadAnalytics();
+  if (page === 'saved') loadSavedServices();
   if (page === 'settings')  loadNotifPrefs();
   if (page === 'notifications') loadNotifications(currentUser);
 }

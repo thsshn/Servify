@@ -801,6 +801,28 @@ SessionGuard.init();
         </div>
         <div class="review-summary" id="review-summary"></div>
         <div id="reviews-list"></div>
+        <div id="leave-review-wrap" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+          <div class="pcard-title" style="margin-bottom:14px">✍️ Leave a Review</div>
+          <div class="form-group">
+            <label>Your Name</label>
+            <input class="form-control" id="review-name" placeholder="Ahmad bin Razak" maxlength="60"/>
+          </div>
+          <div class="form-group">
+            <label>Rating</label>
+            <div style="display:flex;gap:8px;margin-top:4px" id="star-picker">
+              <span data-val="1" onclick="setReviewStar(1)" style="font-size:1.6rem;cursor:pointer;opacity:0.3">⭐</span>
+              <span data-val="2" onclick="setReviewStar(2)" style="font-size:1.6rem;cursor:pointer;opacity:0.3">⭐</span>
+              <span data-val="3" onclick="setReviewStar(3)" style="font-size:1.6rem;cursor:pointer;opacity:0.3">⭐</span>
+              <span data-val="4" onclick="setReviewStar(4)" style="font-size:1.6rem;cursor:pointer;opacity:0.3">⭐</span>
+              <span data-val="5" onclick="setReviewStar(5)" style="font-size:1.6rem;cursor:pointer;opacity:0.3">⭐</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Your Review</label>
+            <textarea class="form-control" id="review-text" rows="3" maxlength="500" placeholder="Tell others about your experience..."></textarea>
+          </div>
+          <button class="btn btn-accent" onclick="submitReview()" style="width:100%;justify-content:center;padding:13px">Submit Review →</button>
+        </div>
       </div>
     </div>
 
@@ -1294,6 +1316,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('completeness-bar').style.display = 'none';
   if (_isSeekerView) {
     await applySeekerMode();
+    // Show leave a review form for seekers
+    const reviewWrap = document.getElementById('leave-review-wrap');
+    if (reviewWrap) reviewWrap.style.display = 'block';
+    // Increment view count
+    incrementViewCount();
   } else {
     // BUG 2 FIX: Provider editing their own profile — always in edit mode, hide toggle
     document.getElementById('completeness-bar').style.display = 'block';
@@ -1530,6 +1557,93 @@ async function loadListingForSeeker(id) {
         img.src = profile.avatar_url; img.style.display = 'block';
       }
     }
+  }
+}
+
+
+// ════════════════════════════════════
+// REVIEWS
+// ════════════════════════════════════
+let _reviewStar = 0;
+
+function setReviewStar(n) {
+  _reviewStar = n;
+  document.querySelectorAll('#star-picker span').forEach((s, i) => {
+    s.style.opacity = i < n ? '1' : '0.3';
+  });
+}
+
+async function submitReview() {
+  const name = document.getElementById('review-name').value.trim();
+  const text = document.getElementById('review-text').value.trim();
+  if (!name) { showToast('error', 'Please enter your name.'); return; }
+  if (!_reviewStar) { showToast('error', 'Please select a star rating.'); return; }
+  if (!text) { showToast('error', 'Please write a review.'); return; }
+  if (!_listingId) { showToast('error', 'Cannot find listing to review.'); return; }
+
+  const btn = document.querySelector('#leave-review-wrap .btn-accent');
+  const orig = btn.textContent;
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+
+  const { data: { user } } = await db.auth.getUser();
+
+  const { error } = await db.from('reviews').insert({
+    listing_id:    _listingId,
+    reviewer_id:   user?.id || null,
+    reviewer_name: name,
+    rating:        _reviewStar,
+    comment:       text,
+    created_at:    new Date().toISOString()
+  });
+
+  btn.textContent = orig; btn.disabled = false;
+
+  if (error) {
+    showToast('error', 'Could not submit review. Please try again.');
+    return;
+  }
+
+  // Reload reviews
+  document.getElementById('review-name').value = '';
+  document.getElementById('review-text').value = '';
+  setReviewStar(0);
+  showToast('success', '✅ Review submitted! Thank you.');
+
+  // Reload reviews from DB
+  const { data: rows } = await db.from('reviews').select('*').eq('listing_id', _listingId).order('created_at', { ascending: false });
+  if (rows) {
+    reviews = rows.map(r => ({
+      name:   r.reviewer_name || 'Anonymous',
+      rating: r.rating || 5,
+      text:   r.comment || '',
+      date:   r.created_at ? new Date(r.created_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
+    }));
+    renderReviews();
+  }
+}
+
+// ════════════════════════════════════
+// VIEW COUNTER
+// ════════════════════════════════════
+async function incrementViewCount() {
+  if (!_listingId || !_isSeekerView) return;
+  // Use a Supabase RPC or direct increment
+  // We use a simple upsert pattern with a views table approach via listings update
+  // Only count once per session
+  const sessionKey = 'viewed_' + _listingId;
+  if (sessionStorage.getItem(sessionKey)) return;
+  sessionStorage.setItem(sessionKey, '1');
+
+  // Increment view_count on listings table
+  await db.rpc('increment_listing_views', { listing_id: _listingId }).catch(() => {
+    // RPC might not exist yet — silently fail
+  });
+
+  // Update stat display
+  const el = document.getElementById('stat-views');
+  if (el && el.textContent !== '—') {
+    const current = parseInt(el.textContent) || 0;
+    el.textContent = current + 1;
   }
 }
 
