@@ -1839,6 +1839,21 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeLightbox();
 });
  
+ 
+function openWhatsApp() {
+  const raw = contactData.phone || '';
+  const digits = raw.replace(/[^0-9]/g, '');
+  if (!digits || digits.length < 9) {
+    showToast('error', 'No WhatsApp number available for this provider.');
+    return;
+  }
+  const phone = digits.startsWith('60') ? digits : '60' + digits.replace(/^0/, '');
+  const name  = profileData.businessName || 'this provider';
+  const cat   = profileData.category || 'service';
+  const msg   = encodeURIComponent(`Hi ${name}, I found your listing on Servify and I'm interested in your ${cat} service. Could you please provide more details?`);
+  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+}
+ 
 function renderGallery() {
   const grid = document.getElementById('gallery-grid');
   const addBtn = `<div class="gallery-item add-photo ${isEditMode ? '' : 'view-only'}" onclick="openModal('gallery-modal')">📷<span>Add Photo</span></div>`;
