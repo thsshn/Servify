@@ -2540,7 +2540,7 @@ async function adminDeleteListing(id) {
   await loadAdminListings();
 }
 
-function viewAdminListing(id) {
+async function viewAdminListing(id) {
   const l = allAdminListings.find(x => x.id === decodeURIComponent(id));
   if (!l) return;
 
@@ -2550,31 +2550,136 @@ function viewAdminListing(id) {
     rejected: '<span class="badge badge-red">❌ Rejected</span>'
   };
 
+  // Show modal immediately with listing info while we fetch provider profile
   document.getElementById('admin-modal-title').textContent = l.title || 'Listing Details';
+  document.getElementById('admin-modal-body').innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted)">⏳ Loading full profile…</div>`;
+  document.getElementById('admin-modal-actions').innerHTML = `<button class="btn btn-ghost" onclick="closeModal('admin-detail-modal')">Close</button>`;
+  openModal('admin-detail-modal');
+
+  // Fetch provider's profile + all their listings
+  const [profileRes, allListingsRes, sessionRes] = await Promise.all([
+    db.from('profiles').select('*').eq('id', l.user_id).single(),
+    db.from('listings').select('id,title,status,category,price,created_at').eq('user_id', l.user_id).order('created_at', { ascending: false }),
+    db.auth.getSession()
+  ]);
+
+  const profile = profileRes.data || {};
+  const providerListings = allListingsRes.data || [];
+
+  // Fetch user email via admin-users edge function
+  let userEmail = '—';
+  let userCreatedAt = null;
+  let userBanned = false;
+  try {
+    const res = await db.functions.invoke('admin-users', {
+      headers: { Authorization: 'Bearer ' + sessionRes.data.session?.access_token }
+    });
+    const users = res.data?.users || [];
+    const match = users.find(u => u.id === l.user_id);
+    if (match) {
+      userEmail = match.email || '—';
+      userCreatedAt = match.created_at;
+      userBanned = match.banned_until && match.banned_until !== 'none';
+    }
+  } catch(e) { /* edge function may not be deployed */ }
+
+  // Trial calculation
+  let trialHtml = '';
+  if (userCreatedAt) {
+    const daysElapsed = Math.floor((Date.now() - new Date(userCreatedAt)) / 86400000);
+    const daysLeft = 30 - daysElapsed;
+    const trialColor = daysLeft <= 0 ? 'var(--danger)' : daysLeft <= 7 ? 'var(--warning)' : 'var(--success)';
+    const trialText = daysLeft <= 0 ? '⚠️ Expired' : `${daysLeft} days left`;
+    trialHtml = `
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="color:var(--muted)">Trial Status</span>
+        <span style="font-weight:600;color:${trialColor}">${trialText}</span>
+      </div>`;
+  }
+
+  // Other listings by this provider
+  const otherListingsHtml = providerListings.length > 0 ? `
+    <div style="padding:8px 0">
+      <span style="color:var(--muted);display:block;margin-bottom:8px;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em">All Listings by this Provider (${providerListings.length})</span>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${providerListings.map(pl => `
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--paper);border-radius:8px;padding:8px 12px;font-size:0.8rem">
+            <div>
+              <div style="font-weight:600">${sanitize(pl.title||'—')}</div>
+              <div style="color:var(--muted)">${sanitize(pl.category||'—')} · RM ${parseFloat(pl.price||0).toLocaleString()}</div>
+            </div>
+            <span class="badge ${pl.status==='active'?'badge-green':pl.status==='pending'?'badge-orange':'badge-red'}">${pl.status}</span>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  // Saved listings count
+  const savedCount = (profile.saved_listings || []).length;
+
   document.getElementById('admin-modal-body').innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:10px;font-size:0.875rem">
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <span style="color:var(--muted)">Status</span><span>${statusBadge[l.status]||sanitize(l.status)}</span>
+    <div style="display:flex;flex-direction:column;gap:0;font-size:0.875rem">
+
+      <!-- PROVIDER ACCOUNT SECTION -->
+      <div style="background:var(--paper);border-radius:12px;padding:14px 16px;margin-bottom:14px">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:10px">👤 Provider Account</div>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Name</span><span style="font-weight:600">${sanitize(profile.full_name || l.provider_name || '—')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Email</span>
+            <a href="mailto:${sanitize(userEmail)}" style="color:var(--accent2);text-decoration:none;font-weight:500">${sanitize(userEmail)}</a>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Phone</span><span>${sanitize(l.phone || profile.phone || '—')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Role</span><span class="badge ${(profile.role||'')=='provider'?'badge-orange':'badge-blue'}">${sanitize(profile.role || 'seeker')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Account Status</span>
+            <span style="font-weight:600;color:${userBanned?'var(--danger)':'var(--success)'}">${userBanned ? '🚫 Banned' : '✅ Active'}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Joined</span>
+            <span>${userCreatedAt ? new Date(userCreatedAt).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'}) : '—'}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">User ID</span>
+            <span style="font-size:0.72rem;color:var(--muted);font-family:monospace">${sanitize(l.user_id||'—')}</span>
+          </div>
+          ${trialHtml}
+          <div style="display:flex;justify-content:space-between;padding:7px 0">
+            <span style="color:var(--muted)">Saved Services</span><span>${savedCount}</span>
+          </div>
+        </div>
       </div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <span style="color:var(--muted)">Provider</span><span style="font-weight:500">${sanitize(l.provider_name||'—')}</span>
+
+      <!-- LISTING SECTION -->
+      <div style="background:var(--paper);border-radius:12px;padding:14px 16px;margin-bottom:14px">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:10px">📋 This Listing</div>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Status</span><span>${statusBadge[l.status]||sanitize(l.status)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Category</span><span>${sanitize(l.category||'—')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Price</span><span style="font-weight:600;color:var(--accent)">RM ${parseFloat(l.price||0).toLocaleString()}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Location</span><span>${sanitize(l.location||'—')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+            <span style="color:var(--muted)">Submitted</span><span>${new Date(l.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}</span>
+          </div>
+          ${l.description ? `<div style="padding:8px 0"><span style="color:var(--muted);display:block;margin-bottom:4px">Description</span><p style="line-height:1.6;color:var(--ink)">${sanitize(l.description)}</p></div>` : ''}
+        </div>
       </div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <span style="color:var(--muted)">Category</span><span>${sanitize(l.category||'—')}</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <span style="color:var(--muted)">Price</span><span style="font-weight:600;color:var(--accent)">RM ${parseFloat(l.price||0).toLocaleString()}</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <span style="color:var(--muted)">Location</span><span>${sanitize(l.location||'—')}</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <span style="color:var(--muted)">Contact</span><span>${sanitize(l.phone||'—')}</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-        <span style="color:var(--muted)">Submitted</span><span>${new Date(l.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}</span>
-      </div>
-      ${l.description ? `<div style="padding:8px 0"><span style="color:var(--muted);display:block;margin-bottom:4px">Description</span><span>${sanitize(l.description)}</span></div>` : ''}
+
+      <!-- ALL LISTINGS SECTION -->
+      ${otherListingsHtml ? `<div style="background:var(--paper);border-radius:12px;padding:14px 16px">${otherListingsHtml}</div>` : ''}
     </div>`;
 
   document.getElementById('admin-modal-actions').innerHTML = `
@@ -2582,8 +2687,6 @@ function viewAdminListing(id) {
     ${l.status !== 'rejected' ? `<button class="btn btn-danger"  onclick="updateListingStatus('${encodeURIComponent(l.id)}','rejected')">❌ Reject</button>` : ''}
     <button class="btn btn-ghost" onclick="closeModal('admin-detail-modal')">Close</button>
   `;
-
-  openModal('admin-detail-modal');
 }
 
 async function approveAllPending() {
