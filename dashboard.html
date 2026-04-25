@@ -1621,6 +1621,11 @@ async function loadMyListings(userId) {
 // TRIAL BANNER — uses auth created_at (tamper-proof, not localStorage)
 // ════════════════════════════════════
 function setupTrialBanner() {
+  // Only show for providers
+  if (currentUser?.user_metadata?.role !== 'provider') {
+    document.getElementById('trial-banner-wrap').style.display = 'none';
+    return;
+  }
   const TRIAL_DAYS = 30;
   // Use Supabase auth account creation date — cannot be manipulated by user
   const signupDate = currentUser?.created_at;
@@ -2616,7 +2621,17 @@ async function approveAllPending() {
 }
 
 // Setup subscription page placeholder
-function setupSubscriptionPage(user) { /* Called after trial banner setup */ }
+function setupSubscriptionPage(user) {
+  const role = user?.user_metadata?.role || 'seeker';
+  if (role !== 'provider') {
+    document.getElementById('subscription-content').innerHTML = `
+      <div class="card" style="text-align:center;padding:40px">
+        <div style="font-size:2rem;margin-bottom:12px">🔍</div>
+        <div style="font-weight:700;font-size:1.1rem;margin-bottom:8px">Free for Service Seekers</div>
+        <div style="color:var(--muted);font-size:0.875rem">Browsing and contacting providers on Servify is completely free. No subscription needed.</div>
+      </div>`;
+  }
+}
 
 // ════════════════════════════════════
 // NOTIFICATIONS
