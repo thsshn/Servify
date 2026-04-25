@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   location    TEXT,
   role        TEXT NOT NULL DEFAULT 'seeker',   -- 'seeker' | 'provider' | 'admin'
   banned      BOOLEAN NOT NULL DEFAULT FALSE,
+  notif_prefs JSONB DEFAULT '{"email_notif": true, "enquiry_notif": true}'::jsonb,
   created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at  TIMESTAMPTZ
 );

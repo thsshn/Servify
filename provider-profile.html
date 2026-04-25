@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
- 
+
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; img-src 'self' data: https:; upgrade-insecure-requests; form-action 'self'; base-uri 'self'">
@@ -27,7 +27,7 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
   }
 });
 </script>
- 
+
 <style>
 :root {
   --ink: #0d0d0d;
@@ -42,7 +42,7 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
   --danger: #d93025;
   --warning: #d97706;
 }
- 
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
@@ -51,7 +51,7 @@ body {
   color: var(--ink);
   min-height: 100vh;
 }
- 
+
 /* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -66,7 +66,7 @@ nav {
   color: var(--accent); letter-spacing: -0.04em; text-decoration: none;
 }
 .nav-right { display: flex; align-items: center; gap: 12px; }
- 
+
 .btn {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 10px 20px; border-radius: 9px;
@@ -86,7 +86,7 @@ nav {
 .btn-danger { background: var(--danger); color: white; }
 .btn-sm { padding: 7px 14px; font-size: 0.8rem; }
 .btn-lg { padding: 14px 28px; font-size: 1rem; }
- 
+
 /* ── PROFILE HERO ── */
 .profile-hero {
   margin-top: 68px;
@@ -118,7 +118,7 @@ nav {
 }
 .cover-edit-btn:hover { background: rgba(255,255,255,0.25); }
 .cover-edit-btn.view-only { display: none; }
- 
+
 .profile-info-bar {
   padding: 0 48px 28px;
   display: flex; align-items: flex-end; gap: 24px;
@@ -149,7 +149,7 @@ nav {
 }
 .avatar-edit-btn:hover { background: var(--accent); }
 .avatar-edit-btn.view-only { display: none; }
- 
+
 .profile-details { flex: 1; min-width: 0; padding-top: 16px; }
 .profile-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
 .profile-name {
@@ -172,9 +172,9 @@ nav {
   font-size: 0.8rem; color: var(--muted); font-weight: 500;
 }
 .meta-chip svg { flex-shrink: 0; }
- 
+
 .profile-actions { display: flex; gap: 10px; padding-top: 16px; flex-shrink: 0; }
- 
+
 /* ── TABS ── */
 .profile-tabs {
   background: white;
@@ -192,7 +192,7 @@ nav {
 }
 .tab-btn:hover { color: var(--ink); }
 .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
- 
+
 /* ── LAYOUT ── */
 .profile-body {
   max-width: 1200px; margin: 0 auto;
@@ -202,11 +202,11 @@ nav {
 }
 .profile-main { min-width: 0; }
 .profile-sidebar { display: flex; flex-direction: column; gap: 20px; }
- 
+
 /* ── TAB PAGES ── */
 .tab-page { display: none; }
 .tab-page.active { display: block; }
- 
+
 /* ── CARDS ── */
 .pcard {
   background: white; border: 1.5px solid var(--border);
@@ -223,11 +223,11 @@ nav {
 .pcard-edit { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; transition: all 0.15s; font-family: 'DM Sans', sans-serif; font-weight: 500; }
 .pcard-edit:hover { background: var(--paper); color: var(--ink); }
 .pcard-edit.view-only { display: none; }
- 
+
 /* ── ABOUT ── */
 .about-text { font-size: 0.92rem; line-height: 1.75; color: var(--ink); }
 .about-text p + p { margin-top: 12px; }
- 
+
 /* ── SERVICES OFFERED ── */
 .services-list { display: flex; flex-direction: column; gap: 12px; }
 .service-item {
@@ -247,7 +247,7 @@ nav {
 .service-desc-text { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin-bottom: 6px; }
 .service-price-tag { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent); }
 .service-price-unit { font-size: 0.75rem; color: var(--muted); font-family: 'DM Sans', sans-serif; font-weight: 400; }
- 
+
 /* ── GALLERY ── */
 .gallery-grid {
   display: grid;
@@ -276,7 +276,7 @@ nav {
 .gallery-item.add-photo:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,82,26,0.04); }
 .gallery-item.add-photo span { font-size: 0.75rem; font-weight: 500; }
 .gallery-item.add-photo.view-only { display: none; }
- 
+
 /* ── REVIEWS ── */
 .review-summary {
   display: flex; align-items: center; gap: 20px;
@@ -293,7 +293,7 @@ nav {
 .rating-bar-row { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--muted); }
 .rating-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; }
 .rating-bar-fill { height: 100%; background: #f5a623; border-radius: 100px; }
- 
+
 .review-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
 .review-item:last-child { border-bottom: none; }
 .reviewer-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
@@ -306,7 +306,7 @@ nav {
 .reviewer-name { font-weight: 600; font-size: 0.875rem; }
 .reviewer-date { font-size: 0.75rem; color: var(--muted); }
 .review-text { font-size: 0.875rem; line-height: 1.65; color: var(--ink); }
- 
+
 /* ── SIDEBAR CARDS ── */
 .contact-card { background: white; border: 1.5px solid var(--border); border-radius: 16px; padding: 20px; }
 .contact-card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 16px; }
@@ -317,7 +317,7 @@ nav {
 .contact-value { font-size: 0.875rem; font-weight: 500; word-break: break-word; }
 .contact-value a { color: var(--accent2); text-decoration: none; }
 .contact-value a:hover { text-decoration: underline; }
- 
+
 .location-map {
   height: 160px; background: var(--paper); border-radius: 10px; overflow: hidden;
   margin-bottom: 12px; border: 1.5px solid var(--border);
@@ -326,14 +326,14 @@ nav {
   position: relative;
 }
 .location-map-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
- 
+
 .hours-list { display: flex; flex-direction: column; gap: 6px; }
 .hour-row { display: flex; justify-content: space-between; font-size: 0.82rem; }
 .hour-day { color: var(--muted); }
 .hour-time { font-weight: 500; }
 .hour-row.today .hour-day { color: var(--success); font-weight: 600; }
 .hour-row.today .hour-time { color: var(--success); }
- 
+
 .badge {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 3px 10px; border-radius: 100px; font-size: 0.72rem; font-weight: 700;
@@ -341,14 +341,14 @@ nav {
 .badge-green { background: #e8f7ef; color: var(--success); }
 .badge-orange { background: #fff4ee; color: var(--accent); }
 .badge-blue { background: #eef2ff; color: var(--accent2); }
- 
+
 /* ── STATS ROW ── */
 .stats-row { display: flex; gap: 0; background: white; border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
 .stat-box { flex: 1; padding: 18px 16px; text-align: center; border-right: 1px solid var(--border); }
 .stat-box:last-child { border-right: none; }
 .stat-box-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; letter-spacing: -0.04em; }
 .stat-box-label { font-size: 0.72rem; color: var(--muted); font-weight: 500; margin-top: 2px; }
- 
+
 /* ── FORM FIELDS ── */
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
@@ -364,7 +364,7 @@ nav {
 textarea.form-control { resize: vertical; min-height: 90px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .char-count { font-size: 0.72rem; color: var(--muted); text-align: right; margin-top: 3px; }
- 
+
 /* ── MODAL ── */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 300;
@@ -385,7 +385,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .modal-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--muted); padding: 4px; border-radius: 6px; line-height: 1; }
 .modal-close:hover { color: var(--ink); background: var(--paper); }
 .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; padding-top: 20px; border-top: 1.5px solid var(--border); }
- 
+
 /* ── PHOTO UPLOAD AREA ── */
 .upload-zone {
   border: 2px dashed var(--border); border-radius: 12px;
@@ -400,7 +400,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .upload-thumb { aspect-ratio: 1; border-radius: 8px; background: var(--border); overflow: hidden; position: relative; }
 .upload-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .upload-thumb-del { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,0.6); color: white; border: none; cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
- 
+
 /* ── SERVICE EDITOR ── */
 .service-editor-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
 .service-editor-item { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--paper); border-radius: 10px; border: 1.5px solid var(--border); }
@@ -408,7 +408,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .service-editor-item .sei-price { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
 .sei-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 4px; border-radius: 6px; }
 .sei-del:hover { color: var(--danger); background: #fef2f2; }
- 
+
 /* ── TOAST ── */
 .toast {
   position: fixed; bottom: 28px; right: 28px; z-index: 999;
@@ -419,7 +419,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   display: flex; align-items: center; gap: 10px; max-width: 320px;
 }
 .toast.show { transform: translateY(0); opacity: 1; }
- 
+
 /* ── EDIT MODE INDICATOR ── */
 .edit-mode-bar {
   background: var(--ink); color: white;
@@ -429,7 +429,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   display: none;
 }
 .edit-mode-bar.show { display: flex; }
- 
+
 /* ── COMPLETENESS ── */
 .profile-completeness {
   background: linear-gradient(135deg, #fff4ee, #ffe8dd);
@@ -441,12 +441,12 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .pc-bar-track { height: 8px; background: rgba(0,0,0,0.08); border-radius: 100px; overflow: hidden; }
 .pc-bar-fill { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.5s; }
 .pc-pct { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; text-align: right; margin-top: 6px; color: var(--accent); }
- 
+
 /* ── EMPTY STATES ── */
 .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
 .empty-state-icon { font-size: 2.5rem; margin-bottom: 10px; }
 .empty-state p { font-size: 0.875rem; }
- 
+
 /* ── RESPONSIVE ── */
 @media (max-width: 960px) {
   nav { padding: 0 16px; }
@@ -478,7 +478,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 //  - Session integrity checks
 //  - XSS & injection prevention
 // ═══════════════════════════════════════════════════════
- 
+
 // ── AES-256-GCM Encryption (Web Crypto API) ──
 const ServifyCrypto = (() => {
   // Derive a per-browser key from a combo of origin + user agent
@@ -489,7 +489,7 @@ const ServifyCrypto = (() => {
     const hash = await crypto.subtle.digest('SHA-256', enc);
     return crypto.subtle.importKey('raw', hash, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
   }
- 
+
   async function encrypt(plaintext) {
     try {
       const key = await _deriveKey();
@@ -503,7 +503,7 @@ const ServifyCrypto = (() => {
       return btoa(String.fromCharCode(...combined));
     } catch { return null; }
   }
- 
+
   async function decrypt(b64) {
     try {
       const key  = await _deriveKey();
@@ -514,7 +514,7 @@ const ServifyCrypto = (() => {
       return new TextDecoder().decode(pt);
     } catch { return null; }
   }
- 
+
   // Encrypted sessionStorage wrapper
   const secureStore = {
     async set(key, value) {
@@ -528,17 +528,17 @@ const ServifyCrypto = (() => {
     },
     remove(key) { sessionStorage.removeItem('_s_' + key); }
   };
- 
+
   return { encrypt, decrypt, secureStore };
 })();
- 
+
 // ── Input Hardening ──
 const SecureInput = (() => {
   // Strip any HTML/script tags from user input
   function stripTags(str) {
     return String(str || '').replace(/<[^>]*>/g, '').trim();
   }
- 
+
   // Validate and sanitize all form inputs before DB submission
   function sanitizeObject(obj) {
     const out = {};
@@ -551,40 +551,40 @@ const SecureInput = (() => {
     }
     return out;
   }
- 
+
   // SQL injection pattern detection (defence in depth — RLS is primary defence)
   function hasSQLInjection(str) {
     const patterns = [/(\'|\"|;|-{2}|\/\*|\*\/|xp_|UNION\s+SELECT|DROP\s+TABLE|INSERT\s+INTO|DELETE\s+FROM|EXEC\s*\()/i];
     return patterns.some(p => p.test(str));
   }
- 
+
   // Check all string fields in an object for injection attempts
   function isSafe(obj) {
     return !Object.values(obj).some(v => typeof v === 'string' && hasSQLInjection(v));
   }
- 
+
   return { stripTags, sanitizeObject, hasSQLInjection, isSafe };
 })();
- 
+
 // ── Session Integrity ──
 const SessionGuard = (() => {
   let _lastActivity = Date.now();
   const IDLE_LIMIT  = 30 * 60 * 1000; // 30 minutes
- 
+
   function touch() { _lastActivity = Date.now(); }
- 
+
   function isExpired() { return Date.now() - _lastActivity > IDLE_LIMIT; }
- 
+
   // Bind activity listeners once
   function init() {
     ['click','keydown','scroll','mousemove','touchstart'].forEach(ev =>
       document.addEventListener(ev, touch, { passive: true })
     );
   }
- 
+
   return { touch, isExpired, init };
 })();
- 
+
 // ── Anti-Enumeration: Constant-time string comparison ──
 function safeEqual(a, b) {
   // Prevents timing attacks on string comparison
@@ -593,7 +593,7 @@ function safeEqual(a, b) {
   for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return diff === 0;
 }
- 
+
 // ── Output Encoding ──
 // Already defined as sanitize() in each page — this is the canonical version
 function secureEncode(str) {
@@ -601,7 +601,7 @@ function secureEncode(str) {
   d.textContent = String(str || '');
   return d.innerHTML;
 }
- 
+
 // ── URL Safety ──
 function isSafeUrl(url) {
   if (!url) return false;
@@ -610,7 +610,7 @@ function isSafeUrl(url) {
     return ['https:', 'http:'].includes(u.protocol);
   } catch { return false; }
 }
- 
+
 // Prevent open redirect attacks — only allow same-origin redirects
 function safeRedirect(url) {
   try {
@@ -622,13 +622,13 @@ function safeRedirect(url) {
     window.location.href = u.href;
   } catch { window.location.href = '/'; }
 }
- 
+
 // ── Init ──
 SessionGuard.init();
 </script>
 </head>
 <body>
- 
+
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">Servi<span>fy</span></a>
@@ -641,7 +641,7 @@ SessionGuard.init();
     <a href="dashboard.html" class="btn btn-primary">← Dashboard</a>
   </div>
 </nav>
- 
+
 <!-- PROFILE HERO -->
 <div class="profile-hero">
   <!-- Cover Photo -->
@@ -652,7 +652,7 @@ SessionGuard.init();
       📷 Change Cover
     </button>
   </div>
- 
+
   <!-- Profile Info Bar -->
   <div class="profile-info-bar">
     <div class="profile-avatar-wrap">
@@ -662,7 +662,7 @@ SessionGuard.init();
       </div>
       <button class="avatar-edit-btn" id="avatar-edit-btn" onclick="openModal('avatar-modal')" title="Change photo">📷</button>
     </div>
- 
+
     <div class="profile-details">
       <div class="profile-name-row">
         <span class="profile-name" id="display-business-name">Ahmad's Catering</span>
@@ -688,14 +688,14 @@ SessionGuard.init();
         </span>
       </div>
     </div>
- 
+
     <div class="profile-actions" id="profile-actions">
       <button class="btn btn-ghost btn-sm" onclick="openWhatsApp()">💬 WhatsApp</button>
       <button class="btn btn-accent" onclick="openModal('edit-profile-modal')" id="edit-profile-action-btn">✏️ Edit Profile</button>
     </div>
   </div>
 </div>
- 
+
 <!-- TABS -->
 <div class="profile-tabs">
   <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
@@ -703,16 +703,16 @@ SessionGuard.init();
   <button class="tab-btn" onclick="switchTab('gallery')">Gallery</button>
   <button class="tab-btn" onclick="switchTab('reviews')">Reviews <span id="review-count-tab" style="color:var(--muted);font-weight:400"></span></button>
 </div>
- 
+
 <!-- BODY -->
 <div class="profile-body">
- 
+
   <!-- MAIN -->
   <div class="profile-main">
- 
+
     <!-- OVERVIEW TAB -->
     <div class="tab-page active" id="tab-overview">
- 
+
       <!-- Profile Completeness (edit mode only) -->
       <div class="profile-completeness" id="completeness-bar" style="display:none">
         <div class="pc-title">Profile Completeness</div>
@@ -720,7 +720,7 @@ SessionGuard.init();
         <div class="pc-bar-track"><div class="pc-bar-fill" id="pc-fill" style="width:40%"></div></div>
         <div class="pc-pct"><span id="pc-pct-num">40</span>%</div>
       </div>
- 
+
       <!-- Stats -->
       <div class="stats-row">
         <div class="stat-box">
@@ -740,7 +740,7 @@ SessionGuard.init();
           <div class="stat-box-label">Avg Rating</div>
         </div>
       </div>
- 
+
       <!-- About -->
       <div class="pcard">
         <div class="pcard-header">
@@ -753,7 +753,7 @@ SessionGuard.init();
           <p>With over 8 years of experience serving thousands of satisfied guests, we pride ourselves on punctuality, cleanliness, and consistently delicious food. Halal certified and fully insured.</p>
         </div>
       </div>
- 
+
       <!-- What We Offer -->
       <div class="pcard">
         <div class="pcard-header">
@@ -764,9 +764,9 @@ SessionGuard.init();
           <!-- Populated by JS -->
         </div>
       </div>
- 
+
     </div>
- 
+
     <!-- SERVICES TAB -->
     <div class="tab-page" id="tab-services">
       <div class="pcard">
@@ -779,7 +779,7 @@ SessionGuard.init();
         </div>
       </div>
     </div>
- 
+
     <!-- GALLERY TAB -->
     <div class="tab-page" id="tab-gallery">
       <div class="pcard">
@@ -792,7 +792,7 @@ SessionGuard.init();
         </div>
       </div>
     </div>
- 
+
     <!-- REVIEWS TAB -->
     <div class="tab-page" id="tab-reviews">
       <div class="pcard">
@@ -825,12 +825,12 @@ SessionGuard.init();
         </div>
       </div>
     </div>
- 
+
   </div>
- 
+
   <!-- SIDEBAR -->
   <div class="profile-sidebar">
- 
+
     <!-- Location Card -->
     <div class="contact-card" id="location-card">
       <div class="contact-card-title">📍 Business Location</div>
@@ -841,14 +841,14 @@ SessionGuard.init();
       <div id="location-details-display"></div>
       <button class="pcard-edit" id="edit-location-btn" style="width:100%;justify-content:center;margin-top:8px" onclick="openModal('edit-location-modal')">✏️ Edit Location</button>
     </div>
- 
+
     <!-- Contact Info -->
     <div class="contact-card" id="contact-info-card">
       <div class="contact-card-title">📞 Contact Information</div>
       <div id="contact-info-display"></div>
       <button class="pcard-edit" id="edit-contact-btn" style="width:100%;justify-content:center;margin-top:8px" onclick="openModal('edit-contact-modal')">✏️ Edit Contact</button>
     </div>
- 
+
     <!-- Business Hours -->
     <div class="contact-card">
       <div class="contact-card-title" style="display:flex;align-items:center;justify-content:space-between">
@@ -857,7 +857,7 @@ SessionGuard.init();
       </div>
       <div class="hours-list" id="hours-display"></div>
     </div>
- 
+
     <!-- Quick Contact via WhatsApp -->
     <div class="contact-card" style="background:linear-gradient(135deg,#075e54,#128c7e)">
       <div class="contact-card-title" style="color:white;margin-bottom:8px">💬 Chat on WhatsApp</div>
@@ -867,12 +867,12 @@ SessionGuard.init();
         WhatsApp Now →
       </button>
     </div>
- 
+
   </div>
 </div>
- 
- 
- 
+
+
+
 <!-- ═══ LIGHTBOX ═══ -->
 <div class="modal-overlay" id="lightbox-modal" onclick="closeLightbox()" style="background:rgba(0,0,0,0.92);z-index:600">
   <div style="position:relative;max-width:90vw;max-height:90vh;display:flex;align-items:center;justify-content:center" onclick="event.stopPropagation()">
@@ -882,9 +882,9 @@ SessionGuard.init();
     <button onclick="closeLightbox()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer">✕</button>
   </div>
 </div>
- 
+
 <!-- ═══════════════════ MODALS ═══════════════════ -->
- 
+
 <!-- Edit Profile Modal -->
 <div class="modal-overlay" id="edit-profile-modal">
   <div class="modal">
@@ -936,7 +936,7 @@ SessionGuard.init();
     </div>
   </div>
 </div>
- 
+
 <!-- Edit About Modal -->
 <div class="modal-overlay" id="edit-about-modal">
   <div class="modal">
@@ -955,7 +955,7 @@ SessionGuard.init();
     </div>
   </div>
 </div>
- 
+
 <!-- Edit Services Modal -->
 <div class="modal-overlay" id="edit-services-modal">
   <div class="modal" style="max-width:600px">
@@ -964,9 +964,9 @@ SessionGuard.init();
       <button class="modal-close" onclick="closeModal('edit-services-modal')">✕</button>
     </div>
     <p style="font-size:0.82rem;color:var(--muted);margin-bottom:16px">Add the specific services or packages you offer with pricing</p>
- 
+
     <div class="service-editor-list" id="service-editor-list"></div>
- 
+
     <div style="background:var(--paper);border-radius:12px;padding:16px;border:1.5px solid var(--border)">
       <p style="font-size:0.82rem;font-weight:600;margin-bottom:12px">Add New Service</p>
       <div class="form-row">
@@ -998,14 +998,14 @@ SessionGuard.init();
       </div>
       <button class="btn btn-accent btn-sm" onclick="addService()" style="margin-top:4px">+ Add Service</button>
     </div>
- 
+
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('edit-services-modal')">Cancel</button>
       <button class="btn btn-primary" onclick="saveServices()">Save Services</button>
     </div>
   </div>
 </div>
- 
+
 <!-- Edit Location Modal -->
 <div class="modal-overlay" id="edit-location-modal">
   <div class="modal">
@@ -1064,7 +1064,7 @@ SessionGuard.init();
     </div>
   </div>
 </div>
- 
+
 <!-- Edit Contact Modal -->
 <div class="modal-overlay" id="edit-contact-modal">
   <div class="modal">
@@ -1098,7 +1098,7 @@ SessionGuard.init();
     </div>
   </div>
 </div>
- 
+
 <!-- Edit Hours Modal -->
 <div class="modal-overlay" id="edit-hours-modal">
   <div class="modal" style="max-width:520px">
@@ -1113,7 +1113,7 @@ SessionGuard.init();
     </div>
   </div>
 </div>
- 
+
 <!-- Gallery Modal -->
 <div class="modal-overlay" id="gallery-modal">
   <div class="modal">
@@ -1135,7 +1135,7 @@ SessionGuard.init();
     </div>
   </div>
 </div>
- 
+
 <!-- Cover Photo Modal -->
 <div class="modal-overlay" id="cover-modal">
   <div class="modal">
@@ -1159,7 +1159,7 @@ SessionGuard.init();
     </div>
   </div>
 </div>
- 
+
 <!-- Avatar Modal -->
 <div class="modal-overlay" id="avatar-modal">
   <div class="modal">
@@ -1182,7 +1182,7 @@ SessionGuard.init();
     </div>
   </div>
 </div>
- 
+
 <!-- Quick Enquiry Modal -->
 <div class="modal-overlay" id="contact-quick-modal" onclick="closeModal('contact-quick-modal')">
   <div class="modal" style="max-width:400px" onclick="event.stopPropagation()">
@@ -1192,13 +1192,13 @@ SessionGuard.init();
       <div class="modal-title" style="margin-bottom:6px">Contact <span id="enquiry-to-name">this Provider</span></div>
       <p style="font-size:0.875rem;color:var(--muted);line-height:1.55">Reach out directly via WhatsApp — get a response fast.</p>
     </div>
- 
+
     <!-- WhatsApp message preview -->
     <div style="background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:0.82rem;color:var(--muted);line-height:1.6">
       <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;color:var(--ink)">📨 Pre-filled message</div>
       <div id="wa-preview-text" style="font-style:italic"></div>
     </div>
- 
+
     <div style="display:flex;flex-direction:column;gap:10px">
       <a id="wa-link" href="#" target="_blank" rel="noopener noreferrer"
         class="btn" style="justify-content:center;padding:15px;font-size:1rem;font-weight:700;background:#25D366;color:white;border:none;border-radius:12px;text-decoration:none;gap:10px"
@@ -1215,13 +1215,13 @@ SessionGuard.init();
     <p style="text-align:center;font-size:0.72rem;color:var(--muted);margin-top:14px">Your message opens directly in WhatsApp</p>
   </div>
 </div>
- 
+
 <!-- TOAST -->
 <div class="toast" id="toast">
   <span id="toast-icon">✅</span>
   <span id="toast-msg"></span>
 </div>
- 
+
 <!-- ══════════════ JAVASCRIPT ══════════════ -->
 <script>
 // ── MODE DETECTION ──
@@ -1230,9 +1230,9 @@ SessionGuard.init();
 const _urlParams = new URLSearchParams(window.location.search);
 const _listingId = _urlParams.get('id');
 const _isSeekerView = !!_listingId;
- 
+
 let isEditMode = !_isSeekerView; // false for seekers, true for providers
- 
+
 // ── STATE ──
 let profileData = {
   businessName: '',
@@ -1244,7 +1244,7 @@ let profileData = {
   verified: false,
   memberSince: '',
 };
- 
+
 let contactData = {
   phone: '',
   email: '',
@@ -1252,7 +1252,7 @@ let contactData = {
   facebook: '',
   instagram: '',
 };
- 
+
 let locationData = {
   addr1: '',
   addr2: '',
@@ -1261,9 +1261,9 @@ let locationData = {
   state: '',
   serviceArea: '',
 };
- 
+
 let services = [];
- 
+
 let hours = {
   Mon: { open: false, from: '', to: '' },
   Tue: { open: false, from: '', to: '' },
@@ -1273,22 +1273,22 @@ let hours = {
   Sat: { open: false, from: '', to: '' },
   Sun: { open: false, from: '', to: '' },
 };
- 
+
 let galleryImages = [];
 let pendingGalleryImages = [];
 let pendingCoverDataUrl = null;
 let pendingAvatarDataUrl = null;
- 
+
 let reviews = []; // loaded from Supabase
- 
+
 // ── INIT ──
 // Hide page until auth confirmed (prevents flash of content)
 if (!_isSeekerView) {
   document.documentElement.style.visibility = 'hidden';
 }
- 
+
 window.addEventListener('DOMContentLoaded', async () => {
- 
+
   // Auth check for provider-owned profile pages
   if (!_isSeekerView) {
     const { data: { session } } = await db.auth.getSession();
@@ -1297,7 +1297,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       return;
     }
     document.documentElement.style.visibility = '';
- 
+
     // Listen for session expiry
     db.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT' || !session) {
@@ -1305,16 +1305,16 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
     });
   }
- 
+
   // Update nav with auth state (provider view only; seeker nav handled by applySeekerMode)
   if (!_isSeekerView) _updateNavAuth();
- 
+
   if (_isSeekerView) {
     await loadListingForSeeker(_listingId);
   } else {
     await loadProviderOwnData();
   }
- 
+
   applyProfileData();
   renderServicesLists();
   renderGallery();
@@ -1323,7 +1323,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   renderLocationInfo();
   renderHours();
   updateCompleteness();
- 
+
   document.getElementById('completeness-bar').style.display = 'none';
   if (_isSeekerView) {
     await applySeekerMode();
@@ -1344,7 +1344,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
     document.getElementById('edit-profile-action-btn').style.display = '';
   }
- 
+
   const aboutTa = document.getElementById('inp-about');
   if (aboutTa) {
     aboutTa.addEventListener('input', () => {
@@ -1352,7 +1352,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
   }
 });
- 
+
 // ── LOAD PROVIDER'S OWN DATA FROM SUPABASE ──
 async function loadProviderOwnData() {
   const { data: { user } } = await db.auth.getUser();
@@ -1361,10 +1361,10 @@ async function loadProviderOwnData() {
     window.location.href = 'index.html';
     return;
   }
- 
+
   // Store user_id globally so saves can use it
   window._providerId = user.id;
- 
+
   // Fetch their listing
   const { data: listing } = await db
     .from('listings')
@@ -1373,7 +1373,7 @@ async function loadProviderOwnData() {
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
- 
+
   if (listing) {
     window._listingRowId = listing.id;
     profileData.businessName = listing.provider_name || '';
@@ -1384,7 +1384,7 @@ async function loadProviderOwnData() {
     profileData.verified     = listing.status === 'active';
     contactData.phone        = listing.phone || '';
     locationData.city        = listing.location || '';
- 
+
     services = [{
       id:    listing.id,
       name:  listing.title || '',
@@ -1406,14 +1406,14 @@ async function loadProviderOwnData() {
       </div>`;
     document.querySelector('.profile-hero').insertAdjacentElement('afterend', notice);
   }
- 
+
   // Fetch extended profile (bio, contact, location, hours, gallery)
   const { data: profile } = await db
     .from('providers')
     .select('*')
     .eq('id', user.id)
     .maybeSingle();
- 
+
   if (profile) {
     if (profile.about)        profileData.about = profile.about;
     if (profile.tagline)      profileData.tagline = profile.tagline;
@@ -1448,7 +1448,7 @@ async function loadProviderOwnData() {
       img.style.display = 'block';
     }
   }
- 
+
   // Fetch reviews for display
   if (window._listingRowId) {
     const { data: reviewRows } = await db
@@ -1466,11 +1466,11 @@ async function loadProviderOwnData() {
     }
   }
 }
- 
+
 // ── FETCH LISTING FROM SUPABASE (seeker view) ──
 async function loadListingForSeeker(id) {
   const { data, error } = await db.from('listings').select('*').eq('id', id).eq('status', 'active').single();
- 
+
   if (error || !data) {
     document.title = 'Not Found — Servify';
     document.body.innerHTML = `
@@ -1496,17 +1496,17 @@ async function loadListingForSeeker(id) {
       </div>`;
     return;
   }
- 
+
   profileData.businessName = data.provider_name || 'Service Provider';
   profileData.tagline      = data.title || '';
   profileData.category     = data.category || 'Service';
   profileData.about        = data.description || '';
   profileData.memberSince  = data.created_at ? new Date(data.created_at).getFullYear().toString() : '';
   profileData.verified     = true;
- 
+
   contactData.phone = data.phone || '';
   locationData.city = data.location || '';
- 
+
   services = [{
     id:    data.id,
     name:  data.title || 'Service Package',
@@ -1514,14 +1514,14 @@ async function loadListingForSeeker(id) {
     unit:  'per booking',
     desc:  data.description || '',
   }];
- 
+
   // Fetch real reviews for this listing
   const { data: reviewRows } = await db
     .from('reviews')
     .select('*')
     .eq('listing_id', id)
     .order('created_at', { ascending: false });
- 
+
   if (reviewRows && reviewRows.length) {
     reviews = reviewRows.map(r => ({
       name:   r.reviewer_name || 'Anonymous',
@@ -1533,9 +1533,9 @@ async function loadListingForSeeker(id) {
     const avg = (reviews.reduce((a,r) => a+r.rating, 0) / reviews.length).toFixed(1);
     document.getElementById('stat-rating').textContent = avg;
   }
- 
+
   document.title = `${profileData.businessName} — Servify`;
- 
+
   // Also fetch extended provider profile (about, gallery, services, contact, hours)
   // This data lives in the providers table, keyed by user_id on the listing
   if (data.user_id) {
@@ -1570,20 +1570,20 @@ async function loadListingForSeeker(id) {
     }
   }
 }
- 
- 
+
+
 // ════════════════════════════════════
 // REVIEWS
 // ════════════════════════════════════
 let _reviewStar = 0;
- 
+
 function setReviewStar(n) {
   _reviewStar = n;
   document.querySelectorAll('#star-picker span').forEach((s, i) => {
     s.style.opacity = i < n ? '1' : '0.3';
   });
 }
- 
+
 async function submitReview() {
   const name = document.getElementById('review-name').value.trim();
   const text = document.getElementById('review-text').value.trim();
@@ -1591,13 +1591,13 @@ async function submitReview() {
   if (!_reviewStar) { showToast('error', 'Please select a star rating.'); return; }
   if (!text) { showToast('error', 'Please write a review.'); return; }
   if (!_listingId) { showToast('error', 'Cannot find listing to review.'); return; }
- 
+
   const btn = document.querySelector('#leave-review-wrap .btn-accent');
   const orig = btn.textContent;
   btn.textContent = 'Submitting…'; btn.disabled = true;
- 
+
   const { data: { user } } = await db.auth.getUser();
- 
+
   const { error } = await db.from('reviews').insert({
     listing_id:    _listingId,
     reviewer_id:   user?.id || null,
@@ -1606,20 +1606,20 @@ async function submitReview() {
     comment:       text,
     created_at:    new Date().toISOString()
   });
- 
+
   btn.textContent = orig; btn.disabled = false;
- 
+
   if (error) {
     showToast('error', 'Could not submit review. Please try again.');
     return;
   }
- 
+
   // Reload reviews
   document.getElementById('review-name').value = '';
   document.getElementById('review-text').value = '';
   setReviewStar(0);
   showToast('success', '✅ Review submitted! Thank you.');
- 
+
   // Reload reviews from DB
   const { data: rows } = await db.from('reviews').select('*').eq('listing_id', _listingId).order('created_at', { ascending: false });
   if (rows) {
@@ -1632,7 +1632,7 @@ async function submitReview() {
     renderReviews();
   }
 }
- 
+
 // ════════════════════════════════════
 // VIEW COUNTER
 // ════════════════════════════════════
@@ -1644,12 +1644,12 @@ async function incrementViewCount() {
   const sessionKey = 'viewed_' + _listingId;
   if (sessionStorage.getItem(sessionKey)) return;
   sessionStorage.setItem(sessionKey, '1');
- 
+
   // Increment view_count on listings table
   await db.rpc('increment_listing_views', { listing_id: _listingId }).catch(() => {
     // RPC might not exist yet — silently fail
   });
- 
+
   // Update stat display
   const el = document.getElementById('stat-views');
   if (el && el.textContent !== '—') {
@@ -1657,16 +1657,16 @@ async function incrementViewCount() {
     el.textContent = current + 1;
   }
 }
- 
+
 // ── APPLY SEEKER MODE (hide all edit controls) ──
 async function applySeekerMode() {
   // Hide edit buttons throughout
   document.querySelectorAll('.pcard-edit, .cover-edit-btn, .avatar-edit-btn').forEach(el => el.style.display = 'none');
- 
+
   // Hide provider-only action button, keep only Message button
   const editBtn = document.getElementById('edit-profile-action-btn');
   if (editBtn) editBtn.style.display = 'none';
- 
+
   // Check auth to show correct nav
   const { data: { user } } = await db.auth.getUser();
   const navRight = document.getElementById('nav-right');
@@ -1681,12 +1681,12 @@ async function applySeekerMode() {
       navRight.innerHTML = `<a href="index.html" class="btn btn-ghost" style="text-decoration:none">← Back to Listings</a>`;
     }
   }
- 
+
   // Hide stats row (provider analytics, not relevant to seekers)
   const statsRow = document.querySelector('.stats-row');
   if (statsRow) statsRow.style.display = 'none';
 }
- 
+
 // ── VIEW MODE TOGGLE ──
 function toggleViewMode() {
   isEditMode = !isEditMode;
@@ -1694,7 +1694,7 @@ function toggleViewMode() {
   const icon = document.getElementById('view-toggle-icon');
   label.textContent = isEditMode ? 'Preview' : 'Edit Mode';
   icon.textContent = isEditMode ? '👁' : '✏️';
- 
+
   // Toggle all edit buttons
   document.querySelectorAll('.pcard-edit, .cover-edit-btn, .avatar-edit-btn').forEach(btn => {
     btn.classList.toggle('view-only', !isEditMode);
@@ -1702,7 +1702,7 @@ function toggleViewMode() {
   document.getElementById('completeness-bar').style.display = isEditMode ? 'block' : 'none';
   document.getElementById('edit-profile-action-btn').style.display = isEditMode ? '' : 'none';
 }
- 
+
 // ── TABS ──
 function switchTab(name) {
   document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
@@ -1710,7 +1710,7 @@ function switchTab(name) {
   document.getElementById('tab-' + name).classList.add('active');
   event.currentTarget.classList.add('active');
 }
- 
+
 // ── APPLY DATA ──
 function applyProfileData() {
   document.getElementById('display-business-name').textContent = profileData.businessName;
@@ -1719,19 +1719,19 @@ function applyProfileData() {
   document.getElementById('display-member-since').textContent = profileData.memberSince;
   document.getElementById('avatar-initials').textContent = profileData.businessName ? profileData.businessName[0].toUpperCase() : '?';
   document.getElementById('enquiry-to-name').textContent = profileData.businessName || 'Provider';
- 
+
   // Cover emoji based on category
   const emojiMap = { Catering:'🍽️', Events:'🎉', Cleaning:'🧹', Photography:'📸', Moving:'📦', Repair:'🔧', Tutoring:'📚', Beauty:'💄', IT:'💻', Fitness:'🏋️', Music:'🎵', Pets:'🐾' };
   document.getElementById('cover-emoji').textContent = emojiMap[profileData.category] || '⚡';
- 
+
   document.getElementById('verified-badge').style.display = profileData.verified ? 'inline-flex' : 'none';
- 
+
   // About
   const aboutEl = document.getElementById('display-about');
   aboutEl.innerHTML = profileData.about
     ? profileData.about.split('\n\n').filter(Boolean).map(p => `<p>${p}</p>`).join('')
     : '<p style="color:var(--muted);font-size:0.875rem">No description provided yet.</p>';
- 
+
   // Stats — populated after reviews load
   document.getElementById('stat-views').textContent = '—';
   document.getElementById('stat-enquiries').textContent = '—';
@@ -1739,12 +1739,12 @@ function applyProfileData() {
   document.getElementById('stat-rating').textContent = '—';
   document.getElementById('display-rating-chip').textContent = 'No reviews yet';
 }
- 
+
 // ── SERVICES ──
 function renderServicesLists() {
   const catEmoji = { Catering:'🍽️', Events:'🎉', Cleaning:'🧹', Photography:'📸', Moving:'📦', Repair:'🔧', Tutoring:'📚', Beauty:'💄', IT:'💻', Fitness:'🏋️', Music:'🎵', Pets:'🐾', Other:'⭐' };
   const emoji = catEmoji[profileData.category] || '⭐';
- 
+
   const renderService = (s) => `
     <div class="service-item">
       <div class="service-emoji">${emoji}</div>
@@ -1754,10 +1754,10 @@ function renderServicesLists() {
         <div class="service-price-tag">RM ${Number(s.price).toLocaleString()} <span class="service-price-unit">${sanitize(s.unit)}</span></div>
       </div>
     </div>`;
- 
+
   const overviewList = document.getElementById('services-list-overview');
   const fullList = document.getElementById('services-list-full');
- 
+
   if (!services.length) {
     const empty = `<div class="empty-state"><div class="empty-state-icon">🛎️</div><p>No services added yet. <button class="btn btn-accent btn-sm" onclick="openModal('edit-services-modal')">Add your first service</button></p></div>`;
     overviewList.innerHTML = empty;
@@ -1766,11 +1766,11 @@ function renderServicesLists() {
     overviewList.innerHTML = services.slice(0,3).map(renderService).join('');
     fullList.innerHTML = services.map(renderService).join('');
   }
- 
+
   // Enquiry service dropdown
   const sel = document.getElementById('enq-service');
   if (sel) sel.innerHTML = '<option value="">— Select a service —</option>' + services.map(s => `<option value="${sanitize(s.name)}">${sanitize(s.name)}</option>`).join('');
- 
+
   // Service editor
   const editorList = document.getElementById('service-editor-list');
   if (editorList) editorList.innerHTML = services.map(s => `
@@ -1780,7 +1780,7 @@ function renderServicesLists() {
       <button class="sei-del" onclick="removeService(this)" data-sid="${String(s.id)}" title="Remove">✕</button>
     </div>`).join('') || '<p style="font-size:0.82rem;color:var(--muted)">No services yet</p>';
 }
- 
+
 function addService() {
   const name = document.getElementById('new-service-name').value.trim();
   const price = parseFloat(document.getElementById('new-service-price').value);
@@ -1793,14 +1793,14 @@ function addService() {
   document.getElementById('new-service-desc').value = '';
   renderServicesLists();
 }
- 
+
 function removeService(btnOrId) {
   // Accept either a button element (data-sid) or a raw id value
   const id = (btnOrId && btnOrId.dataset) ? btnOrId.dataset.sid : String(btnOrId);
   services = services.filter(s => String(s.id) !== id);
   renderServicesLists();
 }
- 
+
 async function saveServices() {
   const btn = document.querySelector('#edit-services-modal .btn-accent');
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
@@ -1813,9 +1813,9 @@ async function saveServices() {
     showToast('success', '✅ Services updated!');
   }
 }
- 
+
 // ── GALLERY ──
- 
+
 // ── LIGHTBOX ──
 let _lbIdx = 0;
 function openLightbox(idx) {
@@ -1838,8 +1838,8 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') lightboxNav(1);
   if (e.key === 'Escape') closeLightbox();
 });
- 
- 
+
+
 function openWhatsApp() {
   const raw = contactData.phone || '';
   const digits = raw.replace(/[^0-9]/g, '');
@@ -1853,7 +1853,7 @@ function openWhatsApp() {
   const msg   = encodeURIComponent(`Hi ${name}, I found your listing on Servify and I'm interested in your ${cat} service. Could you please provide more details?`);
   window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
 }
- 
+
 function renderGallery() {
   const grid = document.getElementById('gallery-grid');
   const addBtn = `<div class="gallery-item add-photo ${isEditMode ? '' : 'view-only'}" onclick="openModal('gallery-modal')">📷<span>Add Photo</span></div>`;
@@ -1867,7 +1867,7 @@ function renderGallery() {
   }
   renderUploadPreview();
 }
- 
+
 function renderUploadPreview() {
   const preview = document.getElementById('upload-preview');
   preview.innerHTML = galleryImages.map((img) => `
@@ -1876,9 +1876,9 @@ function renderUploadPreview() {
       <button class="upload-thumb-del" onclick="removeGalleryImg('${img.id}')">✕</button>
     </div>`).join('');
 }
- 
+
 let _pendingGalleryFiles = []; // File objects waiting to upload
- 
+
 function handlePhotoUpload(e) {
   const files = Array.from(e.target.files);
   files.slice(0, 12 - galleryImages.length - _pendingGalleryFiles.length).forEach(file => {
@@ -1892,18 +1892,18 @@ function handlePhotoUpload(e) {
   });
   e.target.value = '';
 }
- 
+
 function removeGalleryImg(id) {
   const img = galleryImages.find(i => String(i.id) === String(id));
   if (img?._file) _pendingGalleryFiles = _pendingGalleryFiles.filter(f => f !== img._file);
   galleryImages = galleryImages.filter(i => String(i.id) !== String(id));
   renderUploadPreview();
 }
- 
+
 async function saveGallery() {
   const btn = document.querySelector('#gallery-modal .btn-accent');
   if (btn) { btn.textContent = 'Uploading…'; btn.disabled = true; }
- 
+
   // Upload any pending new files to Supabase Storage
   for (const img of galleryImages.filter(i => i._file)) {
     const ext = img.name.split('.').pop();
@@ -1920,11 +1920,11 @@ async function saveGallery() {
       showToast('error', 'Photo upload failed: ' + uploadErr.message);
     }
   }
- 
+
   // Save gallery URLs to provider_profiles
   const galleryToSave = galleryImages.map(({ id, url, name }) => ({ id, url, name }));
   const ok = await upsertProfile({ gallery: galleryToSave });
- 
+
   if (btn) { btn.textContent = 'Save Gallery'; btn.disabled = false; }
   if (ok !== false) {
     closeModal('gallery-modal');
@@ -1933,10 +1933,10 @@ async function saveGallery() {
     showToast('success', `✅ Gallery saved — ${galleryImages.length} photo(s)`);
   }
 }
- 
+
 // ── COVER ──
 let _pendingCoverFile = null;
- 
+
 function handleCoverUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -1950,43 +1950,43 @@ function handleCoverUpload(e) {
   reader.readAsDataURL(file);
   e.target.value = '';
 }
- 
+
 async function saveCover() {
   if (!_pendingCoverFile) { closeModal('cover-modal'); return; }
- 
+
   const btn = document.querySelector('#cover-modal .btn-accent');
   if (btn) { btn.textContent = 'Uploading…'; btn.disabled = true; }
- 
+
   const ext = _pendingCoverFile.name.split('.').pop();
   const path = `covers/${window._providerId}/cover.${ext}`;
   const { error: uploadErr } = await db.storage
     .from('provider-media')
     .upload(path, _pendingCoverFile, { upsert: true });
- 
+
   if (uploadErr) {
     showToast('error', 'Upload failed: ' + uploadErr.message);
     if (btn) { btn.textContent = 'Save Cover'; btn.disabled = false; }
     return;
   }
- 
+
   const { data: { publicUrl } } = db.storage.from('provider-media').getPublicUrl(path);
   await upsertProfile({ cover_url: publicUrl });
- 
+
   const img = document.getElementById('cover-photo-img');
   img.src = publicUrl;
   img.style.display = 'block';
   document.getElementById('cover-emoji').style.display = 'none';
   _pendingCoverFile = null;
   pendingCoverDataUrl = null;
- 
+
   if (btn) { btn.textContent = 'Save Cover'; btn.disabled = false; }
   closeModal('cover-modal');
   showToast('success', '✅ Cover photo updated!');
 }
- 
+
 // ── AVATAR ──
 let _pendingAvatarFile = null;
- 
+
 function handleAvatarUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -2000,45 +2000,45 @@ function handleAvatarUpload(e) {
   reader.readAsDataURL(file);
   e.target.value = '';
 }
- 
+
 async function saveAvatar() {
   if (!_pendingAvatarFile) { closeModal('avatar-modal'); return; }
- 
+
   const btn = document.querySelector('#avatar-modal .btn-accent');
   if (btn) { btn.textContent = 'Uploading…'; btn.disabled = true; }
- 
+
   const ext = _pendingAvatarFile.name.split('.').pop();
   const path = `avatars/${window._providerId}/avatar.${ext}`;
   const { error: uploadErr } = await db.storage
     .from('provider-media')
     .upload(path, _pendingAvatarFile, { upsert: true });
- 
+
   if (uploadErr) {
     showToast('error', 'Upload failed: ' + uploadErr.message);
     if (btn) { btn.textContent = 'Save Photo'; btn.disabled = false; }
     return;
   }
- 
+
   const { data: { publicUrl } } = db.storage.from('provider-media').getPublicUrl(path);
   await upsertProfile({ avatar_url: publicUrl });
- 
+
   const img = document.getElementById('avatar-img');
   img.src = publicUrl;
   img.style.display = 'block';
   document.getElementById('avatar-initials').style.display = 'none';
   _pendingAvatarFile = null;
   pendingAvatarDataUrl = null;
- 
+
   if (btn) { btn.textContent = 'Save Photo'; btn.disabled = false; }
   closeModal('avatar-modal');
   showToast('success', '✅ Profile photo updated!');
 }
- 
+
 // ── REVIEWS ──
 function renderReviews() {
   const countTab = document.getElementById('review-count-tab');
   const ratingChip = document.getElementById('display-rating-chip');
- 
+
   if (!reviews.length) {
     countTab.textContent = '(0)';
     ratingChip.textContent = 'No reviews yet';
@@ -2050,11 +2050,11 @@ function renderReviews() {
       </div>`;
     return;
   }
- 
+
   const avg = (reviews.reduce((a,r) => a+r.rating, 0)/reviews.length).toFixed(1);
   ratingChip.textContent = `⭐ ${avg} (${reviews.length} review${reviews.length !== 1 ? 's' : ''})`;
   countTab.textContent = `(${reviews.length})`;
- 
+
   const counts = [5,4,3,2,1].map(n => ({ n, c: reviews.filter(r=>r.rating===n).length }));
   document.getElementById('review-summary').innerHTML = `
     <div>
@@ -2070,7 +2070,7 @@ function renderReviews() {
           <span>${c}</span>
         </div>`).join('')}
     </div>`;
- 
+
   document.getElementById('reviews-list').innerHTML = reviews.map(r => `
     <div class="review-item">
       <div class="reviewer-row">
@@ -2083,7 +2083,7 @@ function renderReviews() {
       <div class="review-text">${sanitize(r.text || '')}</div>
     </div>`).join('');
 }
- 
+
 // ── CONTACT INFO ──
 function renderContactInfo() {
   const items = [];
@@ -2104,17 +2104,17 @@ function renderContactInfo() {
   if (contactData.website) items.push({ icon:'🌐', label:'Website', value:`<a href="${encodeURI(contactData.website)}" target="_blank" rel="noopener noreferrer">Visit Website</a>` });
   if (contactData.facebook) items.push({ icon:'📘', label:'Facebook', value:`<a href="${encodeURI(contactData.facebook)}" target="_blank" rel="noopener noreferrer">Facebook Page</a>` });
   if (contactData.instagram) items.push({ icon:'📸', label:'Instagram', value:`<a href="https://instagram.com/${encodeURIComponent(contactData.instagram.replace('@',''))}" target="_blank" rel="noopener noreferrer">${sanitize(contactData.instagram)}</a>` });
- 
+
   document.getElementById('contact-info-display').innerHTML = items.length
     ? items.map(i => `<div class="contact-item"><div class="contact-icon">${i.icon}</div><div><div class="contact-label">${sanitize(i.label)}</div><div class="contact-value">${i.value}</div></div></div>`).join('')
     : '<p style="font-size:0.82rem;color:var(--muted);padding:10px 0">No contact info yet</p>';
 }
- 
+
 // ── LOCATION ──
 function renderLocationInfo() {
   const mapDiv = document.getElementById('location-map-preview');
   const detailsDiv = document.getElementById('location-details-display');
- 
+
   if (locationData.addr1 || locationData.city) {
     const safeAddrParts = [locationData.addr1, locationData.addr2, locationData.city, locationData.postcode, locationData.state].filter(Boolean).map(p => sanitize(p));
     mapDiv.innerHTML = `<div>📍</div><div class="location-map-label" style="font-size:0.82rem;text-align:center;padding:0 12px">${safeAddrParts.join(', ')}</div>`;
@@ -2123,7 +2123,7 @@ function renderLocationInfo() {
       html += `<div class="contact-item"><div class="contact-icon">🗺️</div><div><div class="contact-label">Service Area</div><div class="contact-value">${sanitize(locationData.serviceArea)}</div></div></div>`;
     }
     detailsDiv.innerHTML = html;
- 
+
     // Update chip
     const chip = document.getElementById('meta-location');
     document.getElementById('display-location-chip').textContent = locationData.city || locationData.state;
@@ -2133,7 +2133,7 @@ function renderLocationInfo() {
     detailsDiv.innerHTML = '<p style="font-size:0.82rem;color:var(--muted);padding:10px 0">No location added yet</p>';
   }
 }
- 
+
 // ── HOURS ──
 function renderHours() {
   const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
@@ -2148,7 +2148,7 @@ function renderHours() {
     </div>`;
   }).join('');
 }
- 
+
 function buildHoursEditor() {
   const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   document.getElementById('hours-editor').innerHTML = days.map(d => {
@@ -2168,13 +2168,13 @@ function buildHoursEditor() {
     </div>`;
   }).join('');
 }
- 
+
 function toggleHourDay(day) {
   const isOpen = document.getElementById('hour-open-'+day).checked;
   const timesEl = document.getElementById('hour-times-'+day);
   if (timesEl) timesEl.style.display = isOpen ? 'flex' : 'none';
 }
- 
+
 // ── SAVE HELPERS ──
 async function upsertProfile(fields) {
   if (!window._providerId) return;
@@ -2186,7 +2186,7 @@ async function upsertProfile(fields) {
   if (error) { showToast('error', 'Save failed: ' + error.message); return false; }
   return true;
 }
- 
+
 async function updateListing(fields) {
   // BUG 3 FIX: If no listing exists yet, skip gracefully and return true
   // (provider profile saves go to the providers table; listings table updated when listing exists)
@@ -2198,18 +2198,18 @@ async function updateListing(fields) {
   if (error) { showToast('error', 'Save failed: ' + error.message); return false; }
   return true;
 }
- 
+
 // ── SAVE FUNCTIONS ──
 async function saveProfile() {
   const btn = document.querySelector('#edit-profile-modal .btn-accent');
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
- 
+
   profileData.businessName = document.getElementById('inp-business-name').value.trim() || profileData.businessName;
   profileData.tagline      = document.getElementById('inp-tagline').value.trim() || profileData.tagline;
   profileData.category     = document.getElementById('inp-category').value;
   profileData.years        = parseInt(document.getElementById('inp-years').value) || profileData.years;
   profileData.ssm          = document.getElementById('inp-ssm').value.trim();
- 
+
   const ok1 = await updateListing({
     provider_name: profileData.businessName,
     title:         profileData.tagline,
@@ -2220,7 +2220,7 @@ async function saveProfile() {
     years:   profileData.years,
     ssm:     profileData.ssm,
   });
- 
+
   if (btn) { btn.textContent = 'Save Changes'; btn.disabled = false; }
   if (ok1 !== false && ok2 !== false) {
     applyProfileData();
@@ -2230,18 +2230,18 @@ async function saveProfile() {
     showToast('success', '✅ Profile updated!');
   }
 }
- 
+
 async function saveAbout() {
   const val = document.getElementById('inp-about').value.trim();
   if (!val) { showToast('error', 'Please enter a description'); return; }
- 
+
   const btn = document.querySelector('#edit-about-modal .btn-accent');
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
- 
+
   profileData.about = val;
   const ok1 = await updateListing({ description: val });
   const ok2 = await upsertProfile({ about: val });
- 
+
   if (btn) { btn.textContent = 'Save'; btn.disabled = false; }
   if (ok1 !== false && ok2 !== false) {
     const aboutEl = document.getElementById('display-about');
@@ -2251,17 +2251,17 @@ async function saveAbout() {
     showToast('success', '✅ Description saved!');
   }
 }
- 
+
 async function saveContact() {
   const btn = document.querySelector('#edit-contact-modal .btn-accent');
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
- 
+
   contactData.phone     = document.getElementById('inp-phone').value.trim();
   contactData.email     = document.getElementById('inp-email').value.trim();
   contactData.website   = document.getElementById('inp-website').value.trim();
   contactData.facebook  = document.getElementById('inp-facebook').value.trim();
   contactData.instagram = document.getElementById('inp-instagram').value.trim();
- 
+
   const ok1 = await updateListing({ phone: contactData.phone });
   const ok2 = await upsertProfile({
     phone:     contactData.phone,
@@ -2270,7 +2270,7 @@ async function saveContact() {
     facebook:  contactData.facebook,
     instagram: contactData.instagram,
   });
- 
+
   if (btn) { btn.textContent = 'Save Contact Info'; btn.disabled = false; }
   if (ok1 !== false && ok2 !== false) {
     renderContactInfo();
@@ -2279,18 +2279,18 @@ async function saveContact() {
     showToast('success', '✅ Contact info saved!');
   }
 }
- 
+
 async function saveLocation() {
   const btn = document.querySelector('#edit-location-modal .btn-accent');
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
- 
+
   locationData.addr1       = document.getElementById('inp-addr1').value.trim();
   locationData.addr2       = document.getElementById('inp-addr2').value.trim();
   locationData.city        = document.getElementById('inp-city').value.trim();
   locationData.postcode    = document.getElementById('inp-postcode').value.trim();
   locationData.state       = document.getElementById('inp-state').value;
   locationData.serviceArea = document.getElementById('inp-service-area').value.trim();
- 
+
   const ok1 = await updateListing({ location: locationData.city || locationData.state });
   const ok2 = await upsertProfile({
     addr1:        locationData.addr1,
@@ -2300,7 +2300,7 @@ async function saveLocation() {
     state:        locationData.state,
     service_area: locationData.serviceArea,
   });
- 
+
   if (btn) { btn.textContent = 'Save Location'; btn.disabled = false; }
   if (ok1 !== false && ok2 !== false) {
     renderLocationInfo();
@@ -2309,11 +2309,11 @@ async function saveLocation() {
     showToast('success', '✅ Location saved!');
   }
 }
- 
+
 async function saveHours() {
   const btn = document.querySelector('#edit-hours-modal .btn-accent');
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
- 
+
   const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   days.forEach(d => {
     const open = document.getElementById('hour-open-'+d)?.checked || false;
@@ -2321,9 +2321,9 @@ async function saveHours() {
     const to   = document.getElementById('hour-to-'+d)?.value || '';
     hours[d] = { open, from, to };
   });
- 
+
   const ok = await upsertProfile({ hours });
- 
+
   if (btn) { btn.textContent = 'Save Hours'; btn.disabled = false; }
   if (ok !== false) {
     renderHours();
@@ -2332,14 +2332,14 @@ async function saveHours() {
     showToast('success', '✅ Business hours saved!');
   }
 }
- 
+
 // ── SECURITY: XSS sanitiser ──
 function sanitize(str) {
   const div = document.createElement('div');
   div.textContent = str || '';
   return div.innerHTML;
 }
- 
+
 // ── NAV AUTH STATE ──
 async function _updateNavAuth() {
   const { data: { user } } = await db.auth.getUser();
@@ -2356,12 +2356,12 @@ async function _updateNavAuth() {
       <a href="index.html" class="btn btn-ghost btn-sm">← Back to Listings</a>`;
   }
 }
- 
+
 async function handleSignOut() {
   await db.auth.signOut();
   window.location.href = 'index.html';
 }
- 
+
 // FIX #11 — Idle session timeout on provider profile (30 min for provider edit mode)
 (function setupProviderIdleTimeout() {
   const IDLE_MS = 30 * 60 * 1000;
@@ -2378,7 +2378,7 @@ async function handleSignOut() {
   });
   resetIdleTimer();
 })();
- 
+
 async function handleGoogleSignIn() {
   const { error } = await db.auth.signInWithOAuth({
     provider: 'google',
@@ -2388,7 +2388,7 @@ async function handleGoogleSignIn() {
   });
   if (error) showToast('error', 'Google sign-in failed: ' + error.message);
 }
- 
+
 // ── WHATSAPP CONTACT MODAL ──
 function openContactModal() {
   // FIX #15: Strict phone sanitisation — digits only, validate length
@@ -2401,12 +2401,12 @@ function openContactModal() {
   }
   const name  = profileData.businessName || 'this provider';
   const cat   = profileData.category || 'service';
- 
+
   document.getElementById('enquiry-to-name').textContent = name;
- 
+
   const previewMsg = `Hi ${name}, I found your listing on Servify and I'm interested in your ${cat} service. Could you please provide more details and a quote?`;
   document.getElementById('wa-preview-text').textContent = previewMsg;
- 
+
   if (phone) {
     const waText = encodeURIComponent(previewMsg);
     document.getElementById('wa-link').href = `https://wa.me/${phone}?text=${waText}`;
@@ -2418,10 +2418,10 @@ function openContactModal() {
     document.getElementById('call-link').style.display = 'none';
     document.getElementById('wa-preview-text').textContent = 'This provider has not added a valid contact number yet. Please check back later.';
   }
- 
+
   openModal('contact-quick-modal');
 }
- 
+
 // ── PROFILE COMPLETENESS ──
 function updateCompleteness() {
   const checks = [
@@ -2438,7 +2438,7 @@ function updateCompleteness() {
   document.getElementById('pc-fill').style.width = pct + '%';
   document.getElementById('pc-pct-num').textContent = pct;
 }
- 
+
 // ── MODAL HELPERS ──
 function openModal(id) {
   // Pre-fill data when opening
@@ -2475,12 +2475,12 @@ function openModal(id) {
   document.getElementById(id).classList.add('open');
   document.body.style.overflow = 'hidden';
 }
- 
+
 function closeModal(id) {
   document.getElementById(id).classList.remove('open');
   document.body.style.overflow = '';
 }
- 
+
 // Close on backdrop click
 document.addEventListener('click', e => {
   if (e.target.classList.contains('modal-overlay')) {
@@ -2488,14 +2488,14 @@ document.addEventListener('click', e => {
     document.body.style.overflow = '';
   }
 });
- 
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     document.querySelectorAll('.modal-overlay.open').forEach(el => { el.classList.remove('open'); });
     document.body.style.overflow = '';
   }
 });
- 
+
 // ── TOAST ──
 let toastTimeout;
 function showToast(type, msg) {
