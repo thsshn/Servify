@@ -5,7 +5,7 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; upgrade-insecure-requests; form-action 'self'; base-uri 'self' img-src 'self' data: https:; frame-ancestors 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; upgrade-insecure-requests; form-action 'self'; base-uri 'self'; img-src 'self' data: https:; frame-ancestors 'none'; worker-src 'self';">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Servify — Services, Simplified</title>
 <meta name="description" content="Servify connects you with trusted local service professionals in Malaysia. Find catering, cleaning, photography, event planning and more — fast, simple and secure.">
@@ -17,7 +17,15 @@
 <meta name="twitter:title" content="Servify — Services, Simplified">
 <meta name="twitter:description" content="Find trusted local service professionals in Malaysia.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='20' fill='white'>S</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='110' fill='white'>S</text></svg>">
+<link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+
+<!-- ── PWA ── -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e8521a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Servify">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -2082,9 +2090,6 @@ async function handleSignIn() {
 
 // ── SIGN UP ──
 async function handleSignUp() {
-  // Rate limit: max 5 signup attempts per hour (reuses auth rate limiter)
-  if (!_checkAuthRateLimit()) return;
-
   const first   = document.getElementById('su-first');
   const last    = document.getElementById('su-last');
   const emailEl = document.getElementById('su-email');
@@ -2757,6 +2762,77 @@ window.addEventListener('load', async () => {
     setInterval(showTrialBar, 10 * 60 * 1000);
   }
 });
+</script>
+
+<!-- ── PWA SERVICE WORKER REGISTRATION ── -->
+<script>
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then(reg => {
+        setInterval(() => reg.update(), 60 * 60 * 1000);
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          nw.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              showPwaUpdateBanner();
+            }
+          });
+        });
+      })
+      .catch(err => console.warn('[PWA] SW registration failed:', err));
+  });
+
+  let _deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    _deferredPrompt = e;
+    setTimeout(showPwaInstallBanner, 4000);
+  });
+  window.addEventListener('appinstalled', () => {
+    _removeBanner('pwa-install-banner');
+    _deferredPrompt = null;
+  });
+
+  function showPwaInstallBanner() {
+    if (!_deferredPrompt) return;
+    if (localStorage.getItem('pwa-dismissed')) return;
+    if (document.getElementById('pwa-install-banner')) return;
+    const el = document.createElement('div');
+    el.id = 'pwa-install-banner';
+    el.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#fff;border:1.5px solid #e2ddd5;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);z-index:9999;max-width:calc(100vw - 2rem);width:360px;font-family:DM Sans,sans-serif;';
+    el.innerHTML = '<div style="width:44px;height:44px;background:#e8521a;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:900;font-size:1.3rem;color:white;">S</div><div style="flex:1;"><div style="font-weight:700;font-size:0.88rem;color:#0d0d0d;margin-bottom:2px;">Install Servify</div><div style="color:#7a7570;font-size:0.78rem;">Add to Home Screen for quick access</div></div><div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;"><button id="pwa-install-btn" style="background:#e8521a;color:white;border:none;border-radius:8px;padding:6px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;">Install</button><button id="pwa-dismiss-btn" style="background:transparent;color:#7a7570;border:none;font-size:0.75rem;cursor:pointer;">Not now</button></div>';
+    document.body.appendChild(el);
+    document.getElementById('pwa-install-btn').onclick = async () => {
+      _removeBanner('pwa-install-banner');
+      if (!_deferredPrompt) return;
+      _deferredPrompt.prompt();
+      await _deferredPrompt.userChoice;
+      _deferredPrompt = null;
+    };
+    document.getElementById('pwa-dismiss-btn').onclick = () => {
+      _removeBanner('pwa-install-banner');
+      localStorage.setItem('pwa-dismissed', '1');
+    };
+  }
+
+  function showPwaUpdateBanner() {
+    if (document.getElementById('pwa-update-banner')) return;
+    const el = document.createElement('div');
+    el.id = 'pwa-update-banner';
+    el.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#fff;border:1.5px solid #e2ddd5;border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);z-index:9999;font-family:DM Sans,sans-serif;font-size:0.875rem;color:#0d0d0d;white-space:nowrap;';
+    el.innerHTML = '🎉 A new version of Servify is ready. <button onclick="window.location.reload()" style="background:#e8521a;color:white;border:none;border-radius:8px;padding:6px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;margin-left:6px;">Refresh</button>';
+    document.body.appendChild(el);
+  }
+
+  function _removeBanner(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+  if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+    document.documentElement.classList.add('pwa-standalone');
+  }
+})();
 </script>
 
 <!-- TRIAL WARNING BAR -->
