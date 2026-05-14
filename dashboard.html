@@ -700,7 +700,7 @@ SessionGuard.init();
                   <option>Catering</option><option>Cleaning</option><option>Photography</option>
                   <option>Events</option><option>Moving</option><option>Repair</option>
                   <option>Tutoring</option><option>Beauty</option><option>IT</option>
-                  <option>Fitness</option><option>Music</option><option>Pets</option>
+                  <option>Fitness</option><option>Music</option><option>Pets</option><option>Bridal</option><option>PersonalTrainer</option><option>Massage</option><option>Laundry</option><option>Landscaping</option><option>Childcare</option><option>Elderly</option><option>Pest</option><option>AirCon</option><option>Printing</option><option>Tailor</option><option>Driver</option>
                 </select>
               </div>
               <div class="form-group">
@@ -780,7 +780,7 @@ SessionGuard.init();
               <option>Catering</option><option>Events</option><option>Cleaning</option>
               <option>Photography</option><option>Moving</option><option>Repair</option>
               <option>Tutoring</option><option>Beauty</option><option>IT</option>
-              <option>Fitness</option><option>Music</option><option>Pets</option>
+              <option>Fitness</option><option>Music</option><option>Pets</option><option>Bridal</option><option>PersonalTrainer</option><option>Massage</option><option>Laundry</option><option>Landscaping</option><option>Childcare</option><option>Elderly</option><option>Pest</option><option>AirCon</option><option>Printing</option><option>Tailor</option><option>Driver</option>
             </select>
           </div>
           <div class="form-group">
@@ -1597,7 +1597,7 @@ async function loadMyListings(userId) {
 
   if (!listings.length) return;
 
-  const catEmoji = {'Catering':'🍽️','Events':'🎉','Cleaning':'🧹','Photography':'📸','Moving':'📦','Repair':'🔧','Tutoring':'📚','Beauty':'💄','IT':'💻','Fitness':'🏋️','Music':'🎵','Pets':'🐾'};
+  const catEmoji = {'Catering':'🍽️','Events':'🎉','Cleaning':'🧹','Photography':'📸','Moving':'📦','Repair':'🔧','Tutoring':'📚','Beauty':'💄','IT':'💻','Fitness':'🏋️','Music':'🎵','Pets':'🐾','Bridal':'👰','PersonalTrainer':'🏃','Massage':'💆','Laundry':'👕','Landscaping':'🌿','Childcare':'👶','Elderly':'🧓','Pest':'🪲','AirCon':'❄️','Printing':'🖨️','Tailor':'🪡','Driver':'🚗'};
   const statusBadge = {active:'<span class="badge badge-green">✅ Active</span>',pending:'<span class="badge badge-orange">⏳ Pending</span>',rejected:'<span class="badge badge-red">❌ Rejected</span>'};
 
   const html = listings.map(l => `

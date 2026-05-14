@@ -692,6 +692,7 @@ SessionGuard.init();
     <div class="profile-actions" id="profile-actions">
       <button class="btn btn-ghost btn-sm" onclick="openWhatsApp()">💬 WhatsApp</button>
       <button class="btn btn-accent" onclick="openModal('edit-profile-modal')" id="edit-profile-action-btn">✏️ Edit Profile</button>
+      <button class="btn btn-ghost btn-sm" onclick="reportListing()" title="Report this listing" style="color:var(--muted);font-size:0.82rem;">🚩 Report</button>
     </div>
   </div>
 </div>
@@ -917,6 +918,18 @@ SessionGuard.init();
           <option value="Fitness">🏋️ Fitness & Sports</option>
           <option value="Music">🎵 Music & Entertainment</option>
           <option value="Pets">🐾 Pet Services</option>
+          <option value="Bridal">👰 Bridal & Wedding</option>
+          <option value="PersonalTrainer">🏃 Personal Training</option>
+          <option value="Massage">💆 Massage & Spa</option>
+          <option value="Laundry">👕 Laundry & Ironing</option>
+          <option value="Landscaping">🌿 Landscaping & Gardening</option>
+          <option value="Childcare">👶 Childcare & Babysitting</option>
+          <option value="Elderly">🧓 Elderly Care</option>
+          <option value="Pest">🪲 Pest Control</option>
+          <option value="AirCon">❄️ Aircond Services</option>
+          <option value="Printing">🖨️ Printing & Design</option>
+          <option value="Tailor">🪡 Tailoring & Alterations</option>
+          <option value="Driver">🚗 Driver & Transport</option>
           <option value="Other">⭐ Other</option>
         </select>
       </div>
@@ -1701,6 +1714,9 @@ function toggleViewMode() {
   });
   document.getElementById('completeness-bar').style.display = isEditMode ? 'block' : 'none';
   document.getElementById('edit-profile-action-btn').style.display = isEditMode ? '' : 'none';
+  // Hide report button for owner, show for visitors
+  const reportBtn = document.querySelector('button[onclick="reportListing()"]');
+  if (reportBtn) reportBtn.style.display = isEditMode ? 'none' : '';
 }
 
 // ── TABS ──
@@ -1721,7 +1737,7 @@ function applyProfileData() {
   document.getElementById('enquiry-to-name').textContent = profileData.businessName || 'Provider';
 
   // Cover emoji based on category
-  const emojiMap = { Catering:'🍽️', Events:'🎉', Cleaning:'🧹', Photography:'📸', Moving:'📦', Repair:'🔧', Tutoring:'📚', Beauty:'💄', IT:'💻', Fitness:'🏋️', Music:'🎵', Pets:'🐾' };
+  const emojiMap = { Catering:'🍽️', Events:'🎉', Cleaning:'🧹', Photography:'📸', Moving:'📦', Repair:'🔧', Tutoring:'📚', Beauty:'💄', IT:'💻', Fitness:'🏋️', Music:'🎵', Pets:'🐾', Bridal:'👰', PersonalTrainer:'🏃', Massage:'💆', Laundry:'👕', Landscaping:'🌿', Childcare:'👶', Elderly:'🧓', Pest:'🪲', AirCon:'❄️', Printing:'🖨️', Tailor:'🪡', Driver:'🚗' };
   document.getElementById('cover-emoji').textContent = emojiMap[profileData.category] || '⚡';
 
   document.getElementById('verified-badge').style.display = profileData.verified ? 'inline-flex' : 'none';
@@ -1742,7 +1758,7 @@ function applyProfileData() {
 
 // ── SERVICES ──
 function renderServicesLists() {
-  const catEmoji = { Catering:'🍽️', Events:'🎉', Cleaning:'🧹', Photography:'📸', Moving:'📦', Repair:'🔧', Tutoring:'📚', Beauty:'💄', IT:'💻', Fitness:'🏋️', Music:'🎵', Pets:'🐾', Other:'⭐' };
+  const catEmoji = { Catering:'🍽️', Events:'🎉', Cleaning:'🧹', Photography:'📸', Moving:'📦', Repair:'🔧', Tutoring:'📚', Beauty:'💄', IT:'💻', Fitness:'🏋️', Music:'🎵', Pets:'🐾', Bridal:'👰', PersonalTrainer:'🏃', Massage:'💆', Laundry:'👕', Landscaping:'🌿', Childcare:'👶', Elderly:'🧓', Pest:'🪲', AirCon:'❄️', Printing:'🖨️', Tailor:'🪡', Driver:'🚗', Other:'⭐' };
   const emoji = catEmoji[profileData.category] || '⭐';
 
   const renderService = (s) => `
@@ -2507,6 +2523,24 @@ function showToast(type, msg) {
   clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => toast.classList.remove('show'), 4000);
 }
+
+function reportListing() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id') || 'unknown';
+  const title = document.getElementById('profile-title')?.textContent || 'this listing';
+  const subject = encodeURIComponent('Report a Listing — Servify');
+  const body = encodeURIComponent(`Hi Servify Team,\n\nI would like to report the following listing for suspicious or inappropriate content:\n\nListing: ${title}\nListing ID: ${id}\nListing URL: ${window.location.href}\n\nReason for report:\n[Please describe your concern here]\n\nThank you.`);
+  window.open(`mailto:servify.my@gmail.com?subject=${subject}&body=${body}`);
+}
 </script>
+
+<!-- Legal Footer -->
+<div style="text-align:center;padding:16px;border-top:1px solid var(--border);background:var(--paper);font-size:0.78rem;color:var(--muted);margin-top:32px;">
+  ⚠️ Servify does not verify provider credentials. Please exercise due diligence before engaging any service provider. &nbsp;·&nbsp;
+  <a href="/privacy-policy.html" style="color:var(--muted);text-decoration:none;" target="_blank">Privacy Policy</a> &nbsp;·&nbsp;
+  <a href="/terms.html" style="color:var(--muted);text-decoration:none;" target="_blank">Terms & Conditions</a> &nbsp;·&nbsp;
+  <a href="/refund-policy.html" style="color:var(--muted);text-decoration:none;" target="_blank">Refund Policy</a> &nbsp;·&nbsp;
+  &copy; 2026 Servify
+</div>
 </body>
 </html>

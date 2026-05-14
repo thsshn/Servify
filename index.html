@@ -28,7 +28,7 @@
 <title>Servify — Services, Simplified</title>
 <meta name="description" content="Servify connects you with trusted local service professionals in Malaysia. Find catering, cleaning, photography, event planning and more — fast, simple and secure.">
 <meta property="og:title" content="Servify — Services, Simplified">
-<meta property="og:description" content="Find trusted local service professionals in Malaysia. Catering, cleaning, photography, events and more.">
+<meta property="og:description" content="Find trusted local service professionals in Malaysia. Catering, cleaning, photography, bridal, personal training, aircond, pest control and more.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://servify-wheat.vercel.app">
 <meta name="twitter:card" content="summary_large_image">
@@ -808,6 +808,13 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     <span class="search-tag" onclick="quickSearch('Moving')">📦 Moving</span>
     <span class="search-tag" onclick="quickSearch('Tutoring')">📚 Tutoring</span>
     <span class="search-tag" onclick="quickSearch('Repair')">🔧 Repair</span>
+    <span class="search-tag" onclick="quickSearch('Bridal')">👰 Bridal</span>
+    <span class="search-tag" onclick="quickSearch('PersonalTrainer')">🏃 Personal Training</span>
+    <span class="search-tag" onclick="quickSearch('Massage')">💆 Massage</span>
+    <span class="search-tag" onclick="quickSearch('AirCon')">❄️ Aircond</span>
+    <span class="search-tag" onclick="quickSearch('Pest')">🪲 Pest Control</span>
+    <span class="search-tag" onclick="quickSearch('Laundry')">👕 Laundry</span>
+    <span class="search-tag" onclick="quickSearch('Driver')">🚗 Driver</span>
   </div>
 </section>
 
@@ -829,6 +836,18 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     <div class="cat-card" onclick="jumpToCategory('Fitness')"><div class="cat-icon">🏋️</div><div class="cat-name">Fitness & Sports</div></div>
     <div class="cat-card" onclick="jumpToCategory('Music')"><div class="cat-icon">🎵</div><div class="cat-name">Music & Performing</div></div>
     <div class="cat-card" onclick="jumpToCategory('Pets')"><div class="cat-icon">🐾</div><div class="cat-name">Pet Care</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Bridal')"><div class="cat-icon">👰</div><div class="cat-name">Bridal & Wedding</div></div>
+    <div class="cat-card" onclick="jumpToCategory('PersonalTrainer')"><div class="cat-icon">🏃</div><div class="cat-name">Personal Training</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Massage')"><div class="cat-icon">💆</div><div class="cat-name">Massage & Spa</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Laundry')"><div class="cat-icon">👕</div><div class="cat-name">Laundry & Ironing</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Landscaping')"><div class="cat-icon">🌿</div><div class="cat-name">Landscaping</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Childcare')"><div class="cat-icon">👶</div><div class="cat-name">Childcare</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Elderly')"><div class="cat-icon">🧓</div><div class="cat-name">Elderly Care</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Pest')"><div class="cat-icon">🪲</div><div class="cat-name">Pest Control</div></div>
+    <div class="cat-card" onclick="jumpToCategory('AirCon')"><div class="cat-icon">❄️</div><div class="cat-name">Aircond Services</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Printing')"><div class="cat-icon">🖨️</div><div class="cat-name">Printing & Design</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Tailor')"><div class="cat-icon">🪡</div><div class="cat-name">Tailoring</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Driver')"><div class="cat-icon">🚗</div><div class="cat-name">Driver & Transport</div></div>
   </div>
 </section>
 
@@ -841,7 +860,20 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     </div>
     <div class="filters" id="filter-bar">
       <button class="filter-btn active" onclick="setFilter(this,'All')">All</button>
+      <button class="filter-btn active" onclick="setFilter(this,'All')">All</button>
       <button class="filter-btn" onclick="setFilter(this,'Catering')">Catering</button>
+      <button class="filter-btn" onclick="setFilter(this,'Bridal')">Bridal & Wedding</button>
+      <button class="filter-btn" onclick="setFilter(this,'PersonalTrainer')">Personal Training</button>
+      <button class="filter-btn" onclick="setFilter(this,'Massage')">Massage & Spa</button>
+      <button class="filter-btn" onclick="setFilter(this,'Laundry')">Laundry</button>
+      <button class="filter-btn" onclick="setFilter(this,'Landscaping')">Landscaping</button>
+      <button class="filter-btn" onclick="setFilter(this,'Childcare')">Childcare</button>
+      <button class="filter-btn" onclick="setFilter(this,'Elderly')">Elderly Care</button>
+      <button class="filter-btn" onclick="setFilter(this,'Pest')">Pest Control</button>
+      <button class="filter-btn" onclick="setFilter(this,'AirCon')">Aircond</button>
+      <button class="filter-btn" onclick="setFilter(this,'Printing')">Printing & Design</button>
+      <button class="filter-btn" onclick="setFilter(this,'Tailor')">Tailoring</button>
+      <button class="filter-btn" onclick="setFilter(this,'Driver')">Driver & Transport</button>
       <button class="filter-btn" onclick="setFilter(this,'Events')">Events</button>
       <button class="filter-btn" onclick="setFilter(this,'Cleaning')">Cleaning</button>
       <button class="filter-btn" onclick="setFilter(this,'Photography')">Photography</button>
@@ -1349,6 +1381,18 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
           <option value="Fitness">Fitness & Sports</option>
           <option value="Music">Music & Performing</option>
           <option value="Pets">Pet Care</option>
+          <option value="Bridal">Bridal & Wedding</option>
+          <option value="PersonalTrainer">Personal Training</option>
+          <option value="Massage">Massage & Spa</option>
+          <option value="Laundry">Laundry & Ironing</option>
+          <option value="Landscaping">Landscaping & Gardening</option>
+          <option value="Childcare">Childcare & Babysitting</option>
+          <option value="Elderly">Elderly Care</option>
+          <option value="Pest">Pest Control</option>
+          <option value="AirCon">Aircond Services</option>
+          <option value="Printing">Printing & Design</option>
+          <option value="Tailor">Tailoring & Alterations</option>
+          <option value="Driver">Driver & Transport</option>
         </select>
         <div class="field-error" id="service-cat-err">Please select a category.</div>
       </div>
@@ -1590,12 +1634,18 @@ let currentSearch = '';
 const catEmoji = {
   'Catering':'🍽️','Event Management':'🎉','Cleaning':'🧹','Photography':'📸',
   'Moving & Delivery':'📦','Home Repair':'🔧','Tutoring':'📚','Beauty & Wellness':'💄',
-  'IT & Tech':'💻','Fitness & Sports':'🏋️','Music & Performing':'🎵','Pet Care':'🐾'
+  'IT & Tech':'💻','Fitness & Sports':'🏋️','Music & Performing':'🎵','Pet Care':'🐾',
+  'Bridal & Wedding':'👰','Personal Training':'🏃','Massage & Spa':'💆','Laundry & Ironing':'👕',
+  'Landscaping & Gardening':'🌿','Childcare & Babysitting':'👶','Elderly Care':'🧓','Pest Control':'🪲',
+  'Aircond Services':'❄️','Printing & Design':'🖨️','Tailoring & Alterations':'🪡','Driver & Transport':'🚗'
 };
 const catBg = {
   'Catering':'#fff4f0','Event Management':'#f5f0ff','Cleaning':'#f0f4ff','Photography':'#fff9e6',
   'Moving & Delivery':'#f0fff8','Home Repair':'#fff8f0','Tutoring':'#f0f8ff','Beauty & Wellness':'#fff0f8',
-  'IT & Tech':'#f0f4ff','Fitness & Sports':'#f0fff4','Music & Performing':'#fdf4ff','Pet Care':'#fff8f0'
+  'IT & Tech':'#f0f4ff','Fitness & Sports':'#f0fff4','Music & Performing':'#fdf4ff','Pet Care':'#fff8f0',
+  'Bridal & Wedding':'#fff0f8','Personal Training':'#f0fff4','Massage & Spa':'#f5f0ff','Laundry & Ironing':'#f0f8ff',
+  'Landscaping & Gardening':'#f0fff0','Childcare & Babysitting':'#fff9e6','Elderly Care':'#fff4e6','Pest Control':'#f5fff0',
+  'Aircond Services':'#f0f8ff','Printing & Design':'#fff0f0','Tailoring & Alterations':'#fdf4ff','Driver & Transport':'#f0f4ff'
 };
 
 async function loadListingsFromDB() {
