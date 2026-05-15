@@ -1755,15 +1755,12 @@ function renderListings(filter, overrideList, labelOverride) {
     const safeDesc     = sanitize(s.description || 'Contact provider for details.');
     const safeCat      = sanitize(s.category || 'Service');
     const safeLocation = sanitize(s.location || 'Malaysia');
-    // ISSUE 6b: Strip [DEMO] prefix from provider name for display
     const rawProvider  = (s.provider_name || 'Provider').replace(/^\[DEMO\]\s*/i, '');
     const safeProvider = sanitize(rawProvider);
     const safePrice    = parseFloat(s.price||0).toLocaleString();
-    // ISSUE 6b: Detect demo listings
-    const isDemo = (s.provider_name||'').startsWith('[DEMO]');
     return `
     <a class="listing-card" href="provider-profile.html?id=${encodeURIComponent(s.id)}" tabindex="0" role="button" aria-label="View ${safeTitle}" style="text-decoration:none;color:inherit;display:block;position:relative">
-      ${isDemo ? `<span style="position:absolute;top:10px;right:10px;z-index:5;background:#f59e0b;color:white;font-size:0.68rem;font-weight:800;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase">DEMO</span>` : ''}
+
       <div class="listing-img" style="background:${bg}">
         <span>${emoji}</span>
         <span class="listing-badge" style="background:#e8f7ef;color:#1a9e5c">✓ Verified</span>
