@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co; upgrade-insecure-requests; form-action 'self'; base-uri 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdn.vercel-insights.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://vitals.vercel-insights.com; upgrade-insecure-requests; form-action 'self'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Signing you in… — Servify</title>
@@ -237,6 +237,8 @@ function safeRedirect(url) {
 // ── Init ──
 SessionGuard.init();
 </script>
+<!-- Vercel Web Analytics -->
+<script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 </head>
 <body>
 <div class="card">
