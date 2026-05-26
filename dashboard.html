@@ -423,7 +423,7 @@ SessionGuard.init();
       <button class="sidebar-link provider-only" style="display:none" onclick="goTo('add-listing',this)">
         <span class="sidebar-icon">➕</span> Add New Listing
       </button>
-      <button class="sidebar-link provider-only admin-hide" style="display:none" onclick="goTo('subscription',this)">
+      <button class="sidebar-link provider-only" style="display:none" onclick="goTo('subscription',this)">
         <span class="sidebar-icon">💳</span> Subscription
       </button>
       <button class="sidebar-link provider-only" style="display:none" onclick="goTo('analytics',this)">
@@ -1629,11 +1629,6 @@ async function loadMyListings(userId) {
 // TRIAL BANNER — uses auth created_at (tamper-proof, not localStorage)
 // ════════════════════════════════════
 function setupTrialBanner() {
-  // Never show for admins
-  if (isAdmin(currentUser)) {
-    document.getElementById('trial-banner-wrap').style.display = 'none';
-    return;
-  }
   // Only show for providers
   if (currentUser?.user_metadata?.role !== 'provider') {
     document.getElementById('trial-banner-wrap').style.display = 'none';
@@ -1658,9 +1653,9 @@ function setupTrialBanner() {
       <div class="trial-card expired">
         <div class="trial-icon">⚠️</div>
         <div style="flex:1">
-          <div class="trial-title">Your listing is paused</div>
-          <div class="trial-sub">Your free trial has ended. Your listing is currently hidden from customers. Subscribe for RM29/month to reactivate it immediately — no setup needed.</div>
-          <button class="btn btn-danger" onclick="startPayment()" style="margin-right:8px">Reactivate Now — RM29/month →</button>
+          <div class="trial-title">Your free trial has ended</div>
+          <div class="trial-sub">Your listings are currently frozen. Subscribe for RM 29/month to reactivate them immediately.</div>
+          <button class="btn btn-danger" onclick="startPayment()">Pay Now — RM 29/month →</button>
         </div>
       </div>`;
   } else if (daysLeft <= 7) {
@@ -2093,11 +2088,6 @@ async function loadTrialTracker() {
     const daysUsed = Math.floor((now - started) / (1000 * 60 * 60 * 24));
     const daysLeft = TRIAL_DAYS - daysUsed;
     const status = p.subscription_status || 'trial';
-    // Show paused warning in listings tab
-    if (status === 'expired') {
-      const listingsWarn = document.getElementById('listings-paused-warn');
-      if (listingsWarn) listingsWarn.style.display = '';
-    }
     const { data: listing } = await db.from('listings').select('status, title').eq('user_id', p.id).limit(1).maybeSingle();
     return { ...p, daysLeft, started, status, listing };
   }));
@@ -2661,7 +2651,7 @@ async function loadNotifications(user) {
   const items = [];
 
   try {
-    if (role === 'provider' && !isAdmin(user)) {
+    if (role === 'provider' || isAdmin(user)) {
       // Fetch enquiries sent to this provider's listings in the last 30 days
       const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
       // Get this user's listing IDs first
