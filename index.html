@@ -2522,23 +2522,42 @@ window.addEventListener('scroll', () => {
 // ── PWA INSTALL ──
 let _pwaPrompt = null;
 const _pwaBtn = document.getElementById('pwa-install-btn');
-if (!(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true)) {
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    _pwaPrompt = e;
-    _pwaBtn?.classList.add('visible');
-  });
+
+// Always show the button unless already running as installed PWA
+const _isInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+if (!_isInstalled) {
+  setTimeout(() => { _pwaBtn?.classList.add('visible'); }, 2000);
 }
-_pwaBtn?.addEventListener('click', async () => {
-  if (!_pwaPrompt) return;
-  _pwaPrompt.prompt();
-  const { outcome } = await _pwaPrompt.userChoice;
-  if (outcome === 'accepted') {
-    _pwaBtn.classList.remove('visible');
-    showToast('success', '✅ Servify installed! Find it on your home screen.');
-  }
-  _pwaPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _pwaPrompt = e;
 });
+
+_pwaBtn?.addEventListener('click', async () => {
+  if (_pwaPrompt) {
+    // Native install prompt available
+    _pwaPrompt.prompt();
+    const { outcome } = await _pwaPrompt.userChoice;
+    if (outcome === 'accepted') {
+      _pwaBtn.classList.remove('visible');
+      showToast('success', '✅ Servify installed! Find it on your home screen.');
+    }
+    _pwaPrompt = null;
+  } else {
+    // Fallback instructions
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const isAndroid = /android/i.test(navigator.userAgent);
+    if (isIOS) {
+      showToast('info', '📲 Tap the Share button then "Add to Home Screen"');
+    } else if (isAndroid) {
+      showToast('info', '📲 Tap the menu (⋮) then "Add to Home screen"');
+    } else {
+      showToast('info', '📲 Click the install icon in your browser address bar');
+    }
+  }
+});
+
 window.addEventListener('appinstalled', () => { _pwaBtn?.classList.remove('visible'); _pwaPrompt = null; });
 
 // ── KEYBOARD ──
