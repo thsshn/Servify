@@ -23,12 +23,12 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; upgrade-insecure-requests; form-action 'self'; base-uri 'self'; img-src 'self' data: https:; frame-ancestors 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; upgrade-insecure-requests; form-action 'self'; base-uri 'self' img-src 'self' data: https:; frame-ancestors 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Servify — Services, Simplified</title>
 <meta name="description" content="Servify connects you with trusted local service professionals in Malaysia. Find catering, cleaning, photography, event planning and more — fast, simple and secure.">
 <meta property="og:title" content="Servify — Services, Simplified">
-<meta property="og:description" content="Find trusted local service professionals in Malaysia. Catering, cleaning, photography, events and more.">
+<meta property="og:description" content="Find trusted local service professionals in Malaysia. Catering, cleaning, photography, bridal, personal training, aircond, pest control and more.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://servify-wheat.vercel.app">
 <meta name="twitter:card" content="summary_large_image">
@@ -39,13 +39,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#E8521A">
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    });
-  }
-</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}</script>
 
 <!-- ═══════════════════════════════════════════════════════════════
   SUPABASE CONFIG — these are your PUBLIC anon keys (safe to use
@@ -593,6 +587,26 @@ function _updateNavGuest() {
   .back-to-top.visible { opacity:1;transform:translateY(0);pointer-events:all; }
   .back-to-top:hover { background:#cc4412; }
 
+  /* PWA Install Button */
+  .pwa-install-btn {
+    position: fixed; bottom: 28px; right: 28px; z-index: 997;
+    display: flex; align-items: center; gap: 9px;
+    background: var(--accent); color: white;
+    border: none; border-radius: 100px;
+    padding: 13px 22px 13px 17px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; box-shadow: 0 4px 24px rgba(232,82,26,0.38);
+    transform: translateY(90px); opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease, background 0.2s;
+    pointer-events: none; white-space: nowrap;
+  }
+  .pwa-install-btn.visible { transform: translateY(0); opacity: 1; pointer-events: all; }
+  .pwa-install-btn:hover { background: #cc4412; box-shadow: 0 8px 32px rgba(232,82,26,0.45); transform: translateY(-2px); }
+  .pwa-install-btn .pwa-icon { font-size: 1.05rem; line-height: 1; }
+  @media (max-width: 560px) {
+    .pwa-install-btn { bottom: 16px; right: 14px; padding: 11px 17px 11px 14px; font-size: 0.85rem; }
+  }
+
   /* ── POLICY MODAL ── */
   .policy-modal .modal { max-width:640px; }
   .policy-content { font-size:0.88rem;line-height:1.75;color:var(--ink); }
@@ -705,6 +719,10 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
 
 <!-- BACK TO TOP -->
 <button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button class="pwa-install-btn" id="pwa-install-btn" aria-label="Install Servify app">
+  <span class="pwa-icon">📲</span>
+  <span>Install App</span>
+</button>
 
 <!-- NAV -->
 <nav>
@@ -817,6 +835,13 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     <span class="search-tag" onclick="quickSearch('Moving')">📦 Moving</span>
     <span class="search-tag" onclick="quickSearch('Tutoring')">📚 Tutoring</span>
     <span class="search-tag" onclick="quickSearch('Repair')">🔧 Repair</span>
+    <span class="search-tag" onclick="quickSearch('Bridal')">👰 Bridal</span>
+    <span class="search-tag" onclick="quickSearch('PersonalTrainer')">🏃 Personal Training</span>
+    <span class="search-tag" onclick="quickSearch('Massage')">💆 Massage</span>
+    <span class="search-tag" onclick="quickSearch('AirCon')">❄️ Aircond</span>
+    <span class="search-tag" onclick="quickSearch('Pest')">🪲 Pest Control</span>
+    <span class="search-tag" onclick="quickSearch('Laundry')">👕 Laundry</span>
+    <span class="search-tag" onclick="quickSearch('Driver')">🚗 Driver</span>
   </div>
 </section>
 
@@ -838,6 +863,18 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     <div class="cat-card" onclick="jumpToCategory('Fitness')"><div class="cat-icon">🏋️</div><div class="cat-name">Fitness & Sports</div></div>
     <div class="cat-card" onclick="jumpToCategory('Music')"><div class="cat-icon">🎵</div><div class="cat-name">Music & Performing</div></div>
     <div class="cat-card" onclick="jumpToCategory('Pets')"><div class="cat-icon">🐾</div><div class="cat-name">Pet Care</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Bridal')"><div class="cat-icon">👰</div><div class="cat-name">Bridal & Wedding</div></div>
+    <div class="cat-card" onclick="jumpToCategory('PersonalTrainer')"><div class="cat-icon">🏃</div><div class="cat-name">Personal Training</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Massage')"><div class="cat-icon">💆</div><div class="cat-name">Massage & Spa</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Laundry')"><div class="cat-icon">👕</div><div class="cat-name">Laundry & Ironing</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Landscaping')"><div class="cat-icon">🌿</div><div class="cat-name">Landscaping</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Childcare')"><div class="cat-icon">👶</div><div class="cat-name">Childcare</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Elderly')"><div class="cat-icon">🧓</div><div class="cat-name">Elderly Care</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Pest')"><div class="cat-icon">🪲</div><div class="cat-name">Pest Control</div></div>
+    <div class="cat-card" onclick="jumpToCategory('AirCon')"><div class="cat-icon">❄️</div><div class="cat-name">Aircond Services</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Printing')"><div class="cat-icon">🖨️</div><div class="cat-name">Printing & Design</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Tailor')"><div class="cat-icon">🪡</div><div class="cat-name">Tailoring</div></div>
+    <div class="cat-card" onclick="jumpToCategory('Driver')"><div class="cat-icon">🚗</div><div class="cat-name">Driver & Transport</div></div>
   </div>
 </section>
 
@@ -850,7 +887,20 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     </div>
     <div class="filters" id="filter-bar">
       <button class="filter-btn active" onclick="setFilter(this,'All')">All</button>
+      <button class="filter-btn active" onclick="setFilter(this,'All')">All</button>
       <button class="filter-btn" onclick="setFilter(this,'Catering')">Catering</button>
+      <button class="filter-btn" onclick="setFilter(this,'Bridal')">Bridal & Wedding</button>
+      <button class="filter-btn" onclick="setFilter(this,'PersonalTrainer')">Personal Training</button>
+      <button class="filter-btn" onclick="setFilter(this,'Massage')">Massage & Spa</button>
+      <button class="filter-btn" onclick="setFilter(this,'Laundry')">Laundry</button>
+      <button class="filter-btn" onclick="setFilter(this,'Landscaping')">Landscaping</button>
+      <button class="filter-btn" onclick="setFilter(this,'Childcare')">Childcare</button>
+      <button class="filter-btn" onclick="setFilter(this,'Elderly')">Elderly Care</button>
+      <button class="filter-btn" onclick="setFilter(this,'Pest')">Pest Control</button>
+      <button class="filter-btn" onclick="setFilter(this,'AirCon')">Aircond</button>
+      <button class="filter-btn" onclick="setFilter(this,'Printing')">Printing & Design</button>
+      <button class="filter-btn" onclick="setFilter(this,'Tailor')">Tailoring</button>
+      <button class="filter-btn" onclick="setFilter(this,'Driver')">Driver & Transport</button>
       <button class="filter-btn" onclick="setFilter(this,'Events')">Events</button>
       <button class="filter-btn" onclick="setFilter(this,'Cleaning')">Cleaning</button>
       <button class="filter-btn" onclick="setFilter(this,'Photography')">Photography</button>
@@ -1358,6 +1408,18 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
           <option value="Fitness">Fitness & Sports</option>
           <option value="Music">Music & Performing</option>
           <option value="Pets">Pet Care</option>
+          <option value="Bridal">Bridal & Wedding</option>
+          <option value="PersonalTrainer">Personal Training</option>
+          <option value="Massage">Massage & Spa</option>
+          <option value="Laundry">Laundry & Ironing</option>
+          <option value="Landscaping">Landscaping & Gardening</option>
+          <option value="Childcare">Childcare & Babysitting</option>
+          <option value="Elderly">Elderly Care</option>
+          <option value="Pest">Pest Control</option>
+          <option value="AirCon">Aircond Services</option>
+          <option value="Printing">Printing & Design</option>
+          <option value="Tailor">Tailoring & Alterations</option>
+          <option value="Driver">Driver & Transport</option>
         </select>
         <div class="field-error" id="service-cat-err">Please select a category.</div>
       </div>
@@ -1599,12 +1661,18 @@ let currentSearch = '';
 const catEmoji = {
   'Catering':'🍽️','Event Management':'🎉','Cleaning':'🧹','Photography':'📸',
   'Moving & Delivery':'📦','Home Repair':'🔧','Tutoring':'📚','Beauty & Wellness':'💄',
-  'IT & Tech':'💻','Fitness & Sports':'🏋️','Music & Performing':'🎵','Pet Care':'🐾'
+  'IT & Tech':'💻','Fitness & Sports':'🏋️','Music & Performing':'🎵','Pet Care':'🐾',
+  'Bridal & Wedding':'👰','Personal Training':'🏃','Massage & Spa':'💆','Laundry & Ironing':'👕',
+  'Landscaping & Gardening':'🌿','Childcare & Babysitting':'👶','Elderly Care':'🧓','Pest Control':'🪲',
+  'Aircond Services':'❄️','Printing & Design':'🖨️','Tailoring & Alterations':'🪡','Driver & Transport':'🚗'
 };
 const catBg = {
   'Catering':'#fff4f0','Event Management':'#f5f0ff','Cleaning':'#f0f4ff','Photography':'#fff9e6',
   'Moving & Delivery':'#f0fff8','Home Repair':'#fff8f0','Tutoring':'#f0f8ff','Beauty & Wellness':'#fff0f8',
-  'IT & Tech':'#f0f4ff','Fitness & Sports':'#f0fff4','Music & Performing':'#fdf4ff','Pet Care':'#fff8f0'
+  'IT & Tech':'#f0f4ff','Fitness & Sports':'#f0fff4','Music & Performing':'#fdf4ff','Pet Care':'#fff8f0',
+  'Bridal & Wedding':'#fff0f8','Personal Training':'#f0fff4','Massage & Spa':'#f5f0ff','Laundry & Ironing':'#f0f8ff',
+  'Landscaping & Gardening':'#f0fff0','Childcare & Babysitting':'#fff9e6','Elderly Care':'#fff4e6','Pest Control':'#f5fff0',
+  'Aircond Services':'#f0f8ff','Printing & Design':'#fff0f0','Tailoring & Alterations':'#fdf4ff','Driver & Transport':'#f0f4ff'
 };
 
 async function loadListingsFromDB() {
@@ -1750,6 +1818,7 @@ function renderListings(filter, overrideList, labelOverride) {
             <button onclick="toggleSave(event,'${s.id}')" title="Save this service" style="background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 2px;line-height:1;flex-shrink:0" data-id="${s.id}">🤍</button>
           </div>
         </div>
+        <div style="padding:5px 16px 8px;font-size:0.68rem;color:#bbb;border-top:1px solid var(--border);">⚠️ Servify does not verify provider credentials. Exercise due diligence.</div>
       </div>
     </a>`;
   }).join('');
@@ -2467,6 +2536,37 @@ window.addEventListener('scroll', () => {
   if (!btn) return; // Bug fix: null check
   if (window.scrollY > 400) btn.classList.add('visible');
   else btn.classList.remove('visible');
+});
+
+// ── PWA INSTALL ──
+let _pwaPrompt = null;
+const _pwaBtn = document.getElementById('pwa-install-btn');
+
+// Hide immediately if already running as installed PWA
+if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+  // Already installed — keep button hidden
+} else {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    _pwaPrompt = e;
+    _pwaBtn?.classList.add('visible');
+  });
+}
+
+_pwaBtn?.addEventListener('click', async () => {
+  if (!_pwaPrompt) return;
+  _pwaPrompt.prompt();
+  const { outcome } = await _pwaPrompt.userChoice;
+  if (outcome === 'accepted') {
+    _pwaBtn.classList.remove('visible');
+    showToast('success', '✅ Servify installed! Find it on your home screen.');
+  }
+  _pwaPrompt = null;
+});
+
+window.addEventListener('appinstalled', () => {
+  _pwaBtn?.classList.remove('visible');
+  _pwaPrompt = null;
 });
 
 // ── KEYBOARD ──
