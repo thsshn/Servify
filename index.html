@@ -2868,10 +2868,7 @@ let _pwaPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   _pwaPrompt = e;
-  // Only show if not already installed
-  setTimeout(() => {
-    document.getElementById('pwa-install-btn')?.classList.add('visible');
-  }, 3000);
+  document.getElementById('pwa-install-btn')?.classList.add('visible');
 });
 
 document.getElementById('pwa-install-btn')?.addEventListener('click', async () => {
