@@ -163,5 +163,72 @@
   <p>&copy; 2026 Servify Exclusive (003854282-V). All rights reserved. &nbsp;·&nbsp; <a href="/privacy-policy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="/terms.html">Terms & Conditions</a> &nbsp;·&nbsp; <a href="/refund-policy.html">Refund Policy</a></p>
 </footer>
 
+
+<!-- PWA Install Button -->
+<div id="pwa-install-wrap" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:none;">
+  <button id="pwa-install-btn" onclick="installPWA()" style="
+    display:flex;align-items:center;gap:10px;
+    background:#e8521a;color:#fff;
+    border:none;border-radius:100px;
+    padding:14px 22px;
+    font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;
+    box-shadow:0 4px 24px rgba(232,82,26,0.35);
+    cursor:pointer;transition:all 0.2s;
+    white-space:nowrap;
+  ">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/>
+    </svg>
+    Add to Phone
+  </button>
+</div>
+
+<script>
+// PWA Install Logic
+let _deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _deferredPrompt = e;
+  const wrap = document.getElementById('pwa-install-wrap');
+  if (wrap) wrap.style.display = 'block';
+});
+
+window.addEventListener('appinstalled', () => {
+  const wrap = document.getElementById('pwa-install-wrap');
+  if (wrap) wrap.style.display = 'none';
+  _deferredPrompt = null;
+});
+
+async function installPWA() {
+  if (_deferredPrompt) {
+    _deferredPrompt.prompt();
+    const { outcome } = await _deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      document.getElementById('pwa-install-wrap').style.display = 'none';
+    }
+    _deferredPrompt = null;
+  } else {
+    // Fallback for iOS / unsupported browsers
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (isIOS) {
+      alert('To install Servify on your iPhone:\n\n1. Tap the Share button (box with arrow) at the bottom of Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" — done!');
+    } else {
+      alert('To install Servify:\n\nIn Chrome, tap the menu (⋮) at the top right\nThen tap "Add to Home Screen" or "Install App"');
+    }
+  }
+}
+
+// Show button after 3 seconds if browser supports it but prompt hasn't fired yet (iOS)
+setTimeout(() => {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (isIOS && !isInStandaloneMode) {
+    const wrap = document.getElementById('pwa-install-wrap');
+    if (wrap) wrap.style.display = 'block';
+  }
+}, 3000);
+</script>
+
 </body>
 </html>
