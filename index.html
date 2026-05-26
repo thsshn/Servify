@@ -39,7 +39,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#E8521A">
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}</script>
+<script>if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{});});}</script>
 
 <!-- ═══════════════════════════════════════════════════════════════
   SUPABASE CONFIG — these are your PUBLIC anon keys (safe to use
@@ -586,26 +586,11 @@ function _updateNavGuest() {
   }
   .back-to-top.visible { opacity:1;transform:translateY(0);pointer-events:all; }
   .back-to-top:hover { background:#cc4412; }
-
-  /* PWA Install Button */
-  .pwa-install-btn {
-    position: fixed; bottom: 28px; right: 28px; z-index: 997;
-    display: flex; align-items: center; gap: 9px;
-    background: var(--accent); color: white;
-    border: none; border-radius: 100px;
-    padding: 13px 22px 13px 17px;
-    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.9rem;
-    cursor: pointer; box-shadow: 0 4px 24px rgba(232,82,26,0.38);
-    transform: translateY(90px); opacity: 0;
-    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease, background 0.2s;
-    pointer-events: none; white-space: nowrap;
-  }
-  .pwa-install-btn.visible { transform: translateY(0); opacity: 1; pointer-events: all; }
-  .pwa-install-btn:hover { background: #cc4412; box-shadow: 0 8px 32px rgba(232,82,26,0.45); transform: translateY(-2px); }
-  .pwa-install-btn .pwa-icon { font-size: 1.05rem; line-height: 1; }
-  @media (max-width: 560px) {
-    .pwa-install-btn { bottom: 16px; right: 14px; padding: 11px 17px 11px 14px; font-size: 0.85rem; }
-  }
+  /* PWA Install */
+  .pwa-install-btn{position:fixed;bottom:28px;right:28px;z-index:997;display:flex;align-items:center;gap:9px;background:var(--accent);color:white;border:none;border-radius:100px;padding:13px 22px 13px 17px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;box-shadow:0 4px 24px rgba(232,82,26,0.38);transform:translateY(90px);opacity:0;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s ease,background 0.2s;pointer-events:none;white-space:nowrap;}
+  .pwa-install-btn.visible{transform:translateY(0);opacity:1;pointer-events:all;}
+  .pwa-install-btn:hover{background:#cc4412;box-shadow:0 8px 32px rgba(232,82,26,0.45);transform:translateY(-2px);}
+  @media(max-width:560px){.pwa-install-btn{bottom:16px;right:14px;padding:11px 17px 11px 14px;font-size:0.85rem;}}
 
   /* ── POLICY MODAL ── */
   .policy-modal .modal { max-width:640px; }
@@ -719,10 +704,6 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
 
 <!-- BACK TO TOP -->
 <button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
-<button class="pwa-install-btn" id="pwa-install-btn" aria-label="Install Servify app">
-  <span class="pwa-icon">📲</span>
-  <span>Install App</span>
-</button>
 
 <!-- NAV -->
 <nav>
@@ -2541,18 +2522,13 @@ window.addEventListener('scroll', () => {
 // ── PWA INSTALL ──
 let _pwaPrompt = null;
 const _pwaBtn = document.getElementById('pwa-install-btn');
-
-// Hide immediately if already running as installed PWA
-if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-  // Already installed — keep button hidden
-} else {
+if (!(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true)) {
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     _pwaPrompt = e;
     _pwaBtn?.classList.add('visible');
   });
 }
-
 _pwaBtn?.addEventListener('click', async () => {
   if (!_pwaPrompt) return;
   _pwaPrompt.prompt();
@@ -2563,11 +2539,7 @@ _pwaBtn?.addEventListener('click', async () => {
   }
   _pwaPrompt = null;
 });
-
-window.addEventListener('appinstalled', () => {
-  _pwaBtn?.classList.remove('visible');
-  _pwaPrompt = null;
-});
+window.addEventListener('appinstalled', () => { _pwaBtn?.classList.remove('visible'); _pwaPrompt = null; });
 
 // ── KEYBOARD ──
 document.addEventListener('keydown', e => {
