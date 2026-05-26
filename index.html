@@ -24,7 +24,12 @@
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; upgrade-insecure-requests; form-action 'self'; base-uri 'self' img-src 'self' data: https:; frame-ancestors 'none';">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#e8521a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Servify">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Servify — Services, Simplified</title>
 <meta name="description" content="Servify connects you with trusted local service professionals in Malaysia. Find catering, cleaning, photography, event planning and more — fast, simple and secure.">
 <meta property="og:title" content="Servify — Services, Simplified">
@@ -2839,7 +2844,7 @@ window.addEventListener('load', async () => {
 
 
 <!-- PWA Install Button -->
-<div id="pwa-install-wrap" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:none;">
+<div id="pwa-install-wrap" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:block;">
   <button id="pwa-install-btn" onclick="installPWA()" style="
     display:flex;align-items:center;gap:10px;
     background:#e8521a;color:#fff;
@@ -2861,18 +2866,29 @@ window.addEventListener('load', async () => {
 // PWA Install Logic
 let _deferredPrompt = null;
 
+// Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   _deferredPrompt = e;
-  const wrap = document.getElementById('pwa-install-wrap');
-  if (wrap) wrap.style.display = 'block';
+  document.getElementById('pwa-install-wrap').style.display = 'block';
 });
 
 window.addEventListener('appinstalled', () => {
-  const wrap = document.getElementById('pwa-install-wrap');
-  if (wrap) wrap.style.display = 'none';
+  document.getElementById('pwa-install-wrap').style.display = 'none';
   _deferredPrompt = null;
 });
+
+// Always show button — hide only if already installed
+const isInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+if (!isInstalled) {
+  document.getElementById('pwa-install-wrap').style.display = 'block';
+}
 
 async function installPWA() {
   if (_deferredPrompt) {
@@ -2883,25 +2899,14 @@ async function installPWA() {
     }
     _deferredPrompt = null;
   } else {
-    // Fallback for iOS / unsupported browsers
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
     if (isIOS) {
-      alert('To install Servify on your iPhone:\n\n1. Tap the Share button (box with arrow) at the bottom of Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" — done!');
+      alert('Install Servify on your iPhone:\n\n1. Tap the Share button ↑ at the bottom of Safari\n2. Tap "Add to Home Screen"\n3. Tap "Add" — done! 🎉');
     } else {
-      alert('To install Servify:\n\nIn Chrome, tap the menu (⋮) at the top right\nThen tap "Add to Home Screen" or "Install App"');
+      alert('Install Servify on your phone:\n\n1. Tap the menu ⋮ at the top right of Chrome\n2. Tap "Add to Home Screen" or "Install App"\n3. Tap "Add" — done! 🎉');
     }
   }
 }
-
-// Show button after 3 seconds if browser supports it but prompt hasn't fired yet (iOS)
-setTimeout(() => {
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  if (isIOS && !isInStandaloneMode) {
-    const wrap = document.getElementById('pwa-install-wrap');
-    if (wrap) wrap.style.display = 'block';
-  }
-}, 3000);
 </script>
 
 </body>
