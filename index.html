@@ -23,17 +23,12 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; upgrade-insecure-requests; form-action 'self'; base-uri 'self' img-src 'self' data: https:; frame-ancestors 'none';">
-<link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#e8521a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Servify">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; upgrade-insecure-requests; form-action 'self'; base-uri 'self'; img-src 'self' data: https:; frame-ancestors 'none';">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Servify — Services, Simplified</title>
 <meta name="description" content="Servify connects you with trusted local service professionals in Malaysia. Find catering, cleaning, photography, event planning and more — fast, simple and secure.">
 <meta property="og:title" content="Servify — Services, Simplified">
-<meta property="og:description" content="Find trusted local service professionals in Malaysia. Catering, cleaning, photography, bridal, personal training, aircond, pest control and more.">
+<meta property="og:description" content="Find trusted local service professionals in Malaysia. Catering, cleaning, photography, events and more.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://servify-wheat.vercel.app">
 <meta name="twitter:card" content="summary_large_image">
@@ -42,6 +37,15 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='20' fill='white'>S</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='110' fill='white'>S</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#E8521A">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+</script>
 
 <!-- ═══════════════════════════════════════════════════════════════
   SUPABASE CONFIG — these are your PUBLIC anon keys (safe to use
@@ -813,13 +817,6 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     <span class="search-tag" onclick="quickSearch('Moving')">📦 Moving</span>
     <span class="search-tag" onclick="quickSearch('Tutoring')">📚 Tutoring</span>
     <span class="search-tag" onclick="quickSearch('Repair')">🔧 Repair</span>
-    <span class="search-tag" onclick="quickSearch('Bridal')">👰 Bridal</span>
-    <span class="search-tag" onclick="quickSearch('PersonalTrainer')">🏃 Personal Training</span>
-    <span class="search-tag" onclick="quickSearch('Massage')">💆 Massage</span>
-    <span class="search-tag" onclick="quickSearch('AirCon')">❄️ Aircond</span>
-    <span class="search-tag" onclick="quickSearch('Pest')">🪲 Pest Control</span>
-    <span class="search-tag" onclick="quickSearch('Laundry')">👕 Laundry</span>
-    <span class="search-tag" onclick="quickSearch('Driver')">🚗 Driver</span>
   </div>
 </section>
 
@@ -841,18 +838,6 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     <div class="cat-card" onclick="jumpToCategory('Fitness')"><div class="cat-icon">🏋️</div><div class="cat-name">Fitness & Sports</div></div>
     <div class="cat-card" onclick="jumpToCategory('Music')"><div class="cat-icon">🎵</div><div class="cat-name">Music & Performing</div></div>
     <div class="cat-card" onclick="jumpToCategory('Pets')"><div class="cat-icon">🐾</div><div class="cat-name">Pet Care</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Bridal')"><div class="cat-icon">👰</div><div class="cat-name">Bridal & Wedding</div></div>
-    <div class="cat-card" onclick="jumpToCategory('PersonalTrainer')"><div class="cat-icon">🏃</div><div class="cat-name">Personal Training</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Massage')"><div class="cat-icon">💆</div><div class="cat-name">Massage & Spa</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Laundry')"><div class="cat-icon">👕</div><div class="cat-name">Laundry & Ironing</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Landscaping')"><div class="cat-icon">🌿</div><div class="cat-name">Landscaping</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Childcare')"><div class="cat-icon">👶</div><div class="cat-name">Childcare</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Elderly')"><div class="cat-icon">🧓</div><div class="cat-name">Elderly Care</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Pest')"><div class="cat-icon">🪲</div><div class="cat-name">Pest Control</div></div>
-    <div class="cat-card" onclick="jumpToCategory('AirCon')"><div class="cat-icon">❄️</div><div class="cat-name">Aircond Services</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Printing')"><div class="cat-icon">🖨️</div><div class="cat-name">Printing & Design</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Tailor')"><div class="cat-icon">🪡</div><div class="cat-name">Tailoring</div></div>
-    <div class="cat-card" onclick="jumpToCategory('Driver')"><div class="cat-icon">🚗</div><div class="cat-name">Driver & Transport</div></div>
   </div>
 </section>
 
@@ -865,20 +850,7 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     </div>
     <div class="filters" id="filter-bar">
       <button class="filter-btn active" onclick="setFilter(this,'All')">All</button>
-      <button class="filter-btn active" onclick="setFilter(this,'All')">All</button>
       <button class="filter-btn" onclick="setFilter(this,'Catering')">Catering</button>
-      <button class="filter-btn" onclick="setFilter(this,'Bridal')">Bridal & Wedding</button>
-      <button class="filter-btn" onclick="setFilter(this,'PersonalTrainer')">Personal Training</button>
-      <button class="filter-btn" onclick="setFilter(this,'Massage')">Massage & Spa</button>
-      <button class="filter-btn" onclick="setFilter(this,'Laundry')">Laundry</button>
-      <button class="filter-btn" onclick="setFilter(this,'Landscaping')">Landscaping</button>
-      <button class="filter-btn" onclick="setFilter(this,'Childcare')">Childcare</button>
-      <button class="filter-btn" onclick="setFilter(this,'Elderly')">Elderly Care</button>
-      <button class="filter-btn" onclick="setFilter(this,'Pest')">Pest Control</button>
-      <button class="filter-btn" onclick="setFilter(this,'AirCon')">Aircond</button>
-      <button class="filter-btn" onclick="setFilter(this,'Printing')">Printing & Design</button>
-      <button class="filter-btn" onclick="setFilter(this,'Tailor')">Tailoring</button>
-      <button class="filter-btn" onclick="setFilter(this,'Driver')">Driver & Transport</button>
       <button class="filter-btn" onclick="setFilter(this,'Events')">Events</button>
       <button class="filter-btn" onclick="setFilter(this,'Cleaning')">Cleaning</button>
       <button class="filter-btn" onclick="setFilter(this,'Photography')">Photography</button>
@@ -1206,7 +1178,7 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 Servify Exclusive (003854282-V). All rights reserved.</p>
+    <p>© 2026 Servify. All rights reserved.</p>
     <p>
       <a href="/privacy-policy.html" style="color:rgba(255,255,255,0.35);text-decoration:none;margin-right:12px">Privacy Policy</a>
       <a href="/terms.html" style="color:rgba(255,255,255,0.35);text-decoration:none;margin-right:12px">Terms & Conditions</a>
@@ -1386,18 +1358,6 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
           <option value="Fitness">Fitness & Sports</option>
           <option value="Music">Music & Performing</option>
           <option value="Pets">Pet Care</option>
-          <option value="Bridal">Bridal & Wedding</option>
-          <option value="PersonalTrainer">Personal Training</option>
-          <option value="Massage">Massage & Spa</option>
-          <option value="Laundry">Laundry & Ironing</option>
-          <option value="Landscaping">Landscaping & Gardening</option>
-          <option value="Childcare">Childcare & Babysitting</option>
-          <option value="Elderly">Elderly Care</option>
-          <option value="Pest">Pest Control</option>
-          <option value="AirCon">Aircond Services</option>
-          <option value="Printing">Printing & Design</option>
-          <option value="Tailor">Tailoring & Alterations</option>
-          <option value="Driver">Driver & Transport</option>
         </select>
         <div class="field-error" id="service-cat-err">Please select a category.</div>
       </div>
@@ -1639,18 +1599,12 @@ let currentSearch = '';
 const catEmoji = {
   'Catering':'🍽️','Event Management':'🎉','Cleaning':'🧹','Photography':'📸',
   'Moving & Delivery':'📦','Home Repair':'🔧','Tutoring':'📚','Beauty & Wellness':'💄',
-  'IT & Tech':'💻','Fitness & Sports':'🏋️','Music & Performing':'🎵','Pet Care':'🐾',
-  'Bridal & Wedding':'👰','Personal Training':'🏃','Massage & Spa':'💆','Laundry & Ironing':'👕',
-  'Landscaping & Gardening':'🌿','Childcare & Babysitting':'👶','Elderly Care':'🧓','Pest Control':'🪲',
-  'Aircond Services':'❄️','Printing & Design':'🖨️','Tailoring & Alterations':'🪡','Driver & Transport':'🚗'
+  'IT & Tech':'💻','Fitness & Sports':'🏋️','Music & Performing':'🎵','Pet Care':'🐾'
 };
 const catBg = {
   'Catering':'#fff4f0','Event Management':'#f5f0ff','Cleaning':'#f0f4ff','Photography':'#fff9e6',
   'Moving & Delivery':'#f0fff8','Home Repair':'#fff8f0','Tutoring':'#f0f8ff','Beauty & Wellness':'#fff0f8',
-  'IT & Tech':'#f0f4ff','Fitness & Sports':'#f0fff4','Music & Performing':'#fdf4ff','Pet Care':'#fff8f0',
-  'Bridal & Wedding':'#fff0f8','Personal Training':'#f0fff4','Massage & Spa':'#f5f0ff','Laundry & Ironing':'#f0f8ff',
-  'Landscaping & Gardening':'#f0fff0','Childcare & Babysitting':'#fff9e6','Elderly Care':'#fff4e6','Pest Control':'#f5fff0',
-  'Aircond Services':'#f0f8ff','Printing & Design':'#fff0f0','Tailoring & Alterations':'#fdf4ff','Driver & Transport':'#f0f4ff'
+  'IT & Tech':'#f0f4ff','Fitness & Sports':'#f0fff4','Music & Performing':'#fdf4ff','Pet Care':'#fff8f0'
 };
 
 async function loadListingsFromDB() {
@@ -1760,12 +1714,15 @@ function renderListings(filter, overrideList, labelOverride) {
     const safeDesc     = sanitize(s.description || 'Contact provider for details.');
     const safeCat      = sanitize(s.category || 'Service');
     const safeLocation = sanitize(s.location || 'Malaysia');
+    // ISSUE 6b: Strip [DEMO] prefix from provider name for display
     const rawProvider  = (s.provider_name || 'Provider').replace(/^\[DEMO\]\s*/i, '');
     const safeProvider = sanitize(rawProvider);
     const safePrice    = parseFloat(s.price||0).toLocaleString();
+    // ISSUE 6b: Detect demo listings
+    const isDemo = (s.provider_name||'').startsWith('[DEMO]');
     return `
     <a class="listing-card" href="provider-profile.html?id=${encodeURIComponent(s.id)}" tabindex="0" role="button" aria-label="View ${safeTitle}" style="text-decoration:none;color:inherit;display:block;position:relative">
-
+      ${isDemo ? `<span style="position:absolute;top:10px;right:10px;z-index:5;background:#f59e0b;color:white;font-size:0.68rem;font-weight:800;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase">DEMO</span>` : ''}
       <div class="listing-img" style="background:${bg}">
         <span>${emoji}</span>
         <span class="listing-badge" style="background:#e8f7ef;color:#1a9e5c">✓ Verified</span>
@@ -1793,7 +1750,6 @@ function renderListings(filter, overrideList, labelOverride) {
             <button onclick="toggleSave(event,'${s.id}')" title="Save this service" style="background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 2px;line-height:1;flex-shrink:0" data-id="${s.id}">🤍</button>
           </div>
         </div>
-        <div style="padding:5px 16px 8px;font-size:0.68rem;color:#bbb;border-top:1px solid var(--border);">⚠️ Servify does not verify provider credentials. Exercise due diligence.</div>
       </div>
     </a>`;
   }).join('');
@@ -2842,9 +2798,5 @@ window.addEventListener('load', async () => {
   </div>
 </div>
 
-
-
-
-<script src="/pwa-install.js"></script>
 </body>
 </html>
