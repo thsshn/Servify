@@ -2058,16 +2058,39 @@ async function startPayment() {
   }
 }
 
-// Check if returning from successful payment
-function checkPaymentReturn() {
+// Check if returning from successful payment.
+// This used to just show a toast and hope the ToyyibPay webhook had already
+// activated the account in the background — with no way to tell if it
+// actually had. It now actively re-confirms the payment itself (via the
+// confirm-payment function, which independently checks with ToyyibPay)
+// so a missed/delayed webhook doesn't leave the user looking "unpaid".
+async function checkPaymentReturn() {
   const params = new URLSearchParams(window.location.search);
-  if (params.get('payment') === 'success') {
-    // Clean URL
-    window.history.replaceState({}, '', '/dashboard.html');
-    showToast('success', '✅ Payment received! Your listing will be activated within 5 minutes.');
-    // Refresh subscription status after short delay
-    setTimeout(() => window.location.reload(), 3000);
+  if (params.get('payment') !== 'success') return;
+
+  // Clean URL
+  window.history.replaceState({}, '', '/dashboard.html');
+  showToast('success', '✅ Payment received — confirming with ToyyibPay…');
+
+  let status = null;
+  try {
+    const res = await db.functions.invoke('confirm-payment');
+    status = res?.data?.status;
+  } catch (e) {
+    console.warn('[checkPaymentReturn] confirm-payment call failed:', e?.message);
   }
+
+  if (status === 'activated' || status === 'already_active') {
+    showToast('success', '🎉 Your Pro subscription is active — your listing is live!');
+  } else if (status === 'not_yet_confirmed') {
+    showToast('error', "ToyyibPay hasn't confirmed this payment yet. If you were charged, it'll activate automatically within a few minutes — email servify.my@gmail.com if it doesn't.");
+  } else {
+    // Fallback wording for any unexpected response — matches the old message
+    // so nothing looks broken even if confirm-payment itself is unreachable.
+    showToast('success', 'Payment received! Your listing will be activated shortly.');
+  }
+
+  setTimeout(() => window.location.reload(), 2500);
 }
 
 // ════════════════════════════════════
