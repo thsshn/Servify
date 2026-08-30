@@ -377,7 +377,7 @@ SessionGuard.init();
 <!-- NAV -->
 <nav>
   <div style="display:flex;align-items:center;gap:12px">
-    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
     <a class="nav-logo" href="index.html">Servify</a>
   </div>
   <div class="nav-right">
@@ -404,10 +404,10 @@ SessionGuard.init();
       <span class="user-role-badge" id="sb-role-badge">...</span>
     </div>
 
-    <div class="sidebar-nav">
+    <div class="sidebar-nav" role="navigation" aria-label="Dashboard navigation">
       <!-- Common -->
       <div class="sidebar-section">Overview</div>
-      <button class="sidebar-link active" onclick="goTo('overview',this)">
+      <button class="sidebar-link active" onclick="goTo('overview',this)" aria-current="page">
         <span class="sidebar-icon">🏠</span> Dashboard
       </button>
       <button class="sidebar-link" onclick="goTo('profile',this)">
@@ -539,7 +539,7 @@ SessionGuard.init();
               <div class="card-title" style="font-size:1rem">🚀 Get your profile ready</div>
               <div style="font-size:0.8rem;color:var(--muted);margin-top:2px">Complete these steps to start receiving enquiries</div>
             </div>
-            <button onclick="document.getElementById('onboarding-checklist').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px" title="Dismiss">✕</button>
+            <button onclick="document.getElementById('onboarding-checklist').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px" title="Dismiss" aria-label="Dismiss onboarding checklist">✕</button>
           </div>
           <div id="onboarding-steps" style="display:flex;flex-direction:column;gap:10px"></div>
           <div style="margin-top:14px">
@@ -642,20 +642,20 @@ SessionGuard.init();
           <div id="profile-edit" style="display:none">
             <div class="form-row">
               <div class="form-group">
-                <label>First Name</label>
+                <label for="edit-first">First Name</label>
                 <input class="form-control" id="edit-first" placeholder="Ahmad"/>
               </div>
               <div class="form-group">
-                <label>Last Name</label>
+                <label for="edit-last">Last Name</label>
                 <input class="form-control" id="edit-last" placeholder="bin Razak"/>
               </div>
             </div>
             <div class="form-group">
-              <label>Phone Number</label>
+              <label for="edit-phone">Phone Number</label>
               <input class="form-control" id="edit-phone" placeholder="01X-XXXXXXX"/>
             </div>
             <div class="form-group">
-              <label>Location</label>
+              <label for="edit-location">Location</label>
               <select class="form-control" id="edit-location">
                 <option value="">Select location...</option>
                 <option>Kuala Lumpur</option><option>Petaling Jaya</option><option>Subang Jaya</option>
@@ -696,11 +696,11 @@ SessionGuard.init();
             </div>
             <div id="biz-edit" style="display:none;margin-top:16px">
               <div class="form-group">
-                <label>Business / Provider Name</label>
+                <label for="edit-biz">Business / Provider Name</label>
                 <input class="form-control" id="edit-biz" placeholder="Ahmad's Catering"/>
               </div>
               <div class="form-group">
-                <label>Category</label>
+                <label for="edit-cat">Category</label>
                 <select class="form-control" id="edit-cat">
                   <option value="">Select...</option>
                   <option>Catering</option><option>Cleaning</option><option>Photography</option>
@@ -710,7 +710,7 @@ SessionGuard.init();
                 </select>
               </div>
               <div class="form-group">
-                <label>Business Description</label>
+                <label for="edit-biz-desc">Business Description</label>
                 <textarea class="form-control" id="edit-biz-desc" placeholder="Tell customers about your business..."></textarea>
               </div>
               <div style="display:flex;gap:10px">
@@ -775,12 +775,12 @@ SessionGuard.init();
       </div>
       <div class="card" style="max-width:640px">
         <div class="form-group">
-          <label>Service Title *</label>
+          <label for="new-title">Service Title *</label>
           <input class="form-control" id="new-title" placeholder="e.g. Professional Wedding Catering" maxlength="80"/>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Category *</label>
+            <label for="new-cat">Category *</label>
             <select class="form-control" id="new-cat">
               <option value="">Select category...</option>
               <option>Catering</option><option>Events</option><option>Cleaning</option>
@@ -790,17 +790,17 @@ SessionGuard.init();
             </select>
           </div>
           <div class="form-group">
-            <label>Starting Price (RM) *</label>
+            <label for="new-price">Starting Price (RM) *</label>
             <input class="form-control" type="number" id="new-price" placeholder="e.g. 150" min="1"/>
           </div>
         </div>
         <div class="form-group">
-          <label>Description</label>
+          <label for="new-desc">Description</label>
           <textarea class="form-control" id="new-desc" rows="4" placeholder="Describe your service, experience, and what makes you stand out..."></textarea>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Location *</label>
+            <label for="new-location">Location *</label>
             <select class="form-control" id="new-location">
               <option value="">Select location...</option>
               <option>Kuala Lumpur</option><option>Petaling Jaya</option><option>Subang Jaya</option>
@@ -810,7 +810,7 @@ SessionGuard.init();
             </select>
           </div>
           <div class="form-group">
-            <label>Contact Number *</label>
+            <label for="new-phone">Contact Number *</label>
             <input class="form-control" id="new-phone" type="tel" placeholder="01X-XXXXXXX"/>
           </div>
         </div>
@@ -902,11 +902,11 @@ SessionGuard.init();
         <div class="card-title" style="margin-bottom:20px">🔐 Change Password</div>
         <div style="max-width:400px">
           <div class="form-group">
-            <label>New Password</label>
+            <label for="new-pw">New Password</label>
             <input class="form-control" type="password" id="new-pw" placeholder="Min. 8 characters"/>
           </div>
           <div class="form-group">
-            <label>Confirm New Password</label>
+            <label for="new-pw-confirm">Confirm New Password</label>
             <input class="form-control" type="password" id="new-pw-confirm" placeholder="Repeat password"/>
           </div>
           <div style="color:var(--danger);font-size:0.78rem;margin-bottom:12px;display:none" id="pw-change-err"></div>
@@ -922,7 +922,7 @@ SessionGuard.init();
               <div style="font-size:0.875rem;font-weight:500">Email notifications</div>
               <div style="font-size:0.78rem;color:var(--muted)">Receive emails about your account activity</div>
             </div>
-            <button class="toggle-btn on" id="toggle-email-notif" onclick="saveNotifPref('email_notif', this)">
+            <button class="toggle-btn on" id="toggle-email-notif" onclick="saveNotifPref('email_notif', this)" role="switch" aria-checked="true" aria-label="Email notifications">
               <span></span>
             </button>
           </div>
@@ -931,7 +931,7 @@ SessionGuard.init();
               <div style="font-size:0.875rem;font-weight:500">Enquiry alerts</div>
               <div style="font-size:0.78rem;color:var(--muted)">Get notified when someone contacts you</div>
             </div>
-            <button class="toggle-btn on" id="toggle-enquiry-notif" onclick="saveNotifPref('enquiry_notif', this)">
+            <button class="toggle-btn on" id="toggle-enquiry-notif" onclick="saveNotifPref('enquiry_notif', this)" role="switch" aria-checked="true" aria-label="Enquiry alerts">
               <span></span>
             </button>
           </div>
@@ -955,7 +955,7 @@ SessionGuard.init();
         <div class="card">
           <div class="card-title" style="margin-bottom:16px">📬 Contact Support</div>
           <div class="form-group">
-            <label>Subject</label>
+            <label for="help-subject">Subject</label>
             <select class="form-control" id="help-subject">
               <option>General Enquiry</option>
               <option>Listing Issue</option>
@@ -966,7 +966,7 @@ SessionGuard.init();
             </select>
           </div>
           <div class="form-group">
-            <label>Message</label>
+            <label for="help-msg">Message</label>
             <textarea class="form-control" id="help-msg" rows="4" placeholder="Describe your issue..."></textarea>
           </div>
           <button class="btn btn-accent" style="width:100%;justify-content:center" onclick="submitHelp()">Send Message →</button>
@@ -1051,26 +1051,26 @@ SessionGuard.init();
       </div>
 
       <!-- Admin Section Tabs -->
-      <div style="display:flex;gap:4px;margin-bottom:20px;background:var(--cream);padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap">
-        <button class="admin-section-tab active" id="atab-listings" onclick="switchAdminTab('listings')">📋 Listings</button>
-        <button class="admin-section-tab" id="atab-users" onclick="switchAdminTab('users')">👥 Users</button>
-        <button class="admin-section-tab" id="atab-logs" onclick="switchAdminTab('logs')">📜 Activity Log</button>
-        <button class="admin-section-tab" id="atab-settings" onclick="switchAdminTab('settings')">⚙️ Settings</button>
-        <button class="admin-section-tab" id="atab-trials" onclick="switchAdminTab('trials')">⏳ Trials <span id="trials-badge" style="background:#e8521a;color:white;border-radius:999px;padding:1px 7px;font-size:0.72rem;margin-left:4px;display:none">!</span></button>
+      <div style="display:flex;gap:4px;margin-bottom:20px;background:var(--cream);padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap" role="tablist" aria-label="Admin sections">
+        <button class="admin-section-tab active" id="atab-listings" onclick="switchAdminTab('listings')" role="tab" aria-selected="true">📋 Listings</button>
+        <button class="admin-section-tab" id="atab-users" onclick="switchAdminTab('users')" role="tab" aria-selected="false">👥 Users</button>
+        <button class="admin-section-tab" id="atab-logs" onclick="switchAdminTab('logs')" role="tab" aria-selected="false">📜 Activity Log</button>
+        <button class="admin-section-tab" id="atab-settings" onclick="switchAdminTab('settings')" role="tab" aria-selected="false">⚙️ Settings</button>
+        <button class="admin-section-tab" id="atab-trials" onclick="switchAdminTab('trials')" role="tab" aria-selected="false">⏳ Trials <span id="trials-badge" style="background:#e8521a;color:white;border-radius:999px;padding:1px 7px;font-size:0.72rem;margin-left:4px;display:none">!</span></button>
       </div>
 
       <!-- ── TAB: LISTINGS ── -->
       <div id="admin-tab-listings">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="admin-tab active" id="ltab-all"      onclick="filterAdminListings('all',this)">All</button>
-            <button class="admin-tab"        id="ltab-pending"  onclick="filterAdminListings('pending',this)">⏳ Pending</button>
-            <button class="admin-tab"        id="ltab-active"   onclick="filterAdminListings('active',this)">✅ Active</button>
-            <button class="admin-tab"        id="ltab-rejected" onclick="filterAdminListings('rejected',this)">❌ Rejected</button>
-            <button class="admin-tab"        id="ltab-suspended" onclick="filterAdminListings('suspended',this)">🔒 Suspended</button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" role="tablist" aria-label="Filter listings by status">
+            <button class="admin-tab active" id="ltab-all"      onclick="filterAdminListings('all',this)" role="tab" aria-selected="true">All</button>
+            <button class="admin-tab"        id="ltab-pending"  onclick="filterAdminListings('pending',this)" role="tab" aria-selected="false">⏳ Pending</button>
+            <button class="admin-tab"        id="ltab-active"   onclick="filterAdminListings('active',this)" role="tab" aria-selected="false">✅ Active</button>
+            <button class="admin-tab"        id="ltab-rejected" onclick="filterAdminListings('rejected',this)" role="tab" aria-selected="false">❌ Rejected</button>
+            <button class="admin-tab"        id="ltab-suspended" onclick="filterAdminListings('suspended',this)" role="tab" aria-selected="false">🔒 Suspended</button>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <input class="form-control" id="admin-search" placeholder="🔍 Search listings…" oninput="searchAdminListings()" style="width:200px;padding:8px 12px;font-size:0.82rem"/>
+            <input class="form-control" id="admin-search" aria-label="Search listings" placeholder="🔍 Search listings…" oninput="searchAdminListings()" style="width:200px;padding:8px 12px;font-size:0.82rem"/>
             <button class="btn btn-ghost btn-sm" onclick="exportAdminListingsCSV()">⬇️ Export CSV</button>
             <button class="btn btn-success btn-sm" onclick="approveAllPending()">✅ Approve All Pending</button>
           </div>
@@ -1091,14 +1091,14 @@ SessionGuard.init();
           ℹ️ Banning a user immediately signs them out, blocks login, and suspends their listings — unbanning restores login access and returns their listings to Pending for re-review.
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="admin-tab active" id="utab-all"      onclick="filterAdminUsers('all',this)">All</button>
-            <button class="admin-tab"        id="utab-provider" onclick="filterAdminUsers('provider',this)">🏪 Providers</button>
-            <button class="admin-tab"        id="utab-seeker"   onclick="filterAdminUsers('seeker',this)">🔍 Seekers</button>
-            <button class="admin-tab"        id="utab-banned"   onclick="filterAdminUsers('banned',this)">🚫 Banned</button>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" role="tablist" aria-label="Filter users">
+            <button class="admin-tab active" id="utab-all"      onclick="filterAdminUsers('all',this)" role="tab" aria-selected="true">All</button>
+            <button class="admin-tab"        id="utab-provider" onclick="filterAdminUsers('provider',this)" role="tab" aria-selected="false">🏪 Providers</button>
+            <button class="admin-tab"        id="utab-seeker"   onclick="filterAdminUsers('seeker',this)" role="tab" aria-selected="false">🔍 Seekers</button>
+            <button class="admin-tab"        id="utab-banned"   onclick="filterAdminUsers('banned',this)" role="tab" aria-selected="false">🚫 Banned</button>
           </div>
           <div style="display:flex;gap:8px">
-            <input class="form-control" id="user-search" placeholder="🔍 Search by name or email…" oninput="searchAdminUsers()" style="width:220px;padding:8px 12px;font-size:0.82rem"/>
+            <input class="form-control" id="user-search" aria-label="Search users by name or email" placeholder="🔍 Search by name or email…" oninput="searchAdminUsers()" style="width:220px;padding:8px 12px;font-size:0.82rem"/>
             <button class="btn btn-ghost btn-sm" onclick="exportAdminUsersCSV()">⬇️ Export CSV</button>
           </div>
         </div>
@@ -1120,7 +1120,7 @@ SessionGuard.init();
             <div class="card-title">📋 Recent Listing Activity</div>
             <button class="btn btn-ghost btn-sm" onclick="loadActivityLog()">🔄 Refresh</button>
           </div>
-          <input class="form-control" id="log-search" placeholder="🔍 Filter by title, provider or category…" oninput="searchActivityLog()" style="margin:0 16px 12px;width:calc(100% - 32px);padding:8px 12px;font-size:0.82rem"/>
+          <input class="form-control" id="log-search" aria-label="Filter listing activity" placeholder="🔍 Filter by title, provider or category…" oninput="searchActivityLog()" style="margin:0 16px 12px;width:calc(100% - 32px);padding:8px 12px;font-size:0.82rem"/>
           <div id="admin-log-container">
             <div class="empty-state" style="padding:24px"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div>
           </div>
@@ -1129,7 +1129,7 @@ SessionGuard.init();
           <div class="card-header">
             <div class="card-title">📩 Recent Contact Enquiries</div>
           </div>
-          <input class="form-control" id="enquiries-search" placeholder="🔍 Filter by name, email or subject…" oninput="searchEnquiries()" style="margin:0 16px 12px;width:calc(100% - 32px);padding:8px 12px;font-size:0.82rem"/>
+          <input class="form-control" id="enquiries-search" aria-label="Filter contact enquiries" placeholder="🔍 Filter by name, email or subject…" oninput="searchEnquiries()" style="margin:0 16px 12px;width:calc(100% - 32px);padding:8px 12px;font-size:0.82rem"/>
           <div id="admin-enquiries-container">
             <div class="empty-state" style="padding:24px"><div class="empty-icon">📩</div><div class="empty-title">Loading…</div></div>
           </div>
@@ -1195,11 +1195,11 @@ SessionGuard.init();
 
 
 <!-- Admin Listing Detail Modal -->
-<div class="modal-overlay" id="admin-detail-modal" onclick="closeModal('admin-detail-modal')">
+<div class="modal-overlay" id="admin-detail-modal" onclick="closeModal('admin-detail-modal')" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
   <div class="modal" onclick="event.stopPropagation()" style="max-width:520px;width:95%">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
       <div class="modal-title" id="admin-modal-title">Listing Details</div>
-      <button onclick="closeModal('admin-detail-modal')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
+      <button onclick="closeModal('admin-detail-modal')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)" aria-label="Close dialog">✕</button>
     </div>
     <div id="admin-modal-body"></div>
     <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap" id="admin-modal-actions"></div>
@@ -1210,15 +1210,15 @@ SessionGuard.init();
 <div id="sidebar-backdrop" onclick="toggleSidebar()"></div>
 
 <!-- TOAST -->
-<div class="toast" id="toast"><span id="toast-icon"></span><span id="toast-msg"></span></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"><span id="toast-icon" aria-hidden="true"></span><span id="toast-msg"></span></div>
 
 <!-- Confirm delete modal -->
-<div class="modal-overlay" id="delete-modal">
+<div class="modal-overlay" id="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
   <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-title" style="color:var(--danger)">Delete Account</div>
+    <div class="modal-title" id="delete-modal-title" style="color:var(--danger)">Delete Account</div>
     <p class="modal-sub">This will permanently delete your account and all your data. This cannot be undone.</p>
     <p style="font-size:0.875rem;margin-bottom:20px">Type <strong>DELETE</strong> to confirm:</p>
-    <input class="form-control" id="delete-confirm-input" placeholder="Type DELETE here"/>
+    <input class="form-control" id="delete-confirm-input" aria-label="Type DELETE to confirm account deletion" placeholder="Type DELETE here"/>
     <div style="display:flex;gap:10px;margin-top:16px">
       <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal('delete-modal')">Cancel</button>
       <button class="btn btn-danger" style="flex:1;justify-content:center" onclick="deleteAccount()">Delete Forever</button>
@@ -2360,6 +2360,7 @@ async function loadAnalytics() {
 async function saveNotifPref(key, btn) {
   btn.classList.toggle('on');
   const val = btn.classList.contains('on');
+  btn.setAttribute('aria-checked', String(val));
   // Store in profiles table under a notif_prefs JSON column
   const prefs = { [key]: val };
   const { error } = await db.from('profiles').upsert({
@@ -2369,6 +2370,7 @@ async function saveNotifPref(key, btn) {
   }, { onConflict: 'id' });
   if (error) {
     btn.classList.toggle('on'); // revert on failure
+    btn.setAttribute('aria-checked', String(btn.classList.contains('on')));
     showToast('error', 'Could not save preference');
   } else {
     showToast('success', val ? '🔔 Notifications enabled' : '🔕 Notifications disabled');
@@ -2392,12 +2394,12 @@ function goTo(page, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + page);
   if (target) target.classList.add('active');
-  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-  if (el) el.classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(l => { l.classList.remove('active'); l.removeAttribute('aria-current'); });
+  if (el) { el.classList.add('active'); el.setAttribute('aria-current', 'page'); }
   // If no el passed, highlight the matching sidebar button
   if (!el) {
     const btn = document.querySelector(`.sidebar-link[onclick*="${page}"]`);
-    if (btn) btn.classList.add('active');
+    if (btn) { btn.classList.add('active'); btn.setAttribute('aria-current', 'page'); }
   }
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebar-backdrop').classList.remove('open');
@@ -2505,8 +2507,12 @@ async function loadAdminListings() {
 function filterAdminListings(filter, el) {
   currentAdminFilter = filter;
   if (el) {
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    // BUG FIX: was querying every .admin-tab on the page, which also
+    // un-highlighted the Users tab's filter buttons since they share the
+    // same class. Scoped to this tab group only.
+    document.querySelectorAll('#admin-tab-listings .admin-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
     el.classList.add('active');
+    el.setAttribute('aria-selected', 'true');
   }
   filteredAdminListings = filter === 'all'
     ? [...allAdminListings]
@@ -2675,21 +2681,21 @@ function editAdminListing(id) {
   document.getElementById('admin-modal-title').textContent = 'Edit Listing';
   document.getElementById('admin-modal-body').innerHTML = `
     <div style="display:flex;flex-direction:column;gap:12px;font-size:0.875rem">
-      <div><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Title</label>
+      <div><label for="al-edit-title" style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Title</label>
         <input class="form-control" id="al-edit-title"/></div>
       <div style="display:flex;gap:10px">
-        <div style="flex:1"><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Category</label>
+        <div style="flex:1"><label for="al-edit-category" style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Category</label>
           <input class="form-control" id="al-edit-category"/></div>
-        <div style="flex:1"><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Location</label>
+        <div style="flex:1"><label for="al-edit-location" style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Location</label>
           <input class="form-control" id="al-edit-location"/></div>
       </div>
       <div style="display:flex;gap:10px">
-        <div style="flex:1"><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Price (RM)</label>
+        <div style="flex:1"><label for="al-edit-price" style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Price (RM)</label>
           <input class="form-control" type="number" min="0" step="0.01" id="al-edit-price"/></div>
-        <div style="flex:1"><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Phone</label>
+        <div style="flex:1"><label for="al-edit-phone" style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Phone</label>
           <input class="form-control" id="al-edit-phone"/></div>
       </div>
-      <div><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Description</label>
+      <div><label for="al-edit-desc" style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Description</label>
         <textarea class="form-control" id="al-edit-desc" rows="4" style="resize:vertical"></textarea></div>
     </div>`;
 
@@ -2991,7 +2997,10 @@ function switchAdminTab(tab) {
   ADMIN_TABS.forEach(t => {
     document.getElementById('admin-tab-' + t).style.display = t === tab ? '' : 'none';
     const btn = document.getElementById('atab-' + t);
-    if (btn) btn.classList.toggle('active', t === tab);
+    if (btn) {
+      btn.classList.toggle('active', t === tab);
+      btn.setAttribute('aria-selected', String(t === tab));
+    }
   });
   // Lazy-load on first open
   if (tab === 'users'  && !_usersLoaded)  loadAdminUsers();
@@ -3116,8 +3125,9 @@ async function loadAdminUsers() {
 function filterAdminUsers(filter, el) {
   currentUserFilter = filter;
   if (el) {
-    document.querySelectorAll('#admin-tab-users .admin-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('#admin-tab-users .admin-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
     el.classList.add('active');
+    el.setAttribute('aria-selected', 'true');
   }
   if (filter === 'all')      filteredAdminUsers = [...allAdminUsers];
   else if (filter === 'provider') filteredAdminUsers = allAdminUsers.filter(u => u.role === 'provider');
@@ -3233,7 +3243,7 @@ function viewUserListings(encodedUserId) {
   const userId = decodeURIComponent(encodedUserId);
   closeModal('admin-detail-modal');
   switchAdminTab('listings');
-  document.querySelectorAll('#admin-tab-listings .admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#admin-tab-listings .admin-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
   const searchBox = document.getElementById('admin-search');
   if (searchBox) searchBox.value = '';
   const results = allAdminListings.filter(l => l.user_id === userId);

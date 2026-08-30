@@ -881,23 +881,23 @@ SessionGuard.init();
 
 
 <!-- ═══ LIGHTBOX ═══ -->
-<div class="modal-overlay" id="lightbox-modal" onclick="closeLightbox()" style="background:rgba(0,0,0,0.92);z-index:600">
+<div class="modal-overlay" id="lightbox-modal" onclick="closeLightbox()" style="background:rgba(0,0,0,0.92);z-index:600" role="dialog" aria-modal="true" aria-label="Photo viewer">
   <div style="position:relative;max-width:90vw;max-height:90vh;display:flex;align-items:center;justify-content:center" onclick="event.stopPropagation()">
-    <button onclick="lightboxNav(-1)" style="position:absolute;left:-50px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;padding:10px">‹</button>
+    <button onclick="lightboxNav(-1)" style="position:absolute;left:-50px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;padding:10px" aria-label="Previous photo">‹</button>
     <img id="lightbox-img" src="" alt="" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px">
-    <button onclick="lightboxNav(1)" style="position:absolute;right:-50px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;padding:10px">›</button>
-    <button onclick="closeLightbox()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer">✕</button>
+    <button onclick="lightboxNav(1)" style="position:absolute;right:-50px;background:none;border:none;color:white;font-size:2rem;cursor:pointer;padding:10px" aria-label="Next photo">›</button>
+    <button onclick="closeLightbox()" style="position:absolute;top:-40px;right:0;background:none;border:none;color:white;font-size:1.5rem;cursor:pointer" aria-label="Close">✕</button>
   </div>
 </div>
 
 <!-- ═══════════════════ MODALS ═══════════════════ -->
 
 <!-- Edit Profile Modal -->
-<div class="modal-overlay" id="edit-profile-modal">
+<div class="modal-overlay" id="edit-profile-modal" role="dialog" aria-modal="true" aria-labelledby="edit-profile-modal-title">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">✏️ Edit Profile</div>
-      <button class="modal-close" onclick="closeModal('edit-profile-modal')">✕</button>
+      <div class="modal-title" id="edit-profile-modal-title">✏️ Edit Profile</div>
+      <button class="modal-close" onclick="closeModal('edit-profile-modal')" aria-label="Close">✕</button>
     </div>
     <div class="form-group">
       <label>Business Name *</label>
@@ -957,11 +957,11 @@ SessionGuard.init();
 </div>
 
 <!-- Edit About Modal -->
-<div class="modal-overlay" id="edit-about-modal">
+<div class="modal-overlay" id="edit-about-modal" role="dialog" aria-modal="true" aria-labelledby="edit-about-modal-title">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">📝 About Your Business</div>
-      <button class="modal-close" onclick="closeModal('edit-about-modal')">✕</button>
+      <div class="modal-title" id="edit-about-modal-title">📝 About Your Business</div>
+      <button class="modal-close" onclick="closeModal('edit-about-modal')" aria-label="Close">✕</button>
     </div>
     <div class="form-group">
       <label>Business Description *</label>
@@ -976,11 +976,11 @@ SessionGuard.init();
 </div>
 
 <!-- Edit Services Modal -->
-<div class="modal-overlay" id="edit-services-modal">
+<div class="modal-overlay" id="edit-services-modal" role="dialog" aria-modal="true" aria-labelledby="edit-services-modal-title">
   <div class="modal" style="max-width:600px">
     <div class="modal-header">
-      <div class="modal-title">🛎️ Edit Services & Packages</div>
-      <button class="modal-close" onclick="closeModal('edit-services-modal')">✕</button>
+      <div class="modal-title" id="edit-services-modal-title">🛎️ Edit Services & Packages</div>
+      <button class="modal-close" onclick="closeModal('edit-services-modal')" aria-label="Close">✕</button>
     </div>
     <p style="font-size:0.82rem;color:var(--muted);margin-bottom:16px">Add the specific services or packages you offer with pricing</p>
 
@@ -1026,11 +1026,11 @@ SessionGuard.init();
 </div>
 
 <!-- Edit Location Modal -->
-<div class="modal-overlay" id="edit-location-modal">
+<div class="modal-overlay" id="edit-location-modal" role="dialog" aria-modal="true" aria-labelledby="edit-location-modal-title">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">📍 Business Location</div>
-      <button class="modal-close" onclick="closeModal('edit-location-modal')">✕</button>
+      <div class="modal-title" id="edit-location-modal-title">📍 Business Location</div>
+      <button class="modal-close" onclick="closeModal('edit-location-modal')" aria-label="Close">✕</button>
     </div>
     <div class="form-group">
       <label>Address Line 1</label>
@@ -1085,11 +1085,11 @@ SessionGuard.init();
 </div>
 
 <!-- Edit Contact Modal -->
-<div class="modal-overlay" id="edit-contact-modal">
+<div class="modal-overlay" id="edit-contact-modal" role="dialog" aria-modal="true" aria-labelledby="edit-contact-modal-title">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">📞 Contact Information</div>
-      <button class="modal-close" onclick="closeModal('edit-contact-modal')">✕</button>
+      <div class="modal-title" id="edit-contact-modal-title">📞 Contact Information</div>
+      <button class="modal-close" onclick="closeModal('edit-contact-modal')" aria-label="Close">✕</button>
     </div>
     <div class="form-group">
       <label>Phone / WhatsApp *</label>
@@ -1119,11 +1119,11 @@ SessionGuard.init();
 </div>
 
 <!-- Edit Hours Modal -->
-<div class="modal-overlay" id="edit-hours-modal">
+<div class="modal-overlay" id="edit-hours-modal" role="dialog" aria-modal="true" aria-labelledby="edit-hours-modal-title">
   <div class="modal" style="max-width:520px">
     <div class="modal-header">
-      <div class="modal-title">🕐 Business Hours</div>
-      <button class="modal-close" onclick="closeModal('edit-hours-modal')">✕</button>
+      <div class="modal-title" id="edit-hours-modal-title">🕐 Business Hours</div>
+      <button class="modal-close" onclick="closeModal('edit-hours-modal')" aria-label="Close">✕</button>
     </div>
     <div id="hours-editor"></div>
     <div class="modal-footer">
@@ -1134,11 +1134,11 @@ SessionGuard.init();
 </div>
 
 <!-- Gallery Modal -->
-<div class="modal-overlay" id="gallery-modal">
+<div class="modal-overlay" id="gallery-modal" role="dialog" aria-modal="true" aria-labelledby="gallery-modal-title">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">📸 Manage Photos</div>
-      <button class="modal-close" onclick="closeModal('gallery-modal')">✕</button>
+      <div class="modal-title" id="gallery-modal-title">📸 Manage Photos</div>
+      <button class="modal-close" onclick="closeModal('gallery-modal')" aria-label="Close">✕</button>
     </div>
     <p style="font-size:0.82rem;color:var(--muted);margin-bottom:16px">Add photos of your work, team, or premises. Good photos get more bookings!</p>
     <div class="upload-zone" id="upload-zone" onclick="document.getElementById('photo-file-input').click()">
@@ -1156,11 +1156,11 @@ SessionGuard.init();
 </div>
 
 <!-- Cover Photo Modal -->
-<div class="modal-overlay" id="cover-modal">
+<div class="modal-overlay" id="cover-modal" role="dialog" aria-modal="true" aria-labelledby="cover-modal-title">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">🖼️ Cover Photo</div>
-      <button class="modal-close" onclick="closeModal('cover-modal')">✕</button>
+      <div class="modal-title" id="cover-modal-title">🖼️ Cover Photo</div>
+      <button class="modal-close" onclick="closeModal('cover-modal')" aria-label="Close">✕</button>
     </div>
     <p style="font-size:0.82rem;color:var(--muted);margin-bottom:16px">Upload a wide banner photo for your profile. Recommended: 1200×400px.</p>
     <div class="upload-zone" onclick="document.getElementById('cover-file-input').click()">
@@ -1180,11 +1180,11 @@ SessionGuard.init();
 </div>
 
 <!-- Avatar Modal -->
-<div class="modal-overlay" id="avatar-modal">
+<div class="modal-overlay" id="avatar-modal" role="dialog" aria-modal="true" aria-labelledby="avatar-modal-title">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">🧑 Profile Photo</div>
-      <button class="modal-close" onclick="closeModal('avatar-modal')">✕</button>
+      <div class="modal-title" id="avatar-modal-title">🧑 Profile Photo</div>
+      <button class="modal-close" onclick="closeModal('avatar-modal')" aria-label="Close">✕</button>
     </div>
     <div class="upload-zone" onclick="document.getElementById('avatar-file-input').click()">
       <div class="upload-zone-icon">🧑</div>
@@ -1203,12 +1203,12 @@ SessionGuard.init();
 </div>
 
 <!-- Quick Enquiry Modal -->
-<div class="modal-overlay" id="contact-quick-modal" onclick="closeModal('contact-quick-modal')">
+<div class="modal-overlay" id="contact-quick-modal" onclick="closeModal('contact-quick-modal')" role="dialog" aria-modal="true" aria-labelledby="contact-quick-modal-title">
   <div class="modal" style="max-width:400px" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal('contact-quick-modal')">✕</button>
+    <button class="modal-close" onclick="closeModal('contact-quick-modal')" aria-label="Close">✕</button>
     <div style="text-align:center;padding:8px 0 20px">
       <div style="width:64px;height:64px;background:#e8f7ef;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px">💬</div>
-      <div class="modal-title" style="margin-bottom:6px">Contact <span id="enquiry-to-name">this Provider</span></div>
+      <div class="modal-title" id="contact-quick-modal-title" style="margin-bottom:6px">Contact <span id="enquiry-to-name">this Provider</span></div>
       <p style="font-size:0.875rem;color:var(--muted);line-height:1.55">Reach out directly via WhatsApp — get a response fast.</p>
     </div>
 
@@ -1236,8 +1236,8 @@ SessionGuard.init();
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast">
-  <span id="toast-icon">✅</span>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+  <span id="toast-icon" aria-hidden="true">✅</span>
   <span id="toast-msg"></span>
 </div>
 
@@ -1802,7 +1802,7 @@ function renderServicesLists() {
     <div class="service-editor-item">
       <div class="sei-name">${sanitize(s.name)}</div>
       <div class="sei-price">RM ${Number(s.price).toLocaleString()} <span style="color:var(--muted);font-weight:400;font-size:0.75rem">${sanitize(s.unit)}</span></div>
-      <button class="sei-del" onclick="removeService(this)" data-sid="${String(s.id)}" title="Remove">✕</button>
+      <button class="sei-del" onclick="removeService(this)" data-sid="${String(s.id)}" title="Remove" aria-label="Remove ${sanitize(s.name)}">✕</button>
     </div>`).join('') || '<p style="font-size:0.82rem;color:var(--muted)">No services yet</p>';
 }
 
@@ -1898,7 +1898,7 @@ function renderUploadPreview() {
   preview.innerHTML = galleryImages.map((img) => `
     <div class="upload-thumb">
       <img src="${img.url || img.dataUrl}" alt="">
-      <button class="upload-thumb-del" onclick="removeGalleryImg('${img.id}')">✕</button>
+      <button class="upload-thumb-del" onclick="removeGalleryImg('${img.id}')" aria-label="Remove photo">✕</button>
     </div>`).join('');
 }
 
