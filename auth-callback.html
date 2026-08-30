@@ -305,6 +305,31 @@ function showError(msg) {
       return;
     }
 
+    // Apply a pending role picked on the sign-up form before a Google
+    // redirect. OAuth can't carry the custom "seeker"/"provider" choice the
+    // way email/password signUp() does, so index.html stashes it in
+    // sessionStorage right before sending the user to Google, and this is
+    // the one place it gets consumed — once, and only into 'provider'
+    // (the trigger that creates new profiles already defaults everyone to
+    // 'seeker', so there's nothing to do for that choice beyond clearing
+    // the flag). Never touches admin/moderator, and is best-effort only —
+    // it must never block a successful sign-in.
+    try {
+      const pendingRole = sessionStorage.getItem('servify_pending_role');
+      sessionStorage.removeItem('servify_pending_role');
+      if (pendingRole === 'provider') {
+        const { data: prof } = await db.from('profiles').select('role').eq('id', session.user.id).maybeSingle();
+        if (prof && prof.role === 'seeker') {
+          await db.from('profiles').update({ role: 'provider' }).eq('id', session.user.id);
+          const firstName = (session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email || 'New').split(/[ @]/)[0];
+          await db.from('providers').upsert({
+            id: session.user.id,
+            business_name: `${firstName}'s Services`,
+          });
+        }
+      }
+    } catch (_) { /* best-effort only — never block a successful sign-in over this */ }
+
     // Success — redirect to dashboard
     document.getElementById('status-title').textContent = 'Signed in!';
     document.getElementById('status-sub').textContent   = 'Redirecting you to your dashboard…';
