@@ -6,7 +6,9 @@
 
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co https://cdn.jsdelivr.net; img-src 'self' data: https:; upgrade-insecure-requests; form-action 'self'; base-uri 'self'">
+<!-- Content-Security-Policy is set via the HTTP response header in vercel.json, which
+     covers every route. Keeping it only in one place avoids a duplicate/conflicting
+     policy and a console warning. -->
 <meta name="robots" content="noindex, nofollow">
 <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#e8521a">
@@ -1065,9 +1067,11 @@ SessionGuard.init();
             <button class="admin-tab"        id="ltab-pending"  onclick="filterAdminListings('pending',this)">⏳ Pending</button>
             <button class="admin-tab"        id="ltab-active"   onclick="filterAdminListings('active',this)">✅ Active</button>
             <button class="admin-tab"        id="ltab-rejected" onclick="filterAdminListings('rejected',this)">❌ Rejected</button>
+            <button class="admin-tab"        id="ltab-suspended" onclick="filterAdminListings('suspended',this)">🔒 Suspended</button>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <input class="form-control" id="admin-search" placeholder="🔍 Search listings…" oninput="searchAdminListings()" style="width:200px;padding:8px 12px;font-size:0.82rem"/>
+            <button class="btn btn-ghost btn-sm" onclick="exportAdminListingsCSV()">⬇️ Export CSV</button>
             <button class="btn btn-success btn-sm" onclick="approveAllPending()">✅ Approve All Pending</button>
           </div>
         </div>
@@ -1084,7 +1088,7 @@ SessionGuard.init();
       <!-- ── TAB: USERS ── -->
       <div id="admin-tab-users" style="display:none">
         <div style="background:#fff8f5;border:1.5px solid #fcd5c4;border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:0.82rem;color:var(--muted)">
-          ℹ️ User data is fetched via the <strong>admin-users</strong> Edge Function. Make sure it is deployed in Supabase. Ban/unban uses the <strong>admin-ban-user</strong> function.
+          ℹ️ Banning a user immediately signs them out, blocks login, and suspends their listings — unbanning restores login access and returns their listings to Pending for re-review.
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
           <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -1093,7 +1097,10 @@ SessionGuard.init();
             <button class="admin-tab"        id="utab-seeker"   onclick="filterAdminUsers('seeker',this)">🔍 Seekers</button>
             <button class="admin-tab"        id="utab-banned"   onclick="filterAdminUsers('banned',this)">🚫 Banned</button>
           </div>
-          <input class="form-control" id="user-search" placeholder="🔍 Search by name or email…" oninput="searchAdminUsers()" style="width:220px;padding:8px 12px;font-size:0.82rem"/>
+          <div style="display:flex;gap:8px">
+            <input class="form-control" id="user-search" placeholder="🔍 Search by name or email…" oninput="searchAdminUsers()" style="width:220px;padding:8px 12px;font-size:0.82rem"/>
+            <button class="btn btn-ghost btn-sm" onclick="exportAdminUsersCSV()">⬇️ Export CSV</button>
+          </div>
         </div>
         <div class="card" style="padding:0;overflow:hidden">
           <div id="admin-users-container">
@@ -1113,6 +1120,7 @@ SessionGuard.init();
             <div class="card-title">📋 Recent Listing Activity</div>
             <button class="btn btn-ghost btn-sm" onclick="loadActivityLog()">🔄 Refresh</button>
           </div>
+          <input class="form-control" id="log-search" placeholder="🔍 Filter by title, provider or category…" oninput="searchActivityLog()" style="margin:0 16px 12px;width:calc(100% - 32px);padding:8px 12px;font-size:0.82rem"/>
           <div id="admin-log-container">
             <div class="empty-state" style="padding:24px"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div>
           </div>
@@ -1121,6 +1129,7 @@ SessionGuard.init();
           <div class="card-header">
             <div class="card-title">📩 Recent Contact Enquiries</div>
           </div>
+          <input class="form-control" id="enquiries-search" placeholder="🔍 Filter by name, email or subject…" oninput="searchEnquiries()" style="margin:0 16px 12px;width:calc(100% - 32px);padding:8px 12px;font-size:0.82rem"/>
           <div id="admin-enquiries-container">
             <div class="empty-state" style="padding:24px"><div class="empty-icon">📩</div><div class="empty-title">Loading…</div></div>
           </div>
@@ -2097,6 +2106,7 @@ async function checkPaymentReturn() {
 // TRIAL TRACKER
 // ════════════════════════════════════
 async function loadTrialTracker() {
+  _trialsLoaded = true;
   const container = document.getElementById('trial-tracker-content');
   if (!container) return;
   container.innerHTML = '<div style="color:var(--muted);font-size:0.875rem">Loading trial data…</div>';
@@ -2115,7 +2125,18 @@ async function loadTrialTracker() {
   const now = new Date();
   const TRIAL_DAYS = 30;
 
-  const rows = await Promise.all(profiles.map(async p => {
+  // PERF FIX: this used to run one listings query per provider via
+  // Promise.all — fine with a handful of demo rows, but N+1 queries that
+  // scale with your provider count. One bulk query + a client-side map
+  // does the same job.
+  const providerIds = profiles.map(p => p.id);
+  const { data: theirListings } = providerIds.length
+    ? await db.from('listings').select('user_id, status, title').in('user_id', providerIds)
+    : { data: [] };
+  const listingByUser = {};
+  (theirListings || []).forEach(l => { if (!listingByUser[l.user_id]) listingByUser[l.user_id] = l; });
+
+  const rows = profiles.map(p => {
     const started = p.trial_started_at ? new Date(p.trial_started_at) : new Date();
     const daysUsed = Math.floor((now - started) / (1000 * 60 * 60 * 24));
     const daysLeft = TRIAL_DAYS - daysUsed;
@@ -2125,9 +2146,9 @@ async function loadTrialTracker() {
       const listingsWarn = document.getElementById('listings-paused-warn');
       if (listingsWarn) listingsWarn.style.display = '';
     }
-    const { data: listing } = await db.from('listings').select('status, title').eq('user_id', p.id).limit(1).maybeSingle();
+    const listing = listingByUser[p.id] || null;
     return { ...p, daysLeft, started, status, listing };
-  }));
+  });
 
   rows.sort((a, b) => a.daysLeft - b.daysLeft);
 
@@ -2167,12 +2188,15 @@ async function loadTrialTracker() {
   const expired = rows.filter(r => r.daysLeft < 0 && r.status !== 'active').length;
   const endingSoon = rows.filter(r => r.daysLeft >= 0 && r.daysLeft <= 7 && r.status !== 'active').length;
   const paid = rows.filter(r => r.status === 'active').length;
+  const MONTHLY_PRICE_RM = 29;
+  const mrr = paid * MONTHLY_PRICE_RM;
 
   let html = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px">';
   html += '<div style="background:#fee2e2;border-radius:12px;padding:16px;text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#991b1b">' + expired + '</div><div style="font-size:0.75rem;color:#991b1b;margin-top:2px">Expired</div></div>';
   html += '<div style="background:#fef9c3;border-radius:12px;padding:16px;text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#854d0e">' + endingSoon + '</div><div style="font-size:0.75rem;color:#854d0e;margin-top:2px">Ending soon</div></div>';
   html += '<div style="background:#f0fdf4;border-radius:12px;padding:16px;text-align:center"><div style="font-size:1.5rem;font-weight:700;color:#166534">' + paid + '</div><div style="font-size:0.75rem;color:#166534;margin-top:2px">Paid</div></div>';
   html += '<div style="background:var(--cream);border-radius:12px;padding:16px;text-align:center"><div style="font-size:1.5rem;font-weight:700">' + rows.length + '</div><div style="font-size:0.75rem;color:var(--muted);margin-top:2px">Total</div></div>';
+  html += '<div style="background:#fff4ee;border-radius:12px;padding:16px;text-align:center" title="' + paid + ' paying provider(s) × RM' + MONTHLY_PRICE_RM + '/month"><div style="font-size:1.5rem;font-weight:700;color:var(--accent)">RM' + mrr.toLocaleString() + '</div><div style="font-size:0.75rem;color:var(--accent);margin-top:2px">Est. MRR</div></div>';
   html += '</div>';
 
   html += '<div class="card" style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:0.85rem">';
@@ -2212,7 +2236,12 @@ async function markTrialOnly(userId) {
 }
 
 async function freezeProvider(userId) {
-  await db.from('listings').update({ status: 'rejected' }).eq('user_id', userId);
+  // Uses the same 'suspended' status admin-ban-user applies when banning a
+  // user, instead of 'rejected' — 'rejected' means "we reviewed this and
+  // declined it", which is the wrong signal for a listing paused only
+  // because a trial/payment lapsed. Keeping one vocabulary for "hidden but
+  // not declined" also means it now shows correctly in the Suspended filter.
+  await db.from('listings').update({ status: 'suspended' }).eq('user_id', userId);
   showToast('success', '🔒 Provider frozen — listings hidden.');
   loadTrialTracker();
 }
@@ -2505,9 +2534,10 @@ function renderAdminTable(listings) {
   }
 
   const statusBadge = {
-    active:   '<span class="badge badge-green">✅ Active</span>',
-    pending:  '<span class="badge badge-orange">⏳ Pending</span>',
-    rejected: '<span class="badge badge-red">❌ Rejected</span>'
+    active:    '<span class="badge badge-green">✅ Active</span>',
+    pending:   '<span class="badge badge-orange">⏳ Pending</span>',
+    rejected:  '<span class="badge badge-red">❌ Rejected</span>',
+    suspended: '<span class="badge badge-grey">🔒 Suspended</span>'
   };
 
   const rows = listings.map(l => `
@@ -2590,9 +2620,10 @@ function viewAdminListing(id) {
   if (!l) return;
 
   const statusBadge = {
-    active:   '<span class="badge badge-green">✅ Active</span>',
-    pending:  '<span class="badge badge-orange">⏳ Pending</span>',
-    rejected: '<span class="badge badge-red">❌ Rejected</span>'
+    active:    '<span class="badge badge-green">✅ Active</span>',
+    pending:   '<span class="badge badge-orange">⏳ Pending</span>',
+    rejected:  '<span class="badge badge-red">❌ Rejected</span>',
+    suspended: '<span class="badge badge-grey">🔒 Suspended</span>'
   };
 
   document.getElementById('admin-modal-title').textContent = l.title || 'Listing Details';
@@ -2625,10 +2656,76 @@ function viewAdminListing(id) {
   document.getElementById('admin-modal-actions').innerHTML = `
     ${l.status !== 'active'   ? `<button class="btn btn-success" onclick="updateListingStatus('${encodeURIComponent(l.id)}','active')">✅ Approve</button>` : ''}
     ${l.status !== 'rejected' ? `<button class="btn btn-danger"  onclick="updateListingStatus('${encodeURIComponent(l.id)}','rejected')">❌ Reject</button>` : ''}
+    <button class="btn btn-ghost" onclick="editAdminListing('${encodeURIComponent(l.id)}')">✏️ Edit</button>
     <button class="btn btn-ghost" onclick="closeModal('admin-detail-modal')">Close</button>
   `;
 
   openModal('admin-detail-modal');
+}
+
+// Lets an admin fix a typo, wrong price/category, or bad phone number
+// directly, instead of the previous all-or-nothing choice of
+// approve/reject/delete. Values are set via .value (not interpolated into
+// the HTML string) so nothing in a listing's existing text can break out
+// of an attribute.
+function editAdminListing(id) {
+  const l = allAdminListings.find(x => x.id === decodeURIComponent(id));
+  if (!l) return;
+
+  document.getElementById('admin-modal-title').textContent = 'Edit Listing';
+  document.getElementById('admin-modal-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px;font-size:0.875rem">
+      <div><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Title</label>
+        <input class="form-control" id="al-edit-title"/></div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1"><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Category</label>
+          <input class="form-control" id="al-edit-category"/></div>
+        <div style="flex:1"><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Location</label>
+          <input class="form-control" id="al-edit-location"/></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1"><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Price (RM)</label>
+          <input class="form-control" type="number" min="0" step="0.01" id="al-edit-price"/></div>
+        <div style="flex:1"><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Phone</label>
+          <input class="form-control" id="al-edit-phone"/></div>
+      </div>
+      <div><label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:4px">Description</label>
+        <textarea class="form-control" id="al-edit-desc" rows="4" style="resize:vertical"></textarea></div>
+    </div>`;
+
+  document.getElementById('al-edit-title').value    = l.title || '';
+  document.getElementById('al-edit-category').value = l.category || '';
+  document.getElementById('al-edit-location').value = l.location || '';
+  document.getElementById('al-edit-price').value    = l.price || '';
+  document.getElementById('al-edit-phone').value    = l.phone || '';
+  document.getElementById('al-edit-desc').value     = l.description || '';
+
+  document.getElementById('admin-modal-actions').innerHTML = `
+    <button class="btn btn-success" onclick="saveAdminListingEdit('${encodeURIComponent(l.id)}')">💾 Save Changes</button>
+    <button class="btn btn-ghost" onclick="viewAdminListing('${encodeURIComponent(l.id)}')">← Back</button>
+  `;
+}
+
+async function saveAdminListingEdit(id) {
+  const realId = decodeURIComponent(id);
+  const title = document.getElementById('al-edit-title').value.trim();
+  if (!title) { showToast('error', 'Title is required'); return; }
+
+  const updates = {
+    title,
+    category:    document.getElementById('al-edit-category').value.trim(),
+    location:    document.getElementById('al-edit-location').value.trim(),
+    price:       parseFloat(document.getElementById('al-edit-price').value) || 0,
+    phone:       document.getElementById('al-edit-phone').value.trim(),
+    description: document.getElementById('al-edit-desc').value.trim(),
+    updated_at:  new Date().toISOString(),
+  };
+
+  const { error } = await db.from('listings').update(updates).eq('id', realId);
+  if (error) { showToast('error', 'Failed to save: ' + error.message); console.error('[saveAdminListingEdit]', error); return; }
+  showToast('success', '💾 Listing updated');
+  closeModal('admin-detail-modal');
+  await loadAdminListings();
 }
 
 async function approveAllPending() {
@@ -2830,9 +2927,65 @@ function _timeAgo(iso) {
 */
 
 // ════════════════════════════════════
+// ADMIN — CSV EXPORT
+// ════════════════════════════════════
+function _csvCell(val) {
+  const s = String(val ?? '');
+  // Quote any cell containing a comma, quote, or newline; escape inner quotes.
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+function exportToCSV(rows, columns, filename) {
+  if (!rows || !rows.length) { showToast('info', 'Nothing to export'); return; }
+  const header = columns.map(c => _csvCell(c.label)).join(',');
+  const body = rows.map(r => columns.map(c => _csvCell(c.get(r))).join(',')).join('\n');
+  const blob = new Blob(['﻿' + header + '\n' + body], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showToast('success', `⬇️ Exported ${rows.length} row(s)`);
+}
+
+function exportAdminListingsCSV() {
+  const rows = filteredAdminListings.length ? filteredAdminListings : allAdminListings;
+  exportToCSV(rows, [
+    { label: 'Title',        get: l => l.title },
+    { label: 'Provider',     get: l => l.provider_name },
+    { label: 'Status',       get: l => l.status },
+    { label: 'Category',     get: l => l.category },
+    { label: 'Location',     get: l => l.location },
+    { label: 'Price (RM)',   get: l => l.price },
+    { label: 'Phone',        get: l => l.phone },
+    { label: 'Created',      get: l => l.created_at },
+  ], `servify-listings-${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+function exportAdminUsersCSV() {
+  const rows = filteredAdminUsers.length ? filteredAdminUsers : allAdminUsers;
+  exportToCSV(rows, [
+    { label: 'Name',           get: u => u.full_name },
+    { label: 'Email',          get: u => u.email },
+    { label: 'Role',           get: u => u.role },
+    { label: 'Banned',         get: u => u._banned ? 'yes' : 'no' },
+    { label: 'Joined',         get: u => u.created_at },
+    { label: 'Last Sign In',   get: u => u.last_sign_in_at },
+    { label: 'Email Verified', get: u => u.email_confirmed_at || u.email_confirmed ? 'yes' : 'no' },
+  ], `servify-users-${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+// ════════════════════════════════════
 // ADMIN — TAB SWITCHING
 // ════════════════════════════════════
-const ADMIN_TABS = ['listings','users','logs','settings'];
+// BUG FIX: 'trials' was missing from this list, which meant clicking the
+// Trials tab hid every other tab's container but never showed its own
+// (admin-tab-trials kept its inline display:none from the HTML) and never
+// triggered loadTrialTracker() — the whole tab was silently dead.
+const ADMIN_TABS = ['listings','users','logs','settings','trials'];
 
 function switchAdminTab(tab) {
   ADMIN_TABS.forEach(t => {
@@ -2841,20 +2994,24 @@ function switchAdminTab(tab) {
     if (btn) btn.classList.toggle('active', t === tab);
   });
   // Lazy-load on first open
-  if (tab === 'users' && !_usersLoaded) loadAdminUsers();
-  if (tab === 'logs'  && !_logsLoaded)  loadActivityLog();
+  if (tab === 'users'  && !_usersLoaded)  loadAdminUsers();
+  if (tab === 'logs'   && !_logsLoaded)   loadActivityLog();
+  if (tab === 'trials' && !_trialsLoaded) loadTrialTracker();
 }
 
 let _usersLoaded = false;
 let _logsLoaded  = false;
+let _trialsLoaded = false;
 
 function adminRefreshAll() {
   _usersLoaded = false;
   _logsLoaded  = false;
+  _trialsLoaded = false;
   loadAdminListings();
   const activeTab = ADMIN_TABS.find(t => document.getElementById('admin-tab-' + t)?.style.display !== 'none') || 'listings';
-  if (activeTab === 'users') { _usersLoaded = false; loadAdminUsers(); }
-  if (activeTab === 'logs')  { _logsLoaded  = false; loadActivityLog(); }
+  if (activeTab === 'users')  { _usersLoaded  = false; loadAdminUsers(); }
+  if (activeTab === 'logs')   { _logsLoaded   = false; loadActivityLog(); }
+  if (activeTab === 'trials') { _trialsLoaded = false; loadTrialTracker(); }
   showToast('info', 'Admin data refreshed');
 }
 
@@ -2886,21 +3043,20 @@ async function loadAdminUsers() {
     if (res.error) throw res.error;
 
     const users = res.data?.users || [];
-    allAdminUsers = users;
 
-    // Update user count stat card
+    // BUG FIX: this used to read u.banned_until, a field the admin-users
+    // Edge Function never returns (it returns a `banned` boolean, already
+    // sourced from profiles.banned) — so the "Banned Users" stat card
+    // always showed 0 no matter how many users were actually banned.
+    allAdminUsers = users.map(u => ({ ...u, _banned: !!u.banned }));
+
+    // Update stat cards
     const el = document.getElementById('admin-stat-users');
     if (el) el.textContent = users.length;
 
-    const banned = users.filter(u => u.banned_until && u.banned_until !== 'none').length;
+    const bannedCount = allAdminUsers.filter(u => u._banned).length;
     const bannedEl = document.getElementById('admin-stat-banned');
-    if (bannedEl) bannedEl.textContent = banned;
-
-    // Cross-reference with profiles for ban flag
-    const { data: profiles } = await db.from('profiles').select('id,banned');
-    const bannedMap = {};
-    (profiles || []).forEach(p => { bannedMap[p.id] = p.banned; });
-    allAdminUsers = users.map(u => ({ ...u, _banned: bannedMap[u.id] || false }));
+    if (bannedEl) bannedEl.textContent = bannedCount;
 
     filterAdminUsers(currentUserFilter, null);
 
@@ -2926,6 +3082,8 @@ async function loadAdminUsers() {
 
       const el = document.getElementById('admin-stat-users');
       if (el) el.textContent = allAdminUsers.length;
+      const bannedEl2 = document.getElementById('admin-stat-banned');
+      if (bannedEl2) bannedEl2.textContent = allAdminUsers.filter(u => u._banned).length;
 
       filterAdminUsers(currentUserFilter, null);
 
@@ -2964,7 +3122,7 @@ function filterAdminUsers(filter, el) {
   if (filter === 'all')      filteredAdminUsers = [...allAdminUsers];
   else if (filter === 'provider') filteredAdminUsers = allAdminUsers.filter(u => u.role === 'provider');
   else if (filter === 'seeker')   filteredAdminUsers = allAdminUsers.filter(u => u.role === 'seeker');
-  else if (filter === 'banned')   filteredAdminUsers = allAdminUsers.filter(u => u._banned || (u.banned_until && u.banned_until !== 'none'));
+  else if (filter === 'banned')   filteredAdminUsers = allAdminUsers.filter(u => u._banned);
   renderAdminUsersTable(filteredAdminUsers);
 }
 
@@ -2989,7 +3147,7 @@ function renderAdminUsersTable(users) {
   }
 
   const rows = users.map(u => {
-    const isBanned = u._banned || (u.banned_until && u.banned_until !== 'none');
+    const isBanned = !!u._banned;
     const roleBadge = u.role === 'provider'
       ? '<span class="badge badge-orange">🏪 Provider</span>'
       : '<span class="badge badge-blue">🔍 Seeker</span>';
@@ -3043,7 +3201,7 @@ function renderAdminUsersTable(users) {
 function viewAdminUser(encodedId) {
   const u = allAdminUsers.find(x => x.id === decodeURIComponent(encodedId));
   if (!u) return;
-  const isBanned = u._banned || (u.banned_until && u.banned_until !== 'none');
+  const isBanned = !!u._banned;
 
   document.getElementById('admin-modal-title').textContent = u.full_name || u.email || 'User Details';
   document.getElementById('admin-modal-body').innerHTML = `
@@ -3058,6 +3216,7 @@ function viewAdminUser(encodedId) {
     </div>`;
 
   document.getElementById('admin-modal-actions').innerHTML = `
+    <button class="btn btn-ghost" onclick="viewUserListings('${encodeURIComponent(u.id)}')">📋 View Listings</button>
     ${!isBanned
       ? `<button class="btn btn-danger" onclick="banUser('${encodeURIComponent(u.id)}',true,'${sanitize(u.email||'')}');closeModal('admin-detail-modal')">🚫 Ban User</button>`
       : `<button class="btn btn-success" onclick="banUser('${encodeURIComponent(u.id)}',false,'${sanitize(u.email||'')}');closeModal('admin-detail-modal')">✅ Unban User</button>`
@@ -3065,6 +3224,22 @@ function viewAdminUser(encodedId) {
     <button class="btn btn-ghost" onclick="closeModal('admin-detail-modal')">Close</button>`;
 
   openModal('admin-detail-modal');
+}
+
+// Jump from a user's detail view to their listings, pre-filtered — lets an
+// admin go straight from "who is this person" to "what have they posted"
+// without hunting through the full listings table.
+function viewUserListings(encodedUserId) {
+  const userId = decodeURIComponent(encodedUserId);
+  closeModal('admin-detail-modal');
+  switchAdminTab('listings');
+  document.querySelectorAll('#admin-tab-listings .admin-tab').forEach(t => t.classList.remove('active'));
+  const searchBox = document.getElementById('admin-search');
+  if (searchBox) searchBox.value = '';
+  const results = allAdminListings.filter(l => l.user_id === userId);
+  filteredAdminListings = results;
+  renderAdminTable(results);
+  showToast('info', `Showing ${results.length} listing(s) for this user — click "All" to clear`);
 }
 
 async function banUser(encodedId, suspend, email) {
@@ -3112,6 +3287,9 @@ async function banUser(encodedId, suspend, email) {
 // ════════════════════════════════════
 // ADMIN — ACTIVITY LOG
 // ════════════════════════════════════
+let allActivityListings = [];
+let allActivityContacts = [];
+
 async function loadActivityLog() {
   _logsLoaded = true;
   const logContainer = document.getElementById('admin-log-container');
@@ -3124,22 +3302,8 @@ async function loadActivityLog() {
       .order('updated_at', { ascending: false })
       .limit(50);
 
-    if (!listings || !listings.length) {
-      logContainer.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">📋</div><div class="empty-title">No listing activity yet</div></div>';
-    } else {
-      const statusIcon = { active:'✅', pending:'⏳', rejected:'❌', frozen:'🧊' };
-      logContainer.innerHTML = listings.map(l => `
-        <div class="activity-item">
-          <div class="activity-dot" style="background:${l.status==='active'?'var(--success)':l.status==='pending'?'var(--accent)':'var(--danger)'}"></div>
-          <div style="flex:1">
-            <div class="activity-text">
-              ${statusIcon[l.status]||'📋'} <strong>${sanitize(l.title||'Untitled')}</strong>
-              — <span class="badge ${l.status==='active'?'badge-green':l.status==='pending'?'badge-orange':'badge-red'}">${l.status}</span>
-            </div>
-            <div class="activity-time">${sanitize(l.provider_name||'Unknown')} · ${sanitize(l.category||'—')} · ${_timeAgo(l.updated_at)}</div>
-          </div>
-        </div>`).join('');
-    }
+    allActivityListings = listings || [];
+    renderActivityLog(allActivityListings);
 
     // Recent contact enquiries (admin-only via RLS)
     const { data: contacts } = await db.from('contacts')
@@ -3147,27 +3311,78 @@ async function loadActivityLog() {
       .order('created_at', { ascending: false })
       .limit(30);
 
-    if (!contacts || !contacts.length) {
-      enquiriesContainer.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">📩</div><div class="empty-title">No enquiries yet</div></div>';
-    } else {
-      enquiriesContainer.innerHTML = contacts.map(c => `
-        <div class="activity-item">
-          <div class="activity-dot" style="background:var(--accent2)"></div>
-          <div style="flex:1">
-            <div class="activity-text">
-              📩 <strong>${sanitize(c.name||'Anonymous')}</strong>
-              <span style="color:var(--muted);font-size:0.78rem">&lt;${sanitize(c.email||'—')}&gt;</span>
-              — ${sanitize(c.subject||'General')}
-            </div>
-            <div class="activity-time" style="margin-bottom:4px">${_timeAgo(c.created_at)}</div>
-            ${c.message ? `<div style="font-size:0.8rem;color:var(--muted);background:var(--cream);padding:8px 10px;border-radius:8px;line-height:1.5;max-width:480px">${sanitize((c.message||'').substring(0,200))}${(c.message||'').length > 200 ? '…' : ''}</div>` : ''}
-          </div>
-        </div>`).join('');
-    }
+    allActivityContacts = contacts || [];
+    renderEnquiries(allActivityContacts);
 
   } catch (err) {
     logContainer.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load activity log</div><div class="empty-sub">Check RLS policies on listings and contacts tables</div></div>';
   }
+}
+
+function renderActivityLog(listings) {
+  const logContainer = document.getElementById('admin-log-container');
+  if (!listings || !listings.length) {
+    logContainer.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">📋</div><div class="empty-title">No listing activity found</div></div>';
+    return;
+  }
+  // 'frozen' was a stale key that never matched a real status value —
+  // the status this code actually writes for a paused-not-rejected
+  // listing is 'suspended' (see freezeProvider / admin-ban-user).
+  const statusIcon  = { active:'✅', pending:'⏳', rejected:'❌', suspended:'🔒' };
+  const statusColor = { active:'var(--success)', pending:'var(--accent)', suspended:'var(--muted)' };
+  const statusClass = { active:'badge-green', pending:'badge-orange', suspended:'badge-grey' };
+  logContainer.innerHTML = listings.map(l => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${statusColor[l.status] || 'var(--danger)'}"></div>
+      <div style="flex:1">
+        <div class="activity-text">
+          ${statusIcon[l.status]||'📋'} <strong>${sanitize(l.title||'Untitled')}</strong>
+          — <span class="badge ${statusClass[l.status] || 'badge-red'}">${l.status}</span>
+        </div>
+        <div class="activity-time">${sanitize(l.provider_name||'Unknown')} · ${sanitize(l.category||'—')} · ${_timeAgo(l.updated_at)}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderEnquiries(contacts) {
+  const enquiriesContainer = document.getElementById('admin-enquiries-container');
+  if (!contacts || !contacts.length) {
+    enquiriesContainer.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">📩</div><div class="empty-title">No enquiries found</div></div>';
+    return;
+  }
+  enquiriesContainer.innerHTML = contacts.map(c => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:var(--accent2)"></div>
+      <div style="flex:1">
+        <div class="activity-text">
+          📩 <strong>${sanitize(c.name||'Anonymous')}</strong>
+          <span style="color:var(--muted);font-size:0.78rem">&lt;${sanitize(c.email||'—')}&gt;</span>
+          — ${sanitize(c.subject||'General')}
+        </div>
+        <div class="activity-time" style="margin-bottom:4px">${_timeAgo(c.created_at)}</div>
+        ${c.message ? `<div style="font-size:0.8rem;color:var(--muted);background:var(--cream);padding:8px 10px;border-radius:8px;line-height:1.5;max-width:480px">${sanitize((c.message||'').substring(0,200))}${(c.message||'').length > 200 ? '…' : ''}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function searchActivityLog() {
+  const q = (document.getElementById('log-search')?.value || '').toLowerCase();
+  if (!q) { renderActivityLog(allActivityListings); return; }
+  renderActivityLog(allActivityListings.filter(l =>
+    (l.title||'').toLowerCase().includes(q) ||
+    (l.provider_name||'').toLowerCase().includes(q) ||
+    (l.category||'').toLowerCase().includes(q)
+  ));
+}
+
+function searchEnquiries() {
+  const q = (document.getElementById('enquiries-search')?.value || '').toLowerCase();
+  if (!q) { renderEnquiries(allActivityContacts); return; }
+  renderEnquiries(allActivityContacts.filter(c =>
+    (c.name||'').toLowerCase().includes(q) ||
+    (c.email||'').toLowerCase().includes(q) ||
+    (c.subject||'').toLowerCase().includes(q)
+  ));
 }
 
 // ════════════════════════════════════

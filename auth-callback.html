@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self' https://cdxxltgowjlfbhcqjqkr.supabase.co wss://cdxxltgowjlfbhcqjqkr.supabase.co; upgrade-insecure-requests; form-action 'self'; base-uri 'self'">
+<!-- Content-Security-Policy is set via the HTTP response header in vercel.json, which
+     covers every route. Keeping it only in one place avoids a duplicate/conflicting
+     policy and a console warning. -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Signing you in… — Servify</title>
