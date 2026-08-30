@@ -312,6 +312,14 @@ nav {
 .reviewer-name { font-weight: 600; font-size: 0.875rem; }
 .reviewer-date { font-size: 0.75rem; color: var(--muted); }
 .review-text { font-size: 0.875rem; line-height: 1.65; color: var(--ink); }
+.review-response {
+  margin-top: 12px; margin-left: 16px; padding: 12px 14px;
+  background: rgba(232,82,26,0.06); border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+}
+.review-response-label { font-size: 0.75rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.review-response-date { font-size: 0.72rem; color: var(--muted); margin-left: 6px; font-weight: 400; }
+.review-response-text { font-size: 0.85rem; line-height: 1.6; color: var(--ink); }
 
 /* ── SIDEBAR CARDS ── */
 .contact-card { background: white; border: 1.5px solid var(--border); border-radius: 16px; padding: 20px; }
@@ -1235,6 +1243,34 @@ SessionGuard.init();
   </div>
 </div>
 
+<!-- Report Listing Modal -->
+<div class="modal-overlay" id="report-modal" role="dialog" aria-modal="true" aria-labelledby="report-modal-title">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <div class="modal-title" id="report-modal-title">🚩 Report this Listing</div>
+      <button class="modal-close" onclick="closeModal('report-modal')" aria-label="Close">✕</button>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted);line-height:1.55;margin-bottom:16px">Let us know if this listing looks fake, inappropriate, or otherwise breaks our rules. Our team will review it.</p>
+    <div class="form-group">
+      <label for="report-reason">Reason *</label>
+      <select class="form-control" id="report-reason">
+        <option value="Fake or scam listing">Fake or scam listing</option>
+        <option value="Inappropriate content">Inappropriate content</option>
+        <option value="Spam">Spam</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="report-details">Additional details (optional)</label>
+      <textarea class="form-control" id="report-details" rows="3" maxlength="500" placeholder="Anything else that would help us review this?"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('report-modal')">Cancel</button>
+      <button class="btn btn-accent" onclick="submitReport()">Submit Report</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
   <span id="toast-icon" aria-hidden="true">✅</span>
@@ -1477,10 +1513,12 @@ async function loadProviderOwnData() {
       .order('created_at', { ascending: false });
     if (reviewRows) {
       reviews = reviewRows.map(r => ({
-        name:   r.reviewer_name || 'Anonymous',
-        rating: r.rating || 5,
-        date:   r.created_at ? new Date(r.created_at).toLocaleDateString('en-MY', { month: 'long', year: 'numeric' }) : '',
-        text:   r.comment || '',
+        name:       r.reviewer_name || 'Anonymous',
+        rating:     r.rating || 5,
+        date:       r.created_at ? new Date(r.created_at).toLocaleDateString('en-MY', { month: 'long', year: 'numeric' }) : '',
+        text:       r.comment || '',
+        response:   r.provider_response || '',
+        responseAt: r.provider_response_at ? new Date(r.provider_response_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
       }));
     }
   }
@@ -1543,10 +1581,12 @@ async function loadListingForSeeker(id) {
 
   if (reviewRows && reviewRows.length) {
     reviews = reviewRows.map(r => ({
-      name:   r.reviewer_name || 'Anonymous',
-      rating: r.rating || 5,
-      date:   r.created_at ? new Date(r.created_at).toLocaleDateString('en-MY', { month: 'long', year: 'numeric' }) : '',
-      text:   r.comment || '',
+      name:       r.reviewer_name || 'Anonymous',
+      rating:     r.rating || 5,
+      date:       r.created_at ? new Date(r.created_at).toLocaleDateString('en-MY', { month: 'long', year: 'numeric' }) : '',
+      text:       r.comment || '',
+      response:   r.provider_response || '',
+      responseAt: r.provider_response_at ? new Date(r.provider_response_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
     }));
     // Update stat
     const avg = (reviews.reduce((a,r) => a+r.rating, 0) / reviews.length).toFixed(1);
@@ -1646,10 +1686,12 @@ async function submitReview() {
   const { data: rows } = await db.from('reviews').select('*').eq('listing_id', _listingId).order('created_at', { ascending: false });
   if (rows) {
     reviews = rows.map(r => ({
-      name:   r.reviewer_name || 'Anonymous',
-      rating: r.rating || 5,
-      text:   r.comment || '',
-      date:   r.created_at ? new Date(r.created_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
+      name:       r.reviewer_name || 'Anonymous',
+      rating:     r.rating || 5,
+      text:       r.comment || '',
+      date:       r.created_at ? new Date(r.created_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
+      response:   r.provider_response || '',
+      responseAt: r.provider_response_at ? new Date(r.provider_response_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' }) : '',
     }));
     renderReviews();
   }
@@ -2106,6 +2148,11 @@ function renderReviews() {
         </div>
       </div>
       <div class="review-text">${sanitize(r.text || '')}</div>
+      ${r.response ? `
+      <div class="review-response">
+        <div class="review-response-label">💬 Provider's response<span class="review-response-date">${sanitize(r.responseAt || '')}</span></div>
+        <div class="review-response-text">${sanitize(r.response)}</div>
+      </div>` : ''}
     </div>`).join('');
 }
 
@@ -2431,6 +2478,7 @@ function openContactModal() {
 
   const previewMsg = `Hi ${name}, I found your listing on Servify and I'm interested in your ${cat} service. Could you please provide more details and a quote?`;
   document.getElementById('wa-preview-text').textContent = previewMsg;
+  _lastEnquiryMsg = previewMsg;
 
   if (phone) {
     const waText = encodeURIComponent(previewMsg);
@@ -2446,6 +2494,44 @@ function openContactModal() {
 
   openModal('contact-quick-modal');
 }
+
+// ── LOG ENQUIRY TO DATABASE + NOTIFY PROVIDER (best-effort, fire-and-forget) ──
+// Never awaited from the click handler and never throws — must not delay or
+// break the seeker's actual WhatsApp/call navigation, even if this fails.
+let _lastEnquiryMsg = '';
+function logEnquiry() {
+  (async () => {
+    try {
+      let userId = null, userName = null, userEmail = null;
+      try {
+        const { data: { user } } = await db.auth.getUser();
+        if (user) {
+          userId = user.id || null;
+          userName = user.user_metadata?.full_name || null;
+          userEmail = user.email || null;
+        }
+      } catch (_) { /* not signed in — fine */ }
+
+      const payload = {
+        listing_id: _listingId || window._listingRowId || null,
+        subject:    'Listing enquiry',
+        message:    _lastEnquiryMsg || '',
+        name:       userName || 'Website visitor',
+      };
+      if (userEmail) payload.email = userEmail;
+      if (userId) payload.user_id = userId;
+
+      const { data, error } = await db.from('contacts').insert(payload).select('id').single();
+      if (error || !data) return;
+
+      db.functions.invoke('notify-provider-enquiry', { body: { contactId: data.id } }).catch(() => {});
+    } catch (_) {
+      // Swallow — this must never break the seeker's contact action.
+    }
+  })();
+}
+document.getElementById('wa-link')?.addEventListener('click', logEnquiry);
+document.getElementById('call-link')?.addEventListener('click', logEnquiry);
 
 // ── PROFILE COMPLETENESS ──
 function updateCompleteness() {
@@ -2534,12 +2620,43 @@ function showToast(type, msg) {
 }
 
 function reportListing() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id') || 'unknown';
-  const title = document.getElementById('profile-title')?.textContent || 'this listing';
-  const subject = encodeURIComponent('Report a Listing — Servify');
-  const body = encodeURIComponent(`Hi Servify Team,\n\nI would like to report the following listing for suspicious or inappropriate content:\n\nListing: ${title}\nListing ID: ${id}\nListing URL: ${window.location.href}\n\nReason for report:\n[Please describe your concern here]\n\nThank you.`);
-  window.open(`mailto:servify.my@gmail.com?subject=${subject}&body=${body}`);
+  document.getElementById('report-reason').value = 'Fake or scam listing';
+  document.getElementById('report-details').value = '';
+  openModal('report-modal');
+}
+
+async function submitReport() {
+  const reason = document.getElementById('report-reason').value;
+  const details = document.getElementById('report-details').value.trim();
+  const listingId = _listingId || window._listingRowId || null;
+
+  const btn = document.querySelector('#report-modal .btn-accent');
+  const orig = btn.textContent;
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+
+  try {
+    let reporterId = null;
+    try {
+      const { data: { user } } = await db.auth.getUser();
+      reporterId = user?.id || null;
+    } catch (_) { /* anonymous is fine */ }
+
+    const { error } = await db.from('reports').insert({
+      listing_id:  listingId,
+      reporter_id: reporterId,
+      reason:      reason,
+      details:     details || null,
+    });
+
+    if (error) throw error;
+
+    closeModal('report-modal');
+    showToast('success', '✅ Report submitted. Our team will take a look — thank you.');
+  } catch (err) {
+    showToast('error', 'Could not submit report. Please try again.');
+  } finally {
+    btn.textContent = orig; btn.disabled = false;
+  }
 }
 </script>
 

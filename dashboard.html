@@ -435,6 +435,10 @@ SessionGuard.init();
       <button class="sidebar-link provider-only" style="display:none" onclick="goTo('analytics',this)">
         <span class="sidebar-icon">📈</span> Analytics
       </button>
+      <button class="sidebar-link provider-only" style="display:none" onclick="goTo('enquiries',this)">
+        <span class="sidebar-icon">📩</span> Enquiries
+        <span class="sb-badge" id="provider-enquiries-badge" style="display:none">0</span>
+      </button>
 
       <!-- Seeker only -->
       <div class="sidebar-section seeker-only" style="display:none">For Seekers</div>
@@ -811,7 +815,8 @@ SessionGuard.init();
           </div>
           <div class="form-group">
             <label for="new-phone">Contact Number *</label>
-            <input class="form-control" id="new-phone" type="tel" placeholder="01X-XXXXXXX"/>
+            <input class="form-control" id="new-phone" type="tel" placeholder="01X-XXXXXXX" oninput="clearPhoneError()"/>
+            <div id="new-phone-err" style="color:var(--danger);font-size:0.78rem;margin-top:6px;display:none"></div>
           </div>
         </div>
         <div style="display:flex;gap:10px">
@@ -859,6 +864,10 @@ SessionGuard.init();
         <div style="margin-top:8px">
           <div style="font-weight:600;margin-bottom:12px">Recent Enquiries</div>
           <div id="an-recent-enquiries"><div style="color:var(--muted);font-size:0.875rem">Loading…</div></div>
+        </div>
+        <div style="margin-top:24px">
+          <div style="font-weight:600;margin-bottom:12px">My Reviews</div>
+          <div id="an-my-reviews"><div style="color:var(--muted);font-size:0.875rem">Loading…</div></div>
         </div>
       </div>
     </div>
@@ -1057,6 +1066,8 @@ SessionGuard.init();
         <button class="admin-section-tab" id="atab-logs" onclick="switchAdminTab('logs')" role="tab" aria-selected="false">📜 Activity Log</button>
         <button class="admin-section-tab" id="atab-settings" onclick="switchAdminTab('settings')" role="tab" aria-selected="false">⚙️ Settings</button>
         <button class="admin-section-tab" id="atab-trials" onclick="switchAdminTab('trials')" role="tab" aria-selected="false">⏳ Trials <span id="trials-badge" style="background:#e8521a;color:white;border-radius:999px;padding:1px 7px;font-size:0.72rem;margin-left:4px;display:none">!</span></button>
+        <button class="admin-section-tab" id="atab-auditlog" onclick="switchAdminTab('auditlog')" role="tab" aria-selected="false">🧾 Audit Log</button>
+        <button class="admin-section-tab" id="atab-reports" onclick="switchAdminTab('reports')" role="tab" aria-selected="false">🚩 Reports</button>
       </div>
 
       <!-- ── TAB: LISTINGS ── -->
@@ -1158,6 +1169,29 @@ SessionGuard.init();
             </div>
           </div>
         </div>
+        <!-- Admin-only: hidden for moderators via initAdminPanel (bulk email
+             is 403'd server-side for non-admins). -->
+        <div class="card" id="admin-bulk-email-card" style="margin-bottom:20px;max-width:560px">
+          <div class="card-title" style="margin-bottom:16px">📣 Announce to Everyone</div>
+          <div class="form-group">
+            <label for="bulk-email-audience">Audience</label>
+            <select class="form-control" id="bulk-email-audience">
+              <option value="providers">Providers</option>
+              <option value="seekers">Seekers</option>
+              <option value="all">All Users</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bulk-email-subject">Subject</label>
+            <input class="form-control" id="bulk-email-subject" placeholder="e.g. Upcoming platform maintenance"/>
+          </div>
+          <div class="form-group">
+            <label for="bulk-email-message">Message</label>
+            <textarea class="form-control" id="bulk-email-message" rows="5" placeholder="Write your announcement…"></textarea>
+          </div>
+          <button class="btn btn-accent" id="bulk-email-send-btn" onclick="sendBulkEmail()">📤 Send Announcement</button>
+        </div>
+
         <div class="card" style="border-color:#fecaca">
           <div class="card-title" style="color:var(--danger);margin-bottom:8px">⚠️ Danger Zone</div>
           <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">These actions affect the entire platform. Irreversible.</p>
@@ -1176,6 +1210,32 @@ SessionGuard.init();
         </div>
         <div id="trial-tracker-content">
           <div style="color:var(--muted);font-size:0.875rem">Loading…</div>
+        </div>
+      </div>
+
+      <!-- ── TAB: AUDIT LOG ── -->
+      <div id="admin-tab-auditlog" style="display:none">
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header">
+            <div class="card-title">🧾 Audit Log</div>
+            <button class="btn btn-ghost btn-sm" onclick="loadAuditLog()">🔄 Refresh</button>
+          </div>
+          <div id="admin-auditlog-container">
+            <div class="empty-state" style="padding:24px"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: REPORTS ── -->
+      <div id="admin-tab-reports" style="display:none">
+        <div class="card" style="margin-bottom:0">
+          <div class="card-header">
+            <div class="card-title">🚩 Reports</div>
+            <button class="btn btn-ghost btn-sm" onclick="loadReports()">🔄 Refresh</button>
+          </div>
+          <div id="admin-reports-container">
+            <div class="empty-state" style="padding:24px"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div>
+          </div>
         </div>
       </div>
 
@@ -1272,6 +1332,12 @@ function sanitize(str) {
 let currentUser = null;
 let userProfile = null;
 let userListings = [];
+let myReviewsCache = [];
+// True when the logged-in admin's profiles.role is 'moderator' (as opposed
+// to 'admin' or the legacy ADMIN_EMAILS allowlist) — gates ban/unban
+// controls, the bulk-email panel, and dispute notes, all of which the
+// backend rejects for non-admins anyway.
+let isModeratorAdmin = false;
 
 // ════════════════════════════════════
 // INIT — strict auth guard
@@ -1372,14 +1438,25 @@ async function initDashboard(user) {
   document.getElementById('overview-greeting').textContent = `${greeting}, ${name}! 👋`;
 
   // Admin check — if admin, skip provider/seeker UI entirely
-  if (isAdmin(user)) {
+  // Broadened beyond the ADMIN_EMAILS allowlist: profiles.role === 'admin'
+  // or 'moderator' also gets into the admin panel. Moderators get a
+  // restricted subset once inside (see isModeratorAdmin — set below, and
+  // consumed by initAdminPanel / renderAdminUsersTable / viewAdminUser).
+  let _gateRole = null;
+  try {
+    const { data: rp } = await db.from('profiles').select('role').eq('id', user.id).single();
+    _gateRole = rp?.role || null;
+  } catch(e) { console.warn('[initDashboard] role lookup failed:', e.message); }
+  isModeratorAdmin = _gateRole === 'moderator';
+
+  if (isAdmin(user) || _gateRole === 'admin' || isModeratorAdmin) {
     // Set admin badge
     const badge = document.getElementById('sb-role-badge');
-    badge.textContent = '🛡️ Admin';
+    badge.textContent = isModeratorAdmin ? '🛡️ Moderator' : '🛡️ Admin';
     badge.className = 'user-role-badge';
     badge.style.background = '#1e3a8a';
     badge.style.color = 'white';
-    document.getElementById('profile-role-badge').textContent = '🛡️ Admin';
+    document.getElementById('profile-role-badge').textContent = isModeratorAdmin ? '🛡️ Moderator' : '🛡️ Admin';
     document.getElementById('profile-role-badge').className = 'user-role-badge';
     document.getElementById('profile-role-badge').style.background = '#1e3a8a';
     document.getElementById('profile-role-badge').style.color = 'white';
@@ -1448,8 +1525,26 @@ function setupProviderUI(user, name, joinedDate) {
   // Load listings
   loadMyListings(user.id);
 
+  // Enquiry inbox "new" count badge
+  loadProviderEnquiryBadge(user.id);
+
   // Subscription page
   setupSubscriptionPage(user);
+}
+
+// New-enquiry count badge for the provider sidebar (contacts.status === 'new'
+// scoped to this provider via the provider_user_id trigger column).
+async function loadProviderEnquiryBadge(userId) {
+  try {
+    const { count } = await db.from('contacts')
+      .select('id', { count: 'exact', head: true })
+      .eq('provider_user_id', userId)
+      .eq('status', 'new');
+    const badge = document.getElementById('provider-enquiries-badge');
+    if (!badge) return;
+    if (count > 0) { badge.style.display = ''; badge.textContent = count; }
+    else badge.style.display = 'none';
+  } catch(e) { console.warn('[loadProviderEnquiryBadge]', e.message); }
 }
 
 // ════════════════════════════════════
@@ -1611,7 +1706,25 @@ async function loadMyListings(userId) {
   if (!listings.length) return;
 
   const catEmoji = {'Catering':'🍽️','Events':'🎉','Cleaning':'🧹','Photography':'📸','Moving':'📦','Repair':'🔧','Tutoring':'📚','Beauty':'💄','IT':'💻','Fitness':'🏋️','Music':'🎵','Pets':'🐾','Bridal':'👰','PersonalTrainer':'🏃','Massage':'💆','Laundry':'👕','Landscaping':'🌿','Childcare':'👶','Elderly':'🧓','Pest':'🪲','AirCon':'❄️','Printing':'🖨️','Tailor':'🪡','Driver':'🚗'};
-  const statusBadge = {active:'<span class="badge badge-green">✅ Active</span>',pending:'<span class="badge badge-orange">⏳ Pending</span>',rejected:'<span class="badge badge-red">❌ Rejected</span>'};
+  const statusBadge = {
+    active:    '<span class="badge badge-green">✅ Active</span>',
+    pending:   '<span class="badge badge-orange">⏳ Pending</span>',
+    rejected:  '<span class="badge badge-red">❌ Rejected</span>',
+    suspended: '<span class="badge badge-grey">🔒 Suspended</span>',
+    paused:    '<span class="badge badge-blue">⏸️ Paused</span>'
+  };
+
+  // Pause/Resume action for the provider's own listing, plus a suspension
+  // reason line when an admin has hidden it.
+  function myListingActions(l) {
+    if (l.status === 'active') return `<button class="btn btn-ghost btn-sm" style="font-size:0.72rem;padding:4px 10px" onclick="pauseMyListing('${encodeURIComponent(l.id)}')">⏸️ Pause</button>`;
+    if (l.status === 'paused') return `<button class="btn btn-ghost btn-sm" style="font-size:0.72rem;padding:4px 10px" onclick="resumeMyListing('${encodeURIComponent(l.id)}')">▶️ Resume</button>`;
+    return '';
+  }
+  function suspensionNote(l) {
+    if (l.status !== 'suspended') return '';
+    return `<div style="font-size:0.75rem;color:var(--danger);margin-top:3px">${sanitize(l.suspension_reason || 'Contact support for details')}</div>`;
+  }
 
   const html = listings.map(l => `
     <div class="listing-item">
@@ -1619,8 +1732,12 @@ async function loadMyListings(userId) {
       <div class="listing-info">
         <div class="listing-title">${sanitize(l.title)}</div>
         <div class="listing-meta">${sanitize(l.category)} · ${sanitize(l.location)} · RM ${parseFloat(l.price).toLocaleString()}</div>
+        ${suspensionNote(l)}
       </div>
-      <div class="listing-status">${statusBadge[l.status]||'<span class="badge badge-grey">Unknown</span>'}</div>
+      <div class="listing-status" style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        ${statusBadge[l.status]||'<span class="badge badge-grey">Unknown</span>'}
+        ${myListingActions(l)}
+      </div>
     </div>
   `).join('');
 
@@ -1636,6 +1753,30 @@ async function loadMyListings(userId) {
 
   // My listings page
   document.getElementById('my-listings-content').innerHTML = html;
+}
+
+async function pauseMyListing(id) {
+  const realId = decodeURIComponent(id);
+  try {
+    const { error } = await db.from('listings').update({ status: 'paused' }).eq('id', realId);
+    if (error) throw error;
+    showToast('success', '⏸️ Listing paused — hidden from search until resumed.');
+    await loadMyListings(currentUser.id);
+  } catch(e) {
+    showToast('error', 'Failed to pause listing: ' + e.message);
+  }
+}
+
+async function resumeMyListing(id) {
+  const realId = decodeURIComponent(id);
+  try {
+    const { error } = await db.from('listings').update({ status: 'active' }).eq('id', realId);
+    if (error) throw error;
+    showToast('success', '▶️ Listing resumed — visible to customers again.');
+    await loadMyListings(currentUser.id);
+  } catch(e) {
+    showToast('error', 'Failed to resume listing: ' + e.message);
+  }
 }
 
 // ════════════════════════════════════
@@ -1735,21 +1876,45 @@ function setupTrialBanner() {
 // ════════════════════════════════════
 // SUBMIT NEW LISTING
 // ════════════════════════════════════
+// Accepts Malaysian mobile formats like 01X-XXXXXXX, 01XXXXXXXX, and
+// +60/60-prefixed equivalents. Strips everything but digits, then strips a
+// leading country code (60) or trunk prefix (0), and expects what's left to
+// start with 1 and be 9–10 digits long (covers both 01X-XXXXXXX and the
+// 11-digit 011-XXXXXXXX format).
+function isValidMYPhone(raw) {
+  let digits = (raw || '').replace(/\D/g, '');
+  if (digits.startsWith('60')) digits = digits.slice(2);
+  if (digits.startsWith('0')) digits = digits.slice(1);
+  return /^1\d{8,9}$/.test(digits);
+}
+
+function clearPhoneError() {
+  const err = document.getElementById('new-phone-err');
+  if (err) { err.style.display = 'none'; err.textContent = ''; }
+}
+
 async function submitNewListing() {
   const title = document.getElementById('new-title').value.trim();
   const cat = document.getElementById('new-cat').value;
   const price = document.getElementById('new-price').value;
   const location = document.getElementById('new-location').value;
   const phone = document.getElementById('new-phone').value.trim();
+  const phoneErr = document.getElementById('new-phone-err');
 
   if (!title || !cat || !price || !location || !phone) {
     showToast('error', 'Please fill in all required fields'); return;
   }
 
+  if (!isValidMYPhone(phone)) {
+    if (phoneErr) { phoneErr.textContent = 'Please enter a valid Malaysian mobile number (e.g. 012-3456789).'; phoneErr.style.display = 'block'; }
+    return;
+  }
+  clearPhoneError();
+
   const btn = document.querySelector('#page-add-listing .btn-accent');
   btn.textContent = 'Publishing…'; btn.disabled = true;
 
-  const { error } = await db.from('listings').insert({
+  const { data: inserted, error } = await db.from('listings').insert({
     title, category: cat,
     price: parseFloat(price),
     description: document.getElementById('new-desc').value.trim() || null,
@@ -1757,14 +1922,24 @@ async function submitNewListing() {
     location, phone,
     status: 'pending',
     user_id: currentUser.id
-  });
+  }).select('id').single();
 
   btn.textContent = 'Publish Listing →'; btn.disabled = false;
 
   if (error) { showToast('error', 'Failed to submit. Please try again.'); return; }
 
+  // Fire-and-forget: let the admin know a new listing needs review. Never
+  // block or fail the provider's own success flow on this.
+  if (inserted?.id) {
+    try {
+      db.functions.invoke('notify-new-listing', { body: { listingId: inserted.id } })
+        .catch(e => console.warn('[notify-new-listing] failed:', e?.message));
+    } catch(e) { console.warn('[notify-new-listing]', e?.message); }
+  }
+
   showToast('success', '🚀 Listing submitted! We\'ll review it within 24 hours.');
   ['new-title','new-cat','new-price','new-desc','new-location','new-phone'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  clearPhoneError();
   await loadMyListings(currentUser.id);
   goTo('my-listings');
 }
@@ -1957,42 +2132,59 @@ async function loadEnquiries() {
   const isProviderRole = role === 'provider';
 
   if (isProviderRole) {
-    // Provider: show messages received about their listings
+    // Provider: show messages received about their listings, sourced
+    // straight from contacts.provider_user_id (auto-filled by a DB trigger
+    // off listing_id) rather than the old title-text-matching heuristic.
     document.getElementById('enquiries-page-title').textContent = 'Received Enquiries';
     document.getElementById('enquiries-page-sub').textContent = 'Messages customers sent about your services';
 
-    // Get this provider's listing IDs first
-    const { data: myListings } = await db.from('listings').select('id,title').eq('user_id', currentUser.id);
-    if (!myListings || !myListings.length) {
-      container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No listings yet</div><div class="empty-sub">Add a listing first so customers can contact you.</div><button class="btn btn-accent btn-sm" onclick="goTo(&quot;add-listing&quot;)">Add Listing →</button></div></div>';
+    let msgs = [];
+    try {
+      const { data, error } = await db.from('contacts')
+        .select('*')
+        .eq('provider_user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      msgs = data || [];
+    } catch(e) {
+      console.warn('[loadEnquiries] provider query failed:', e.message);
+      container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load enquiries</div></div></div>';
       return;
     }
 
-    // Fetch contacts that mention the listing title or came from logged-in users
-    const { data: msgs } = await db.from('contacts')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(50);
-
-    const relevant = (msgs || []).filter(m =>
-      myListings.some(l => m.subject?.includes(l.title) || m.message?.includes(l.title))
-    );
-
-    if (!relevant.length) {
+    if (!msgs.length) {
       container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No enquiries yet</div><div class="empty-sub">When customers contact you, their messages will appear here.</div></div></div>';
       return;
     }
 
-    container.innerHTML = '<div class="card">' + relevant.map(m => `
+    // Look up listing titles for enquiries that reference one
+    const listingIds = [...new Set(msgs.map(m => m.listing_id).filter(Boolean))];
+    let listingMap = {};
+    if (listingIds.length) {
+      const { data: listings } = await db.from('listings').select('id,title').in('id', listingIds);
+      (listings || []).forEach(l => { listingMap[l.id] = l.title; });
+    }
+
+    const statusOptions = ['new', 'responded', 'won', 'lost'];
+    const statusLabel = { new: '🆕 New', responded: '↩️ Responded', won: '✅ Won', lost: '❌ Lost' };
+
+    container.innerHTML = '<div class="card">' + msgs.map(m => `
       <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
           <div style="font-weight:600;font-size:0.9rem">${sanitize(m.name || 'Anonymous')}</div>
           <div style="font-size:0.75rem;color:var(--muted)">${new Date(m.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}</div>
         </div>
+        ${m.listing_id && listingMap[m.listing_id] ? `<div style="font-size:0.78rem;color:var(--accent);font-weight:600">Re: ${sanitize(listingMap[m.listing_id])}</div>` : ''}
         ${m.email ? `<div style="font-size:0.78rem;color:var(--accent2)">${sanitize(m.email)}</div>` : ''}
         ${m.subject ? `<div style="font-size:0.8rem;font-weight:500;color:var(--muted)">${sanitize(m.subject)}</div>` : ''}
         <div style="font-size:0.875rem;color:var(--ink);line-height:1.55">${sanitize(m.message)}</div>
-        ${m.email ? `<a href="mailto:${sanitize(m.email)}" class="btn btn-ghost btn-sm" style="width:fit-content;margin-top:4px">↩ Reply via Email</a>` : ''}
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px">
+          <label for="enq-status-${sanitize(m.id)}" style="font-size:0.75rem;color:var(--muted)">Status:</label>
+          <select class="form-control" id="enq-status-${sanitize(m.id)}" style="width:auto;padding:6px 10px;font-size:0.78rem" onchange="updateEnquiryStatus('${encodeURIComponent(m.id)}', this.value)">
+            ${statusOptions.map(s => `<option value="${s}" ${m.status === s ? 'selected' : ''}>${statusLabel[s]}</option>`).join('')}
+          </select>
+          ${m.email ? `<a href="mailto:${sanitize(m.email)}" class="btn btn-ghost btn-sm" style="width:fit-content">↩ Reply via Email</a>` : ''}
+        </div>
       </div>`).join('') + '</div>';
 
   } else {
@@ -2024,6 +2216,19 @@ async function loadEnquiries() {
         <div style="font-size:0.875rem;color:var(--ink);line-height:1.55">${sanitize(m.message)}</div>
         <div style="font-size:0.75rem;color:var(--muted)">Sent to: ${sanitize(m.name || '—')}</div>
       </div>`).join('') + '</div>';
+  }
+}
+
+async function updateEnquiryStatus(id, status) {
+  const realId = decodeURIComponent(id);
+  try {
+    const { error } = await db.from('contacts').update({ status }).eq('id', realId);
+    if (error) throw error;
+    showToast('success', 'Enquiry marked as ' + status);
+    if (currentUser) loadProviderEnquiryBadge(currentUser.id);
+  } catch(e) {
+    showToast('error', 'Failed to update status: ' + e.message);
+    console.error('[updateEnquiryStatus]', e);
   }
 }
 
@@ -2243,12 +2448,14 @@ async function freezeProvider(userId) {
   // not declined" also means it now shows correctly in the Suspended filter.
   await db.from('listings').update({ status: 'suspended' }).eq('user_id', userId);
   showToast('success', '🔒 Provider frozen — listings hidden.');
+  logAdminAction('suspend_listing', 'listings', userId, { reason: 'provider_frozen' });
   loadTrialTracker();
 }
 
 async function unfreezeProvider(userId) {
   await db.from('listings').update({ status: 'active' }).eq('user_id', userId);
   showToast('success', '🔓 Provider unfrozen — listings visible.');
+  logAdminAction('unsuspend_listing', 'listings', userId, { reason: 'provider_unfrozen' });
   loadTrialTracker();
 }
 
@@ -2321,10 +2528,10 @@ async function loadAnalytics() {
     const el2 = document.getElementById('an-enquiries');
     if (el2) el2.textContent = eCount || 0;
 
-    // Reviews count + avg rating
+    // Reviews count + avg rating + full list (for reply UI below)
     if (myListings && myListings.length) {
       const ids = myListings.map(l => l.id);
-      const { data: reviews } = await db.from('reviews').select('rating').in('listing_id', ids);
+      const { data: reviews } = await db.from('reviews').select('*').in('listing_id', ids).order('created_at', { ascending: false });
       const el3 = document.getElementById('an-reviews');
       const el4 = document.getElementById('an-rating');
       if (el3) el3.textContent = reviews ? reviews.length : 0;
@@ -2332,6 +2539,7 @@ async function loadAnalytics() {
         const avg = (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1);
         el4.textContent = avg + ' ★';
       } else if (el4) el4.textContent = '—';
+      renderMyReviews(reviews || []);
     }
 
     // Recent enquiries
@@ -2352,6 +2560,84 @@ async function loadAnalytics() {
       }
     }
   } catch(e) { console.warn('[loadAnalytics]', e.message); }
+}
+
+// ════════════════════════════════════
+// REVIEW REPLIES (reviews.provider_response / provider_response_at)
+// ════════════════════════════════════
+function renderMyReviews(reviews) {
+  myReviewsCache = reviews || [];
+  const container = document.getElementById('an-my-reviews');
+  if (!container) return;
+  if (!myReviewsCache.length) {
+    container.innerHTML = '<div style="color:var(--muted);font-size:0.875rem">No reviews yet.</div>';
+    return;
+  }
+  container.innerHTML = myReviewsCache.map(r => {
+    const rid = encodeURIComponent(r.id);
+    const safeId = sanitize(r.id);
+    return `
+    <div style="padding:14px 0;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div style="font-weight:600;font-size:0.875rem">${sanitize(r.reviewer_name || 'Anonymous')}</div>
+        <div style="color:var(--accent);font-size:0.85rem">${'★'.repeat(r.rating||0)}${'☆'.repeat(Math.max(0,5-(r.rating||0)))}</div>
+      </div>
+      ${r.comment ? `<div style="font-size:0.85rem;color:var(--ink);line-height:1.55">${sanitize(r.comment)}</div>` : ''}
+      <div style="font-size:0.75rem;color:var(--muted)">${_timeAgo(r.created_at)}</div>
+      <div id="review-reply-view-${safeId}">
+        ${r.provider_response ? `
+          <div style="background:var(--cream);border-radius:8px;padding:10px 12px;margin-top:4px">
+            <div style="font-size:0.72rem;color:var(--muted);font-weight:600;margin-bottom:2px">Your reply${r.provider_response_at ? ' · ' + _timeAgo(r.provider_response_at) : ''}</div>
+            <div style="font-size:0.82rem">${sanitize(r.provider_response)}</div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:6px;font-size:0.72rem" onclick="openReviewReplyForm('${rid}')">✏️ Edit Reply</button>
+          </div>` : `<button class="btn btn-ghost btn-sm" style="font-size:0.75rem" onclick="openReviewReplyForm('${rid}')">↩ Reply</button>`}
+      </div>
+      <div id="review-reply-form-${safeId}" style="display:none;margin-top:6px"></div>
+    </div>`;
+  }).join('');
+}
+
+function openReviewReplyForm(encodedId) {
+  const id = decodeURIComponent(encodedId);
+  const review = myReviewsCache.find(r => r.id === id);
+  if (!review) return;
+  const safeId = sanitize(id);
+  const formHolder = document.getElementById('review-reply-form-' + safeId);
+  if (!formHolder) return;
+  const isOpen = formHolder.style.display !== 'none';
+  if (isOpen) { formHolder.style.display = 'none'; formHolder.innerHTML = ''; return; }
+  formHolder.style.display = '';
+  formHolder.innerHTML = `
+    <label for="review-reply-text-${safeId}" style="font-size:0.75rem;color:var(--muted);display:block;margin-bottom:4px">Your reply</label>
+    <textarea class="form-control" id="review-reply-text-${safeId}" rows="3" placeholder="Thank the customer or address their feedback…"></textarea>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-accent btn-sm" onclick="saveReviewReply('${encodeURIComponent(id)}')">💾 Save Reply</button>
+      <button class="btn btn-ghost btn-sm" onclick="openReviewReplyForm('${encodeURIComponent(id)}')">Cancel</button>
+    </div>`;
+  document.getElementById('review-reply-text-' + safeId).value = review.provider_response || '';
+}
+
+async function saveReviewReply(encodedId) {
+  const id = decodeURIComponent(encodedId);
+  const safeId = sanitize(id);
+  const textEl = document.getElementById('review-reply-text-' + safeId);
+  const text = textEl ? textEl.value.trim() : '';
+  if (!text) { showToast('error', 'Please enter a reply before saving'); return; }
+  try {
+    const nowIso = new Date().toISOString();
+    const { error } = await db.from('reviews').update({
+      provider_response: text,
+      provider_response_at: nowIso
+    }).eq('id', id);
+    if (error) throw error;
+    showToast('success', '💾 Reply saved');
+    const review = myReviewsCache.find(r => r.id === id);
+    if (review) { review.provider_response = text; review.provider_response_at = nowIso; }
+    renderMyReviews(myReviewsCache);
+  } catch(e) {
+    showToast('error', 'Failed to save reply: ' + e.message);
+    console.error('[saveReviewReply]', e);
+  }
 }
 
 // ════════════════════════════════════
@@ -2455,11 +2741,38 @@ function isAdmin(user) {
 }
 
 // ════════════════════════════════════
+// ADMIN — AUDIT LOG (append-only admin_actions table)
+// Fire-and-forget: a logging failure must never break the admin action it
+// documents, so this always swallows its own errors.
+// ════════════════════════════════════
+async function logAdminAction(action, target_table, target_id, details) {
+  try {
+    const { data: { user } } = await db.auth.getUser();
+    await db.from('admin_actions').insert({
+      admin_id: user?.id || currentUser?.id || null,
+      action,
+      target_table,
+      target_id: target_id != null ? String(target_id) : null,
+      details: details || {}
+    });
+  } catch(e) { console.warn('[logAdminAction]', action, e?.message); }
+}
+
+// ════════════════════════════════════
 // ADMIN INIT
 // ════════════════════════════════════
 async function initAdminPanel(user) {
   // Show admin sidebar
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+  // Moderators must never see ban/unban controls, bulk email, or dispute
+  // notes — the backend 403s/rejects all three for non-admins, so hide the
+  // UI rather than let a moderator hit that error. Ban/dispute gating lives
+  // in renderAdminUsersTable / viewAdminUser; bulk email is a single panel
+  // hidden here.
+  if (isModeratorAdmin) {
+    const bulkCard = document.getElementById('admin-bulk-email-card');
+    if (bulkCard) bulkCard.style.display = 'none';
+  }
   await loadAdminListings();
 }
 
@@ -2543,13 +2856,14 @@ function renderAdminTable(listings) {
     active:    '<span class="badge badge-green">✅ Active</span>',
     pending:   '<span class="badge badge-orange">⏳ Pending</span>',
     rejected:  '<span class="badge badge-red">❌ Rejected</span>',
-    suspended: '<span class="badge badge-grey">🔒 Suspended</span>'
+    suspended: '<span class="badge badge-grey">🔒 Suspended</span>',
+    paused:    '<span class="badge badge-blue">⏸️ Paused</span>'
   };
 
   const rows = listings.map(l => `
     <tr>
       <td>
-        <div style="font-weight:600;font-size:0.875rem">${sanitize(l.title||'—')}</div>
+        <div style="font-weight:600;font-size:0.875rem">${sanitize(l.title||'—')}${l.verified ? ' <span class="badge badge-blue" title="Verified">✓ Verified</span>' : ''}</div>
         <div style="color:var(--muted);font-size:0.75rem">${sanitize(l.provider_name||'Unknown')}</div>
       </td>
       <td>${statusBadge[l.status] || '<span class="badge badge-grey">'+sanitize(l.status)+'</span>'}</td>
@@ -2602,6 +2916,7 @@ async function updateListingStatus(id, status) {
     return;
   }
   showToast('success', `✅ Listing ${status === 'active' ? 'approved' : 'rejected'}!`);
+  logAdminAction(status === 'active' ? 'approve_listing' : 'reject_listing', 'listings', realId, { status });
   closeModal('admin-detail-modal');
   await loadAdminListings();
 }
@@ -2629,7 +2944,8 @@ function viewAdminListing(id) {
     active:    '<span class="badge badge-green">✅ Active</span>',
     pending:   '<span class="badge badge-orange">⏳ Pending</span>',
     rejected:  '<span class="badge badge-red">❌ Rejected</span>',
-    suspended: '<span class="badge badge-grey">🔒 Suspended</span>'
+    suspended: '<span class="badge badge-grey">🔒 Suspended</span>',
+    paused:    '<span class="badge badge-blue">⏸️ Paused</span>'
   };
 
   document.getElementById('admin-modal-title').textContent = l.title || 'Listing Details';
@@ -2637,6 +2953,10 @@ function viewAdminListing(id) {
     <div style="display:flex;flex-direction:column;gap:10px;font-size:0.875rem">
       <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
         <span style="color:var(--muted)">Status</span><span>${statusBadge[l.status]||sanitize(l.status)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+        <label for="al-verified-toggle" style="color:var(--muted)">Verified</label>
+        <input type="checkbox" id="al-verified-toggle" ${l.verified ? 'checked' : ''} onchange="toggleAdminVerified('${encodeURIComponent(l.id)}', this.checked)"/>
       </div>
       <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
         <span style="color:var(--muted)">Provider</span><span style="font-weight:500">${sanitize(l.provider_name||'—')}</span>
@@ -2730,8 +3050,29 @@ async function saveAdminListingEdit(id) {
   const { error } = await db.from('listings').update(updates).eq('id', realId);
   if (error) { showToast('error', 'Failed to save: ' + error.message); console.error('[saveAdminListingEdit]', error); return; }
   showToast('success', '💾 Listing updated');
+  logAdminAction('edit_listing', 'listings', realId, updates);
   closeModal('admin-detail-modal');
   await loadAdminListings();
+}
+
+// ════════════════════════════════════
+// ADMIN — VERIFIED TOGGLE
+// ════════════════════════════════════
+async function toggleAdminVerified(id, checked) {
+  const realId = decodeURIComponent(id);
+  try {
+    const { error } = await db.from('listings').update({ verified: checked }).eq('id', realId);
+    if (error) throw error;
+    const l = allAdminListings.find(x => x.id === realId);
+    if (l) l.verified = checked;
+    showToast('success', checked ? '✓ Listing marked verified' : 'Verified badge removed');
+    logAdminAction('toggle_verified', 'listings', realId, { verified: checked });
+    renderAdminTable(filteredAdminListings.length ? filteredAdminListings : allAdminListings);
+  } catch(e) {
+    showToast('error', 'Failed to update verified status: ' + e.message);
+    const cb = document.getElementById('al-verified-toggle');
+    if (cb) cb.checked = !checked;
+  }
 }
 
 async function approveAllPending() {
@@ -2991,7 +3332,7 @@ function exportAdminUsersCSV() {
 // Trials tab hid every other tab's container but never showed its own
 // (admin-tab-trials kept its inline display:none from the HTML) and never
 // triggered loadTrialTracker() — the whole tab was silently dead.
-const ADMIN_TABS = ['listings','users','logs','settings','trials'];
+const ADMIN_TABS = ['listings','users','logs','settings','trials','auditlog','reports'];
 
 function switchAdminTab(tab) {
   ADMIN_TABS.forEach(t => {
@@ -3003,24 +3344,32 @@ function switchAdminTab(tab) {
     }
   });
   // Lazy-load on first open
-  if (tab === 'users'  && !_usersLoaded)  loadAdminUsers();
-  if (tab === 'logs'   && !_logsLoaded)   loadActivityLog();
-  if (tab === 'trials' && !_trialsLoaded) loadTrialTracker();
+  if (tab === 'users'    && !_usersLoaded)    loadAdminUsers();
+  if (tab === 'logs'     && !_logsLoaded)     loadActivityLog();
+  if (tab === 'trials'   && !_trialsLoaded)   loadTrialTracker();
+  if (tab === 'auditlog' && !_auditLoaded)    loadAuditLog();
+  if (tab === 'reports'  && !_reportsLoaded)  loadReports();
 }
 
 let _usersLoaded = false;
 let _logsLoaded  = false;
 let _trialsLoaded = false;
+let _auditLoaded = false;
+let _reportsLoaded = false;
 
 function adminRefreshAll() {
   _usersLoaded = false;
   _logsLoaded  = false;
   _trialsLoaded = false;
+  _auditLoaded = false;
+  _reportsLoaded = false;
   loadAdminListings();
   const activeTab = ADMIN_TABS.find(t => document.getElementById('admin-tab-' + t)?.style.display !== 'none') || 'listings';
-  if (activeTab === 'users')  { _usersLoaded  = false; loadAdminUsers(); }
-  if (activeTab === 'logs')   { _logsLoaded   = false; loadActivityLog(); }
-  if (activeTab === 'trials') { _trialsLoaded = false; loadTrialTracker(); }
+  if (activeTab === 'users')    { _usersLoaded   = false; loadAdminUsers(); }
+  if (activeTab === 'logs')     { _logsLoaded    = false; loadActivityLog(); }
+  if (activeTab === 'trials')   { _trialsLoaded  = false; loadTrialTracker(); }
+  if (activeTab === 'auditlog') { _auditLoaded   = false; loadAuditLog(); }
+  if (activeTab === 'reports')  { _reportsLoaded = false; loadReports(); }
   showToast('info', 'Admin data refreshed');
 }
 
@@ -3179,10 +3528,10 @@ function renderAdminUsersTable(users) {
       <td>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="admin-action-btn admin-view" onclick="viewAdminUser('${encodeURIComponent(u.id)}')">👁 View</button>
-          ${!isBanned
+          ${isModeratorAdmin ? '' : (!isBanned
             ? `<button class="admin-action-btn admin-reject" onclick="banUser('${encodeURIComponent(u.id)}', true, '${sanitize(u.email||'')}')">🚫 Ban</button>`
             : `<button class="admin-action-btn admin-approve" onclick="banUser('${encodeURIComponent(u.id)}', false, '${sanitize(u.email||'')}')">✅ Unban</button>`
-          }
+          )}
         </div>
       </td>
     </tr>`;
@@ -3223,17 +3572,74 @@ function viewAdminUser(encodedId) {
       <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Email Verified</span><span>${u.email_confirmed_at ? '<span style="color:var(--success)">✓ Yes</span>' : '<span style="color:var(--muted)">No</span>'}</span></div>
       <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Joined</span><span>${u.created_at ? new Date(u.created_at).toLocaleDateString('en-MY',{day:'numeric',month:'long',year:'numeric'}) : '—'}</span></div>
       <div style="display:flex;justify-content:space-between;padding:9px 0"><span style="color:var(--muted)">Last Sign In</span><span>${u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : 'Never'}</span></div>
-    </div>`;
+    </div>
+    <div id="admin-dispute-section"></div>`;
 
   document.getElementById('admin-modal-actions').innerHTML = `
     <button class="btn btn-ghost" onclick="viewUserListings('${encodeURIComponent(u.id)}')">📋 View Listings</button>
-    ${!isBanned
+    ${isModeratorAdmin ? '' : (!isBanned
       ? `<button class="btn btn-danger" onclick="banUser('${encodeURIComponent(u.id)}',true,'${sanitize(u.email||'')}');closeModal('admin-detail-modal')">🚫 Ban User</button>`
       : `<button class="btn btn-success" onclick="banUser('${encodeURIComponent(u.id)}',false,'${sanitize(u.email||'')}');closeModal('admin-detail-modal')">✅ Unban User</button>`
-    }
+    )}
     <button class="btn btn-ghost" onclick="closeModal('admin-detail-modal')">Close</button>`;
 
   openModal('admin-detail-modal');
+  // Dispute status/notes are admin-only at the DB level (a trigger rejects
+  // the write for anyone else) — don't even fetch/render the section for a
+  // moderator, so there's nothing there for them to try to save.
+  if (!isModeratorAdmin) loadUserDisputeSection(u.id);
+}
+
+// ════════════════════════════════════
+// ADMIN — DISPUTE NOTES (profiles.dispute_status / dispute_notes)
+// Admin-only: a DB trigger blocks non-admin writes to these columns, so
+// this section is never rendered for a moderator (see viewAdminUser).
+// ════════════════════════════════════
+async function loadUserDisputeSection(userId) {
+  const section = document.getElementById('admin-dispute-section');
+  if (!section) return;
+  section.innerHTML = '<div style="font-size:0.78rem;color:var(--muted);padding:8px 0">Loading dispute info…</div>';
+  try {
+    const { data, error } = await db.from('profiles').select('dispute_status,dispute_notes').eq('id', userId).single();
+    if (error) throw error;
+    const status = data?.dispute_status || 'none';
+    const notes = data?.dispute_notes || '';
+    section.innerHTML = `
+      <div style="border-top:1.5px solid var(--border);margin-top:8px;padding-top:12px">
+        <div style="font-weight:600;font-size:0.85rem;margin-bottom:10px">⚖️ Dispute</div>
+        <div class="form-group">
+          <label for="admin-dispute-status">Dispute Status</label>
+          <select class="form-control" id="admin-dispute-status">
+            <option value="none" ${status === 'none' ? 'selected' : ''}>None</option>
+            <option value="open" ${status === 'open' ? 'selected' : ''}>Open</option>
+            <option value="resolved" ${status === 'resolved' ? 'selected' : ''}>Resolved</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="admin-dispute-notes">Dispute Notes</label>
+          <textarea class="form-control" id="admin-dispute-notes" rows="3" placeholder="Internal notes about this dispute…">${sanitize(notes)}</textarea>
+        </div>
+        <button class="btn btn-accent btn-sm" onclick="saveUserDispute('${encodeURIComponent(userId)}')">💾 Save Dispute Info</button>
+      </div>`;
+  } catch(e) {
+    section.innerHTML = '<div style="font-size:0.78rem;color:var(--danger);padding:8px 0">Could not load dispute info.</div>';
+    console.error('[loadUserDisputeSection]', e);
+  }
+}
+
+async function saveUserDispute(encodedUserId) {
+  const userId = decodeURIComponent(encodedUserId);
+  const dispute_status = document.getElementById('admin-dispute-status')?.value || 'none';
+  const dispute_notes = document.getElementById('admin-dispute-notes')?.value.trim() || '';
+  try {
+    const { error } = await db.from('profiles').update({ dispute_status, dispute_notes }).eq('id', userId);
+    if (error) throw error;
+    showToast('success', '💾 Dispute info saved');
+    logAdminAction('update_dispute', 'profiles', userId, { dispute_status });
+  } catch(e) {
+    showToast('error', 'Failed to save dispute info: ' + e.message);
+    console.error('[saveUserDispute]', e);
+  }
 }
 
 // Jump from a user's detail view to their listings, pre-filtered — lets an
@@ -3284,6 +3690,7 @@ async function banUser(encodedId, suspend, email) {
     filterAdminUsers(currentUserFilter, null);
 
     showToast('success', `✅ User ${suspend ? 'banned' : 'unbanned'} successfully`);
+    logAdminAction(suspend ? 'ban_user' : 'unban_user', 'profiles', targetId, { email });
 
     // Refresh listings if banning (banned users' listings get frozen)
     if (suspend) await loadAdminListings();
@@ -3451,6 +3858,150 @@ async function adminRejectAllPending() {
   if (error) { showToast('error', 'Failed to reject listings'); return; }
   showToast('success', `❌ ${pending.length} listings rejected`);
   await loadAdminListings();
+}
+
+// ════════════════════════════════════
+// ADMIN — AUDIT LOG TAB (reads public.admin_actions)
+// ════════════════════════════════════
+async function loadAuditLog() {
+  _auditLoaded = true;
+  const container = document.getElementById('admin-auditlog-container');
+  if (!container) return;
+  container.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div>';
+
+  try {
+    const { data, error } = await db.from('admin_actions').select('*').order('created_at', { ascending: false }).limit(150);
+    if (error) throw error;
+
+    if (!data || !data.length) {
+      container.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">🧾</div><div class="empty-title">No admin actions logged yet</div></div>';
+      return;
+    }
+
+    // Join admin_id -> a friendlier name/email where possible, one bulk
+    // query instead of one per row (same pattern as loadTrialTracker).
+    const adminIds = [...new Set(data.map(r => r.admin_id).filter(Boolean))];
+    let adminMap = {};
+    if (adminIds.length) {
+      try {
+        const { data: admins } = await db.from('profiles').select('id, email, full_name').in('id', adminIds);
+        (admins || []).forEach(a => { adminMap[a.id] = a.full_name || a.email || a.id; });
+      } catch(e) { /* fall back to raw ids below */ }
+    }
+
+    container.innerHTML = `
+      <div style="overflow-x:auto">
+        <table class="admin-table">
+          <thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Target</th><th>Details</th></tr></thead>
+          <tbody>${data.map(r => `
+            <tr>
+              <td style="font-size:0.78rem;color:var(--muted);white-space:nowrap">${new Date(r.created_at).toLocaleString('en-MY')}</td>
+              <td style="font-size:0.8rem">${sanitize(adminMap[r.admin_id] || r.admin_id || '—')}</td>
+              <td><span class="badge badge-blue">${sanitize(r.action || '—')}</span></td>
+              <td style="font-size:0.78rem;color:var(--muted)">${sanitize(r.target_table || '—')} · ${sanitize(r.target_id || '—')}</td>
+              <td style="font-size:0.75rem;color:var(--muted);max-width:280px;word-break:break-word">${sanitize(JSON.stringify(r.details || {}))}</td>
+            </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+  } catch(e) {
+    container.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load audit log</div></div>';
+    console.error('[loadAuditLog]', e);
+  }
+}
+
+// ════════════════════════════════════
+// ADMIN — REPORTS TAB (reads/updates public.reports)
+// ════════════════════════════════════
+async function loadReports() {
+  _reportsLoaded = true;
+  const container = document.getElementById('admin-reports-container');
+  if (!container) return;
+  container.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">⏳</div><div class="empty-title">Loading…</div></div>';
+
+  try {
+    const { data, error } = await db.from('reports').select('*').order('created_at', { ascending: false }).limit(150);
+    if (error) throw error;
+
+    if (!data || !data.length) {
+      container.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">🚩</div><div class="empty-title">No reports yet</div></div>';
+      return;
+    }
+
+    const listingIds = [...new Set(data.map(r => r.listing_id).filter(Boolean))];
+    let listingMap = {};
+    if (listingIds.length) {
+      try {
+        const { data: listings } = await db.from('listings').select('id,title').in('id', listingIds);
+        (listings || []).forEach(l => { listingMap[l.id] = l.title; });
+      } catch(e) { /* fall back to raw id below */ }
+    }
+
+    const statusBadge = {
+      open:      '<span class="badge badge-orange">⏳ Open</span>',
+      reviewed:  '<span class="badge badge-green">✅ Reviewed</span>',
+      dismissed: '<span class="badge badge-grey">🚫 Dismissed</span>'
+    };
+
+    container.innerHTML = data.map(r => `
+      <div style="padding:14px 0;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div style="font-weight:600;font-size:0.875rem">${sanitize(listingMap[r.listing_id] || (r.listing_id ? 'Listing ' + String(r.listing_id).slice(0,8) : 'Unknown listing'))}</div>
+          ${statusBadge[r.status] || `<span class="badge badge-grey">${sanitize(r.status||'—')}</span>`}
+        </div>
+        <div style="font-size:0.8rem;color:var(--muted)">Reason: ${sanitize(r.reason || '—')}</div>
+        ${r.details ? `<div style="font-size:0.82rem;color:var(--ink)">${sanitize(r.details)}</div>` : ''}
+        <div style="font-size:0.75rem;color:var(--muted)">${_timeAgo(r.created_at)}</div>
+        ${r.status === 'open' ? `
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-success btn-sm" onclick="updateReportStatus('${encodeURIComponent(r.id)}','reviewed')">✅ Mark Reviewed</button>
+          <button class="btn btn-ghost btn-sm" onclick="updateReportStatus('${encodeURIComponent(r.id)}','dismissed')">🚫 Dismiss</button>
+        </div>` : ''}
+      </div>`).join('');
+  } catch(e) {
+    container.innerHTML = '<div class="empty-state" style="padding:24px"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load reports</div></div>';
+    console.error('[loadReports]', e);
+  }
+}
+
+async function updateReportStatus(id, status) {
+  const realId = decodeURIComponent(id);
+  try {
+    const { error } = await db.from('reports').update({ status }).eq('id', realId);
+    if (error) throw error;
+    showToast('success', 'Report marked ' + status);
+    await loadReports();
+  } catch(e) {
+    showToast('error', 'Failed to update report: ' + e.message);
+    console.error('[updateReportStatus]', e);
+  }
+}
+
+// ════════════════════════════════════
+// ADMIN — BULK EMAIL (admin-only Edge Function; hidden for moderators)
+// ════════════════════════════════════
+async function sendBulkEmail() {
+  const audience = document.getElementById('bulk-email-audience').value;
+  const subject = document.getElementById('bulk-email-subject').value.trim();
+  const message = document.getElementById('bulk-email-message').value.trim();
+  if (!subject || !message) { showToast('error', 'Please fill in a subject and message'); return; }
+
+  const btn = document.getElementById('bulk-email-send-btn');
+  if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+
+  try {
+    const res = await db.functions.invoke('admin-bulk-email', { body: { audience, subject, message } });
+    if (res.error) throw res.error;
+    const sent = res.data?.sent ?? 0;
+    const failed = res.data?.failed ?? 0;
+    showToast('success', `📤 Announcement sent — ${sent} delivered${failed ? ', ' + failed + ' failed' : ''}`);
+    document.getElementById('bulk-email-subject').value = '';
+    document.getElementById('bulk-email-message').value = '';
+  } catch(e) {
+    showToast('error', 'Failed to send announcement: ' + (e.message || 'unknown error'));
+    console.error('[sendBulkEmail]', e);
+  } finally {
+    if (btn) { btn.textContent = '📤 Send Announcement'; btn.disabled = false; }
+  }
 }
 
 </script>
