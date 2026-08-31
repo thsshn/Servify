@@ -1660,15 +1660,29 @@ async function submitReview() {
   if (!text) { showToast('error', 'Please write a review.'); return; }
   if (!_listingId) { showToast('error', 'Cannot find listing to review.'); return; }
 
+  const { data: { user } } = await db.auth.getUser();
+  // FIX: the reviews table's INSERT policy requires auth.uid() = reviewer_id,
+  // so an anonymous visitor's review was always silently rejected by RLS —
+  // the form was shown to everyone with no sign-in gate, and the resulting
+  // generic "please try again" error gave no clue why. Check auth up front
+  // instead of letting a guaranteed-to-fail insert run.
+  if (!user) {
+    showToast('info', 'Please sign in to leave a review.');
+    // This page has no sign-in modal of its own (only index.html does) —
+    // flag it via sessionStorage (same pattern auth-callback.html uses for
+    // the pending-role handoff) so index.html can open Sign In on arrival.
+    sessionStorage.setItem('servify_open_signin', '1');
+    setTimeout(() => { window.location.href = 'index.html'; }, 900);
+    return;
+  }
+
   const btn = document.querySelector('#leave-review-wrap .btn-accent');
   const orig = btn.textContent;
   btn.textContent = 'Submitting…'; btn.disabled = true;
 
-  const { data: { user } } = await db.auth.getUser();
-
   const { error } = await db.from('reviews').insert({
     listing_id:    _listingId,
-    reviewer_id:   user?.id || null,
+    reviewer_id:   user.id,
     reviewer_name: name,
     rating:        _reviewStar,
     comment:       text,
@@ -1859,7 +1873,7 @@ function addService() {
   const price = parseFloat(document.getElementById('new-service-price').value);
   const unit = document.getElementById('new-service-unit').value;
   const desc = document.getElementById('new-service-desc').value.trim();
-  if (!name || isNaN(price)) { showToast('error', 'Please enter a service name and price'); return; }
+  if (!name || isNaN(price) || price <= 0) { showToast('error', 'Please enter a service name and a price greater than 0'); return; }
   services.push({ id: Date.now(), name, price, unit, desc });
   document.getElementById('new-service-name').value = '';
   document.getElementById('new-service-price').value = '';
@@ -1978,6 +1992,7 @@ async function saveGallery() {
   if (btn) { btn.textContent = 'Uploading…'; btn.disabled = true; }
 
   // Upload any pending new files to Supabase Storage
+  let failedUploads = 0;
   for (const img of galleryImages.filter(i => i._file)) {
     const ext = img.name.split('.').pop();
     const path = `gallery/${window._providerId}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
@@ -1990,9 +2005,15 @@ async function saveGallery() {
       delete img._file;
       delete img.dataUrl;
     } else {
+      failedUploads++;
       showToast('error', 'Photo upload failed: ' + uploadErr.message);
     }
   }
+
+  // Drop any entry that still has no url (a failed upload above) — saving it
+  // anyway would persist a broken {id, name} record that renders as a blank
+  // image after refresh, since the transient _file/dataUrl are gone too.
+  galleryImages = galleryImages.filter(img => !!img.url);
 
   // Save gallery URLs to provider_profiles
   const galleryToSave = galleryImages.map(({ id, url, name }) => ({ id, url, name }));
@@ -2003,7 +2024,10 @@ async function saveGallery() {
     closeModal('gallery-modal');
     renderGallery();
     updateCompleteness();
-    showToast('success', `✅ Gallery saved — ${galleryImages.length} photo(s)`);
+    const msg = failedUploads
+      ? `✅ Gallery saved — ${galleryImages.length} photo(s) (${failedUploads} failed and were skipped)`
+      : `✅ Gallery saved — ${galleryImages.length} photo(s)`;
+    showToast('success', msg);
   }
 }
 
@@ -2265,6 +2289,19 @@ async function upsertProfile(fields) {
   return true;
 }
 
+// Several saves below write the same field to BOTH the `listings` row
+// (what search/cards show) and the `providers` row (the full profile) —
+// two separate requests, not one transaction. If the first succeeds and
+// the second fails (a transient network blip is the common case), the two
+// records silently diverge with no automatic reconciliation. Retrying the
+// failed half once, right away, closes that gap for the common transient
+// case without a much larger rewrite into a single atomic server call.
+async function retryOnce(fn) {
+  const first = await fn();
+  if (first !== false) return first;
+  return fn();
+}
+
 async function updateListing(fields) {
   // BUG 3 FIX: If no listing exists yet, skip gracefully and return true
   // (provider profile saves go to the providers table; listings table updated when listing exists)
@@ -2288,16 +2325,16 @@ async function saveProfile() {
   profileData.years        = parseInt(document.getElementById('inp-years').value) || profileData.years;
   profileData.ssm          = document.getElementById('inp-ssm').value.trim();
 
-  const ok1 = await updateListing({
+  const ok1 = await retryOnce(() => updateListing({
     provider_name: profileData.businessName,
     title:         profileData.tagline,
     category:      profileData.category,
-  });
-  const ok2 = await upsertProfile({
+  }));
+  const ok2 = await retryOnce(() => upsertProfile({
     tagline: profileData.tagline,
     years:   profileData.years,
     ssm:     profileData.ssm,
-  });
+  }));
 
   if (btn) { btn.textContent = 'Save Changes'; btn.disabled = false; }
   if (ok1 !== false && ok2 !== false) {
@@ -2317,8 +2354,8 @@ async function saveAbout() {
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
 
   profileData.about = val;
-  const ok1 = await updateListing({ description: val });
-  const ok2 = await upsertProfile({ about: val });
+  const ok1 = await retryOnce(() => updateListing({ description: val }));
+  const ok2 = await retryOnce(() => upsertProfile({ about: val }));
 
   if (btn) { btn.textContent = 'Save'; btn.disabled = false; }
   if (ok1 !== false && ok2 !== false) {
@@ -2340,14 +2377,14 @@ async function saveContact() {
   contactData.facebook  = document.getElementById('inp-facebook').value.trim();
   contactData.instagram = document.getElementById('inp-instagram').value.trim();
 
-  const ok1 = await updateListing({ phone: contactData.phone });
-  const ok2 = await upsertProfile({
+  const ok1 = await retryOnce(() => updateListing({ phone: contactData.phone }));
+  const ok2 = await retryOnce(() => upsertProfile({
     phone:     contactData.phone,
     email:     contactData.email,
     website:   contactData.website,
     facebook:  contactData.facebook,
     instagram: contactData.instagram,
-  });
+  }));
 
   if (btn) { btn.textContent = 'Save Contact Info'; btn.disabled = false; }
   if (ok1 !== false && ok2 !== false) {
