@@ -1706,6 +1706,31 @@ async function loadListingsFromDB() {
   }
 
   allServices = data;
+
+  // FIX: the "Min rating" search filter compared against `s.rating`, which
+  // was never populated anywhere — `listings` has no rating column; ratings
+  // live per-review in `reviews`, keyed by listing_id. That made the filter
+  // silently return zero results the instant a seeker picked 3+/4+/4.5+.
+  // Compute a real average rating per listing from the reviews table so the
+  // filter (and any future star display) has real data to work with.
+  try {
+    const listingIds = allServices.map(s => s.id);
+    if (listingIds.length) {
+      const { data: reviewRows } = await db.from('reviews').select('listing_id, rating').in('listing_id', listingIds);
+      const sums = {}, counts = {};
+      (reviewRows || []).forEach(r => {
+        sums[r.listing_id] = (sums[r.listing_id] || 0) + r.rating;
+        counts[r.listing_id] = (counts[r.listing_id] || 0) + 1;
+      });
+      allServices.forEach(s => {
+        s.rating = counts[s.id] ? sums[s.id] / counts[s.id] : null;
+        s.reviewCount = counts[s.id] || 0;
+      });
+    }
+  } catch (e) {
+    console.error('[loadListingsFromDB] rating aggregation failed', e);
+  }
+
   renderListings('All');
 }
 
@@ -2394,6 +2419,13 @@ window.addEventListener('DOMContentLoaded', async () => {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }
+  // Arrived here after being bounced from provider-profile.html's review
+  // form for not being signed in — open Sign In right away instead of
+  // leaving them to find it themselves.
+  if (sessionStorage.getItem('servify_open_signin')) {
+    sessionStorage.removeItem('servify_open_signin');
+    setTimeout(() => openAuthModal('signin'), 300);
+  }
 });
 
 function showNewPasswordModal() {
@@ -2869,20 +2901,29 @@ async function toggleSave(e, listingId) {
   const { data: profile } = await db.from('profiles').select('saved_listings').eq('id', user.id).single();
   let saved = profile?.saved_listings || [];
   const alreadySaved = saved.includes(listingId);
+  const newSaved = alreadySaved ? saved.filter(id => id !== listingId) : [...saved, listingId];
+
+  // FIX: previously updated the button text/toast unconditionally before the
+  // write even ran, so a failed save (RLS hiccup, expired session, network
+  // blip) looked identical to a successful one — the seeker had no way to
+  // know it didn't actually persist. Only update the UI after confirming
+  // the write succeeded.
+  const { error } = await db.from('profiles').upsert({ id: user.id, saved_listings: newSaved });
+  if (error) {
+    showToast('error', 'Could not update saved services. Please try again.');
+    console.error('[toggleSave]', error);
+    return;
+  }
 
   if (alreadySaved) {
-    saved = saved.filter(id => id !== listingId);
     btn.textContent = '🤍';
     btn.title = 'Save';
     showToast('success', 'Removed from saved services.');
   } else {
-    saved = [...saved, listingId];
     btn.textContent = '❤️';
     btn.title = 'Saved!';
     showToast('success', 'Saved! View in your dashboard.');
   }
-
-  await db.from('profiles').upsert({ id: user.id, saved_listings: saved });
 }
 
 // ── INIT ──

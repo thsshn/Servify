@@ -1691,6 +1691,7 @@ async function loadProfileData(userId, role) {
       document.getElementById('pv-status').innerHTML = statusMap[provider.status] || provider.status;
       if (provider.business_name) document.getElementById('edit-biz').value = provider.business_name;
       if (provider.category) document.getElementById('edit-cat').value = provider.category;
+      if (provider.about) document.getElementById('edit-biz-desc').value = provider.about;
     }
   }
 }
@@ -1921,6 +1922,13 @@ async function submitNewListing() {
     showToast('error', 'Please fill in all required fields'); return;
   }
 
+  // `!price` only catches an empty string — "0" and "-50" are truthy and
+  // would otherwise sail through and get stored/displayed as RM 0 or a
+  // negative price.
+  if (!(parseFloat(price) > 0)) {
+    showToast('error', 'Please enter a price greater than 0'); return;
+  }
+
   if (!isValidMYPhone(phone)) {
     if (phoneErr) { phoneErr.textContent = 'Please enter a valid Malaysian mobile number (e.g. 012-3456789).'; phoneErr.style.display = 'block'; }
     return;
@@ -1966,8 +1974,13 @@ async function submitNewListing() {
 async function saveProfile() {
   const first = document.getElementById('edit-first').value.trim();
   const last = document.getElementById('edit-last').value.trim();
-  const phone = document.getElementById('edit-phone').value.trim();
-  const location = document.getElementById('edit-location').value;
+  // Fall back to whatever loadProfileData already fetched if the field is
+  // still empty — it fills these inputs asynchronously and isn't awaited
+  // before the dashboard becomes interactive, so a fast click on "Edit" +
+  // "Save Changes" right after page load could otherwise catch these
+  // inputs still blank and permanently wipe a previously-saved phone/location.
+  const phone = document.getElementById('edit-phone').value.trim() || userProfile?.phone || '';
+  const location = document.getElementById('edit-location').value || userProfile?.location || '';
 
   const btn = document.querySelector('#profile-edit .btn-accent');
   btn.textContent = 'Saving…'; btn.disabled = true;
@@ -1978,9 +1991,14 @@ async function saveProfile() {
   }
 
   // Upsert profile row
-  await db.from('profiles').upsert({ id: currentUser.id, full_name: `${first} ${last}`.trim(), phone, location });
+  const { error } = await db.from('profiles').upsert({ id: currentUser.id, full_name: `${first} ${last}`.trim(), phone, location });
 
   btn.textContent = 'Save Changes'; btn.disabled = false;
+
+  if (error) {
+    showToast('error', 'Could not save profile. Please try again.');
+    return;
+  }
 
   // Update UI
   const fullName = `${first} ${last}`.trim() || document.getElementById('pv-name').textContent;
@@ -1999,7 +2017,16 @@ async function saveBizInfo() {
   const cat = document.getElementById('edit-cat').value;
   const desc = document.getElementById('edit-biz-desc').value.trim();
 
-  await db.from('providers').upsert({ id: currentUser.id, business_name: biz, category: cat, description: desc });
+  // NOTE: the providers table's long-description column is called `about`
+  // (same field provider-profile.html's "Edit About" writes to), not
+  // `description` — that column doesn't exist, so writing to it used to
+  // silently do nothing while still showing a success toast.
+  const { error } = await db.from('providers').upsert({ id: currentUser.id, business_name: biz, category: cat, about: desc });
+
+  if (error) {
+    showToast('error', 'Could not save business info. Please try again.');
+    return;
+  }
 
   document.getElementById('pv-biz').textContent = biz || '—';
   document.getElementById('pv-cat').textContent = cat || '—';
@@ -2208,12 +2235,21 @@ async function loadEnquiries() {
     document.getElementById('enquiries-page-title').textContent = 'My Enquiries';
     document.getElementById('enquiries-page-sub').textContent = 'Messages you\'ve sent to providers';
 
-    const { data: msgs } = await db.from('contacts')
-      .select('*')
-      .eq('user_id', currentUser.id)
-      .order('created_at', { ascending: false });
+    let msgs = [];
+    try {
+      const { data, error } = await db.from('contacts')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      msgs = data || [];
+    } catch (e) {
+      console.warn('[loadEnquiries] seeker query failed:', e.message);
+      container.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load enquiries</div></div></div>';
+      return;
+    }
 
-    if (!msgs || !msgs.length) {
+    if (!msgs.length) {
       container.innerHTML = `<div class="card"><div class="empty-state">
         <div class="empty-icon">📩</div>
         <div class="empty-title">No enquiries yet</div>
@@ -2444,14 +2480,29 @@ async function loadTrialTracker() {
 }
 
 async function markSubscribed(userId) {
-  await db.from('profiles').update({ subscription_status: 'active' }).eq('id', userId);
-  await db.from('listings').update({ status: 'active' }).eq('user_id', userId);
+  const r1 = await db.from('profiles').update({ subscription_status: 'active' }).eq('id', userId);
+  // FIX: previously updated every listing this user owns to 'active' with no
+  // status filter — that would silently un-reject a listing a moderator had
+  // explicitly declined, or auto-publish one that was never reviewed at all.
+  // Paying only ever needs to resume a listing that trial-expiry froze
+  // (status 'suspended'); anything pending/rejected still needs real review.
+  const r2 = await db.from('listings').update({ status: 'active' }).eq('user_id', userId).eq('status', 'suspended');
+  if (r1.error || r2.error) {
+    showToast('error', 'Could not update — please try again.');
+    console.error('[markSubscribed]', r1.error || r2.error);
+    return;
+  }
   showToast('success', '✅ Marked as paid — listing activated.');
   loadTrialTracker();
 }
 
 async function markTrialOnly(userId) {
-  await db.from('profiles').update({ subscription_status: 'trial' }).eq('id', userId);
+  const { error } = await db.from('profiles').update({ subscription_status: 'trial' }).eq('id', userId);
+  if (error) {
+    showToast('error', 'Could not update — please try again.');
+    console.error('[markTrialOnly]', error);
+    return;
+  }
   showToast('success', 'Reverted to trial status.');
   loadTrialTracker();
 }
@@ -2462,14 +2513,28 @@ async function freezeProvider(userId) {
   // declined it", which is the wrong signal for a listing paused only
   // because a trial/payment lapsed. Keeping one vocabulary for "hidden but
   // not declined" also means it now shows correctly in the Suspended filter.
-  await db.from('listings').update({ status: 'suspended' }).eq('user_id', userId);
+  // FIX: scoped to currently-'active' listings only, so this can no longer
+  // stomp a listing that's already rejected/pending into 'suspended'.
+  const { error } = await db.from('listings').update({ status: 'suspended' }).eq('user_id', userId).eq('status', 'active');
+  if (error) {
+    showToast('error', 'Could not freeze — please try again.');
+    console.error('[freezeProvider]', error);
+    return;
+  }
   showToast('success', '🔒 Provider frozen — listings hidden.');
   logAdminAction('suspend_listing', 'listings', userId, { reason: 'provider_frozen' });
   loadTrialTracker();
 }
 
 async function unfreezeProvider(userId) {
-  await db.from('listings').update({ status: 'active' }).eq('user_id', userId);
+  // FIX: scoped to currently-'suspended' listings only (mirrors freezeProvider) —
+  // previously this force-activated every listing regardless of prior status.
+  const { error } = await db.from('listings').update({ status: 'active' }).eq('user_id', userId).eq('status', 'suspended');
+  if (error) {
+    showToast('error', 'Could not unfreeze — please try again.');
+    console.error('[unfreezeProvider]', error);
+    return;
+  }
   showToast('success', '🔓 Provider unfrozen — listings visible.');
   logAdminAction('unsuspend_listing', 'listings', userId, { reason: 'provider_unfrozen' });
   loadTrialTracker();
@@ -2538,9 +2603,12 @@ async function loadAnalytics() {
     const el = document.getElementById('an-listings');
     if (el) el.textContent = lCount || 0;
 
-    // Enquiries count (contacts saved by this user's listings)
+    // Enquiries count — must scope to provider_user_id explicitly (same as
+    // loadEnquiries()); without it, this also picks up rows where the
+    // provider account itself is the sender (user_id) of an enquiry it sent
+    // to someone else while browsing as a customer.
     const { data: myListings } = await db.from('listings').select('id,title').eq('user_id', currentUser.id);
-    const { count: eCount } = await db.from('contacts').select('id', { count: 'exact', head: true });
+    const { count: eCount } = await db.from('contacts').select('id', { count: 'exact', head: true }).eq('provider_user_id', currentUser.id);
     const el2 = document.getElementById('an-enquiries');
     if (el2) el2.textContent = eCount || 0;
 
@@ -2558,8 +2626,8 @@ async function loadAnalytics() {
       renderMyReviews(reviews || []);
     }
 
-    // Recent enquiries
-    const { data: recentMsgs } = await db.from('contacts').select('*').order('created_at', { ascending: false }).limit(5);
+    // Recent enquiries — same scoping fix as the count above
+    const { data: recentMsgs } = await db.from('contacts').select('*').eq('provider_user_id', currentUser.id).order('created_at', { ascending: false }).limit(5);
     const container = document.getElementById('an-recent-enquiries');
     if (container) {
       if (!recentMsgs || !recentMsgs.length) {
@@ -2796,6 +2864,13 @@ async function initAdminPanel(user) {
   if (isModeratorAdmin) {
     const bulkCard = document.getElementById('admin-bulk-email-card');
     if (bulkCard) bulkCard.style.display = 'none';
+    // FIX: the Trials tab reads/writes `profiles`, whose RLS only allows the
+    // row owner or a true admin (not moderators) — a moderator opening it
+    // just saw an always-empty "No providers yet", and any action button
+    // would silently fail RLS while still showing a success toast. Hide the
+    // tab entirely for moderators, same treatment as bulk email.
+    const trialsTab = document.getElementById('atab-trials');
+    if (trialsTab) trialsTab.style.display = 'none';
   }
   await loadAdminListings();
 }
@@ -2898,7 +2973,7 @@ function renderAdminTable(listings) {
           <button class="admin-action-btn admin-view" onclick="viewAdminListing('${encodeURIComponent(l.id)}')">👁 View</button>
           ${l.status !== 'active'   ? `<button class="admin-action-btn admin-approve" onclick="updateListingStatus('${encodeURIComponent(l.id)}','active')">✅ Approve</button>` : ''}
           ${l.status !== 'rejected' ? `<button class="admin-action-btn admin-reject"  onclick="updateListingStatus('${encodeURIComponent(l.id)}','rejected')">❌ Reject</button>` : ''}
-          <button class="admin-action-btn admin-delete" onclick="adminDeleteListing('${encodeURIComponent(l.id)}')">🗑</button>
+          ${!isModeratorAdmin ? `<button class="admin-action-btn admin-delete" onclick="adminDeleteListing('${encodeURIComponent(l.id)}')">🗑</button>` : ''}
         </div>
       </td>
     </tr>
