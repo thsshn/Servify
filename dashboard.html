@@ -2873,6 +2873,14 @@ async function initAdminPanel(user) {
     // tab entirely for moderators, same treatment as bulk email.
     const trialsTab = document.getElementById('atab-trials');
     if (trialsTab) trialsTab.style.display = 'none';
+    // FIX: same problem on the Users tab — the admin-users Edge Function
+    // rejects non-admin callers, and its profiles-table fallback also relies
+    // on is_admin() via RLS, so a moderator opening this tab always hit the
+    // dead-end "Could not load users / Edge Function is not deployed yet"
+    // message (misleading — the function is deployed, it just isn't for
+    // them). Hide the tab entirely for moderators, same treatment as Trials.
+    const usersTab = document.getElementById('atab-users');
+    if (usersTab) usersTab.style.display = 'none';
   }
   await loadAdminListings();
 }
@@ -3789,6 +3797,11 @@ async function banUser(encodedId, suspend, email) {
       u.id === targetId ? { ...u, _banned: suspend } : u
     );
     filterAdminUsers(currentUserFilter, null);
+    // FIX: the Banned Users stat card was only ever set once, at initial
+    // Users-tab load — a ban/unban here updated the table but left the
+    // card showing a stale count until the whole tab was reloaded.
+    const bannedStatEl = document.getElementById('admin-stat-banned');
+    if (bannedStatEl) bannedStatEl.textContent = allAdminUsers.filter(u => u._banned).length;
 
     showToast('success', `✅ User ${suspend ? 'banned' : 'unbanned'} successfully`);
     logAdminAction(suspend ? 'ban_user' : 'unban_user', 'profiles', targetId, { email });
