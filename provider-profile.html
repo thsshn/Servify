@@ -1398,6 +1398,12 @@ window.addEventListener('DOMContentLoaded', async () => {
       btn.style.display = '';
     });
     document.getElementById('edit-profile-action-btn').style.display = '';
+    // Owner editing their own listing directly (no ?id=) never needs to
+    // WhatsApp or report themselves — those only make sense for a visitor.
+    const ownWhatsAppBtn = document.querySelector('#profile-actions button[onclick="openWhatsApp()"]');
+    if (ownWhatsAppBtn) ownWhatsAppBtn.style.display = 'none';
+    const ownReportBtn = document.querySelector('#profile-actions button[onclick="reportListing()"]');
+    if (ownReportBtn) ownReportBtn.style.display = 'none';
   }
 
   const aboutTa = document.getElementById('inp-about');
