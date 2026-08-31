@@ -56,8 +56,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:68px;background:rgba(245,242,235,0.97);border-bottom:1.5px solid var(--border);backdrop-filter:blur(12px)}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.04em;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-.nav-logo img{height:26px;width:auto;display:block}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.04em;text-decoration:none}
 .nav-right{display:flex;align-items:center;gap:12px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.875rem;cursor:pointer;border:none;transition:all 0.18s;text-decoration:none}
 .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--border)}.btn-ghost:hover{background:var(--cream)}
@@ -381,7 +380,7 @@ SessionGuard.init();
 <nav>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
-    <a class="nav-logo" href="index.html"><img src="/nav-glyph.png" alt="">Servify</a>
+    <a class="nav-logo" href="index.html">Servify</a>
   </div>
   <div class="nav-right">
     <span style="font-size:0.85rem;color:var(--muted)" id="nav-greeting"></span>

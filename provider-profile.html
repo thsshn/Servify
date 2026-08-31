@@ -72,9 +72,7 @@ nav {
 .nav-logo {
   font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem;
   color: var(--accent); letter-spacing: -0.04em; text-decoration: none;
-  display: inline-flex; align-items: center;
 }
-.nav-logo img { height: 26px; width: auto; display: block; margin-right: 8px; }
 .nav-right { display: flex; align-items: center; gap: 12px; }
 
 .btn {
@@ -649,7 +647,7 @@ SessionGuard.init();
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo"><img src="/nav-glyph.png" alt="">Servi<span>fy</span></a>
+  <a href="index.html" class="nav-logo">Servi<span>fy</span></a>
   <div class="nav-right" id="nav-right">
     <!-- BUG 2 FIX: Only show preview toggle when in seeker view; hidden for provider own profile -->
     <button class="btn btn-ghost" id="view-toggle-btn" onclick="toggleViewMode()">
