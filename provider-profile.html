@@ -2565,7 +2565,14 @@ function logEnquiry() {
       if (userId) payload.user_id = userId;
 
       const { data, error } = await db.from('contacts').insert(payload).select('id').single();
-      if (error || !data) return;
+      // FIX: this used to fail completely silently — a listing whose
+      // provider row doesn't resolve to a real auth user (e.g. leftover
+      // demo/seed data, or a deleted provider account) trips the
+      // contacts_provider_user_id_fkey constraint and the enquiry is lost
+      // with zero trace. Still never surface this to the seeker (their
+      // WhatsApp/call already went through independently of this log), but
+      // at least leave a console breadcrumb for debugging.
+      if (error || !data) { console.warn('[logEnquiry] failed to log enquiry:', error); return; }
 
       db.functions.invoke('notify-provider-enquiry', { body: { contactId: data.id } }).catch(() => {});
     } catch (_) {
