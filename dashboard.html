@@ -16,8 +16,10 @@
   <meta name="apple-mobile-web-app-title" content="Servify">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Dashboard — Servify</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='20' fill='white'>S</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='110' fill='white'>S</text></svg>">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -54,7 +56,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:68px;background:rgba(245,242,235,0.97);border-bottom:1.5px solid var(--border);backdrop-filter:blur(12px)}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.04em;text-decoration:none}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.04em;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.nav-logo img{height:26px;width:auto;display:block}
 .nav-right{display:flex;align-items:center;gap:12px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.875rem;cursor:pointer;border:none;transition:all 0.18s;text-decoration:none}
 .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--border)}.btn-ghost:hover{background:var(--cream)}
@@ -378,7 +381,7 @@ SessionGuard.init();
 <nav>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
-    <a class="nav-logo" href="index.html">Servify</a>
+    <a class="nav-logo" href="index.html"><img src="/nav-glyph.png" alt="">Servify</a>
   </div>
   <div class="nav-right">
     <span style="font-size:0.85rem;color:var(--muted)" id="nav-greeting"></span>

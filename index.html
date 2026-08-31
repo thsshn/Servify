@@ -36,8 +36,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Servify — Services, Simplified">
 <meta name="twitter:description" content="Find trusted local service professionals in Malaysia.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='20' fill='white'>S</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23e8521a'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='110' fill='white'>S</text></svg>">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-VQFX5XRK4G"></script>
@@ -152,8 +154,10 @@ function _updateNavGuest() {
     color: var(--accent); letter-spacing: -0.04em;
     cursor: pointer; text-decoration: none;
     font-variation-settings: 'wght' 800;
+    display: inline-flex; align-items: center; gap: 8px;
   }
   .nav-logo span { color: var(--accent); }
+  .nav-logo img { height: 28px; width: auto; display: block; }
   .nav-links { display: flex; gap: 36px; align-items: center; }
   .nav-links a {
     font-size: 0.9rem; font-weight: 500; color: var(--muted);
@@ -726,7 +730,7 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Servi<span>fy</span></a>
+  <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="/nav-glyph.png" alt="">Servi<span>fy</span></a>
   <div class="nav-links">
     <a href="#categories">Browse Services</a>
     <a href="#how">How It Works</a>
@@ -1194,7 +1198,7 @@ function safeRedirect(url){try{const u=new URL(url,window.location.origin);if(u.
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <div class="nav-logo" style="color:var(--accent)">Servi<span>fy</span></div>
+      <div class="nav-logo" style="color:var(--accent)"><img src="/nav-glyph.png" alt="">Servi<span>fy</span></div>
       <p>Connecting service seekers with trusted professionals across Malaysia. Simple, fast, and reliable.</p>
     </div>
     <div class="footer-col">
