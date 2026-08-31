@@ -1,4 +1,4 @@
-const CACHE = 'servify-v2';
+const CACHE = 'servify-v3';
 // Only cache local files — no external URLs
 const PRECACHE = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
